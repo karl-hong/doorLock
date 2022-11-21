@@ -21,5 +21,10 @@ enum {
     LIGHT_INDEX2,
 };
 
+void set_light1_on(void);
+void set_light1_off(void);
+void set_light2_on(void);
+void set_light2_off(void);
+void led_task(void)；
 
 #endif

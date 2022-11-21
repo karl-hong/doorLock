@@ -55,7 +55,11 @@ typedef struct {
 }motor_task_ctrl_t;
 
 typedef struct {
-    uint8_t lockDetectState;
+    uint8_t lockDetectState1;
+    uint8_t lockDetectState2;
+    uint8_t doorDetectState1;
+    uint8_t doorDetectState2;
+    uint8_t keyDetectState;
     uint8_t lockState;
     uint8_t manulLockState;
     uint8_t lockTaskState;
@@ -68,10 +72,8 @@ typedef struct {
     uint8_t faultType;
     uint8_t HoldOnDetectEnable;
     uint16_t HoldOnLatencyCnt;
-    uint16_t magazineNum;
-    uint16_t hx711Delay;
-    uint32_t magazineWeight;
-    uint32_t lockDelay;
+    uint8_t lightState1;
+    uint8_t lightState2;
     uint32_t uid0;
     uint32_t uid1;
     uint32_t uid2;
@@ -119,5 +121,8 @@ typedef struct {
 
 
 extern lock_ctrl_t lock;
+
+void gpio_interrupt_callback(uint16_t GPIO_Pin);
+void tim_interrupt_callback(void);
 
 #endif

@@ -22,7 +22,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "common.h"
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/
@@ -77,10 +77,7 @@ void MX_GPIO_Init(void)
 /* USER CODE BEGIN 2 */
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
-	if(Lock_Dect_Pin == GPIO_Pin){
-		lock.lockDetectState = HAL_GPIO_ReadPin(Lock_Dect_GPIO_Port, Lock_Dect_Pin);
-    lock.lockState = lock.lockDetectState;
-	}
+  gpio_interrupt_callback(GPIO_Pin);
 }
 
 /* USER CODE END 2 */

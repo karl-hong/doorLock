@@ -2,7 +2,7 @@
 #include "led.h"
 
 
-void led_set_status(uint8_t led, uint8_t status)
+static void led_set_status(uint8_t led, uint8_t status)
 {
     uint8_t s;
     if(status)  s = GPIO_PIN_SET;
@@ -23,7 +23,7 @@ void led_set_status(uint8_t led, uint8_t status)
     } 
 }
 
-void light_set_status(uint8_t light, uint8_t status)
+static void light_set_status(uint8_t light, uint8_t status)
 {
     uint8_t s;
     if(status)  s = GPIO_PIN_SET;
@@ -46,12 +46,32 @@ void light_set_status(uint8_t light, uint8_t status)
 
 }
 
-void led_task(void)
+void set_light1_on(void)
 {
-
+    lock.lightState1 = LIGHT_ON;
+    light_set_status(LIGHT_INDEX1, LIGHT_ON);
 }
 
-void light_task(void)
+void set_light1_off(void)
+{
+    lock.lightState1 = LIGHT_OFF;
+    light_set_status(LIGHT_INDEX1, LIGHT_OFF);
+}
+
+void set_light2_on(void)
+{
+    lock.lightState2 = LIGHT_ON;
+    light_set_status(LIGHT_INDEX2, LIGHT_ON);
+}
+
+void set_light2_off(void)
+{
+    lock.lightState2 = LIGHT_OFF;
+    light_set_status(LIGHT_INDEX2, LIGHT_OFF);
+}
+
+
+void led_task(void)
 {
 
 }

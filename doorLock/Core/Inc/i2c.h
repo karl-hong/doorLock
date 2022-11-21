@@ -41,7 +41,8 @@ extern I2C_HandleTypeDef hi2c2;
 void MX_I2C2_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+HAL_StatusTypeDef i2c_transmit(uint16_t devAddress, uint16_t memAddr, uint8_t *pData, uint16_t datSize, uint32_t timeOut);
+HAL_StatusTypeDef i2c_receive(uint16_t devAddress, uint16_t memAddr, uint8_t *pData, uint16_t size, uint32_t timeOut);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

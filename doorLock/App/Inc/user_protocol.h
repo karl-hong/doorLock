@@ -56,8 +56,8 @@ typedef struct tagPack
 }Pack_t;
 
 enum {
-	CMD_QUERY = 0xC0,
-	CMD_ACK = 0xC1,
+	CMD_QUERY = 0xD0,
+	CMD_ACK = 0xD1,
 };
 
 enum {
