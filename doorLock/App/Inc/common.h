@@ -15,10 +15,6 @@
 #define FAULT_DECT                  (5*DELAY_BASE)
 #define MOTOR_LATENCY               (2*DELAY_BASE)
 
-#define HX711_FULL_RANGE            (0x800000)
-#define HX711_AVDD                  (4514/1000)
-#define HX711_GAIN                  (128)
-
 enum {
     CMD_DISABLE = 0,
     CMD_ENABLE,
@@ -59,6 +55,8 @@ typedef struct {
     uint8_t lockDetectState2;
     uint8_t doorDetectState1;
     uint8_t doorDetectState2;
+    uint8_t lightState1;
+    uint8_t lightState2;
     uint8_t keyDetectState;
     uint8_t lockState;
     uint8_t manulLockState;
@@ -72,8 +70,6 @@ typedef struct {
     uint8_t faultType;
     uint8_t HoldOnDetectEnable;
     uint16_t HoldOnLatencyCnt;
-    uint8_t lightState1;
-    uint8_t lightState2;
     uint32_t uid0;
     uint32_t uid1;
     uint32_t uid2;

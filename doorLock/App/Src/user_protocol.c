@@ -187,69 +187,56 @@ void user_event_process(uint8_t cmd, uint8_t opt, uint8_t *data, uint16_t lenOfD
 		case CMD_QUERY:{
 			switch (opt)
 			{
-				case OPTION_QUERY_SINGLE_LOCK_STATUS:{
-					onCmdQueryDeviceStatus(data, lenOfData);
-					break;
+				case OPT_CODE_SINGLE_DEV_QUERY_STATUS:{
+
 				}
 
-				case OPTION_QUERY_ALL_LOCKS_STATUS:{
-					onCmdSetDeviceStatus(data, lenOfData, 0);
-					break;
+				case OPT_CODE_MULTI_DEV_SET_ONOFF:{
+
 				}
 
-				case OPTION_LOCK_SINGLE_DEVICE:{
-					onCmdSetDeviceStatus(data, lenOfData, 1);
-					break;
+				case OPT_CODE_SINGLE_DEV_SET_ONOFF:{
+
 				}
 
-				case OPTION_SET_ALL_DEVICES:{
-					onCmdModifyDeviceSetting(data, lenOfData, 0);
-					break;
+				case OPT_CODE_MULTI_DEV_BASE_SETTING:{
+
 				}
 
-				case OPTION_SET_SINGLE_DEVICE:{
-					onCmdModifyDeviceSetting(data, lenOfData, 1);
-					break;
-				}	
+				case OPT_CODE_SINGLE_DEV_BASE_SETTING:{
 
-				case OPTION_SET_ALL_DEVICES_LED:{
-					onCmdSetLedFlash(data, lenOfData, 0);
-					break;
-				}	
-
-				case OPTION_SET_SINGLE_DEVICE_LED:{
-					onCmdSetLedFlash(data, lenOfData, 1);
-					break;
 				}
 
-				case OPTION_CLR_ALL_DEVICES_ALARM_SETTING:{
-					onCmdClrDevAlarmSetting(data, lenOfData, 0);
-					break;
+				case OPT_CODE_MULTI_DEV_SET_LIGHT:{
+
 				}
 
-				case OPTION_CLR_SINGLE_DEVICE_ALARM_SETTING:{
-					onCmdClrDevAlarmSetting(data, lenOfData, 1);
-					break;
+				case OPT_CODE_SINGLE_DEV_SET_LIGHT:{
+
 				}
 
-				case OPTION_GET_SINGLE_LOCK_WEIGHT:{
-					onCmdGetWeight(data, lenOfData);
-					break;
-				}
-	
-				case OPTION_SET_SINGLE_LOCK_DISP_CONTENT:{
-					onCmdSetDispContent(data, lenOfData);
-					break;
+				case OPT_CODE_MULTI_DEV_CLEAR_ALARM:{
+
 				}
 
-				case OPTION_CLR_SIGNLE_LOCK_DISP_CONTENT:{
-					onCmdClrDispContent(data, lenOfData, 1);
-					break;
+				case OPT_CODE_SINGLE_DEV_CLEAR_ALARM:{
+
 				}
 
-				case OPTION_CLR_ALL_LOCKS_DISP_CONTENT:{
-					onCmdClrDispContent(data, lenOfData, 0);
-					break;
+				case OPT_CODE_MANUAL_ALARM:{
+
+				}
+
+				case OPT_CODE_AUTO_LOCK:{
+
+				}
+
+				case OPT_CODE_FAULT_ALARM:{
+
+				}
+
+				case OPT_CODE_SINGLE_DEV_QUERY_GSENSOR:{
+					
 				}
 				
 				default:
