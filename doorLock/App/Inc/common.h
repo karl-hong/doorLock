@@ -26,16 +26,15 @@ typedef struct {
 }cmd_setting_t;
 
 typedef struct {
-    cmd_setting_t reportStatus;
-    cmd_setting_t operateResult;
-    cmd_setting_t basicSetting;
-    cmd_setting_t ledFlashSetting;
-    cmd_setting_t alarmSetting;
-    cmd_setting_t reportOperateStatus;
-    cmd_setting_t reportWeight;
-    cmd_setting_t reportMagazineNum;
-    cmd_setting_t clrDisp;
-    cmd_setting_t unlockFault;
+    cmd_setting_t singleQueryStatus;
+    cmd_setting_t singleSetOnOff;
+    cmd_setting_t singleBasicSetting;
+    cmd_setting_t singleSetLight;
+    cmd_setting_t singleClrAlarm;
+    cmd_setting_t singleManualAlarm;
+    cmd_setting_t autoLockAlarm;
+    cmd_setting_t faultAlarm;
+    cmd_setting_t singleQueryGsensor;
 }cmd_control_t;
 
 typedef struct {
@@ -65,11 +64,13 @@ typedef struct {
     uint16_t lockReplyDelay;
     uint8_t  ledFlashStatus;
     uint8_t  alarmStatus;
-    uint8_t  isReport;
+    uint8_t  autoReportFlag;
     uint8_t  address;
     uint8_t faultType;
+    uint8_t autoLockFlag;
     uint8_t HoldOnDetectEnable;
     uint16_t HoldOnLatencyCnt;
+    uint32_t autoLockTime;
     uint32_t uid0;
     uint32_t uid1;
     uint32_t uid2;
@@ -81,6 +82,7 @@ typedef struct {
 enum {
     LOCK_TASK_STATE_IDLE = 0,
     LOCK_TASK_STATE_UNLOCK,
+    LOCK_TASK_STATE_LOCK,
 };
 
 enum {
@@ -107,7 +109,7 @@ enum {
 typedef struct {
     uint16_t magic;
     uint16_t address;
-    uint16_t isReport;
+    uint16_t autoReportFlag;
     uint16_t ledFlash;
     uint16_t lockDelayLow;
     uint16_t lockDelayHigh;
