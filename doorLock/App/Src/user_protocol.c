@@ -188,55 +188,65 @@ void user_event_process(uint8_t cmd, uint8_t opt, uint8_t *data, uint16_t lenOfD
 			switch (opt)
 			{
 				case OPT_CODE_SINGLE_DEV_QUERY_STATUS:{
-
+					onCmdQuerySingleDevStatus(data, lenOfData);
+					break;
 				}
 
 				case OPT_CODE_MULTI_DEV_SET_ONOFF:{
-
+					onCmdSetDeviceOnOff(data, lenOfData, 0);
+					break;
 				}
 
 				case OPT_CODE_SINGLE_DEV_SET_ONOFF:{
-
+					onCmdSetDeviceOnOff(data, lenOfData, 1);
+					break;
 				}
 
 				case OPT_CODE_MULTI_DEV_BASE_SETTING:{
-
+					onCmdModifyDeviceBasicSetting(data, lenOfData, 0);
+					break;
 				}
 
 				case OPT_CODE_SINGLE_DEV_BASE_SETTING:{
-
+					onCmdModifyDeviceBasicSetting(data, lenOfData, 1);
+					break;
 				}
 
 				case OPT_CODE_MULTI_DEV_SET_LIGHT:{
-
+					onCmdSetLight(data, lenOfData, 0);
+					break;
 				}
 
 				case OPT_CODE_SINGLE_DEV_SET_LIGHT:{
-
+					onCmdSetLight(data, lenOfData, 1);
+					break;
 				}
 
 				case OPT_CODE_MULTI_DEV_CLEAR_ALARM:{
-
+					onCmdClrDevAlarmSetting(data, lenOfData, 0);
+					break;
 				}
 
 				case OPT_CODE_SINGLE_DEV_CLEAR_ALARM:{
-
+					onCmdClrDevAlarmSetting(data, lenOfData, 1);
+					break;
 				}
 
 				case OPT_CODE_MANUAL_ALARM:{
-
+					break;
 				}
 
 				case OPT_CODE_AUTO_LOCK:{
-
+					break;
 				}
 
 				case OPT_CODE_FAULT_ALARM:{
-
+					break;
 				}
 
 				case OPT_CODE_SINGLE_DEV_QUERY_GSENSOR:{
-					
+					onCmdGetGsensorData(data, lenOfData);
+					break;
 				}
 				
 				default:

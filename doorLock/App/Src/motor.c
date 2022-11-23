@@ -1,9 +1,10 @@
 #include "main.h"
 #include "motor.h"
+#include "common.h"
 
 static void motor_set_status(uint8_t index, uint8_t status)
 {
-    uint8_t s;
+    GPIO_PinState s;
     if(status)  s = GPIO_PIN_SET;
     else        s = GPIO_PIN_RESET;
 
@@ -68,8 +69,8 @@ void motor_task(void)
 
     switch(lock.motorTask.state){
         case MOTOR_STATE_1:{
-            if(state != lock.motroTask.state){
-                state = lock.motroTask.state;
+            if(state != lock.motorTask.state){
+                state = lock.motorTask.state;
                 motor_set_status(MOTOR_A, MOTOR_H);
                 motor_set_status(MOTOR_B, MOTOR_L);
                 motor_set_status(MOTOR_C, MOTOR_L);
@@ -79,8 +80,8 @@ void motor_task(void)
         }
 
         case MOTOR_STATE_2:{
-            if(state != lock.motroTask.state){
-                state = lock.motroTask.state;
+            if(state != lock.motorTask.state){
+                state = lock.motorTask.state;
                 motor_set_status(MOTOR_A, MOTOR_L);
                 motor_set_status(MOTOR_B, MOTOR_L);
                 motor_set_status(MOTOR_C, MOTOR_H);
@@ -90,8 +91,8 @@ void motor_task(void)
         }
 
         case MOTOR_STATE_3:{
-            if(state != lock.motroTask.state){
-                state = lock.motroTask.state;
+            if(state != lock.motorTask.state){
+                state = lock.motorTask.state;
                 motor_set_status(MOTOR_A, MOTOR_L);
                 motor_set_status(MOTOR_B, MOTOR_H);
                 motor_set_status(MOTOR_C, MOTOR_H);
@@ -101,8 +102,8 @@ void motor_task(void)
         }
 
         case MOTOR_STATE_4:{
-            if(state != lock.motroTask.state){
-                state = lock.motroTask.state;
+            if(state != lock.motorTask.state){
+                state = lock.motorTask.state;
                 motor_set_status(MOTOR_A, MOTOR_H);
                 motor_set_status(MOTOR_B, MOTOR_H);
                 motor_set_status(MOTOR_C, MOTOR_L);
@@ -113,8 +114,8 @@ void motor_task(void)
 
         case MOTOR_STATE_IDLE:
         default:{
-            if(state != lock.motroTask.state){
-                state = lock.motroTask.state;
+            if(state != lock.motorTask.state){
+                state = lock.motorTask.state;
                 motor_set_status(MOTOR_A, MOTOR_L);
                 motor_set_status(MOTOR_B, MOTOR_L);
                 motor_set_status(MOTOR_C, MOTOR_L);
@@ -127,21 +128,21 @@ void motor_task(void)
 
 void motor_set_forward(void)
 {
-    lock.motroTask.state = MOTOR_STATE_1;
+    lock.motorTask.state = MOTOR_STATE_1;
     lock.motorTask.latency = MOTOR_LATENCY;
     lock.motorTask.direction = MOTOR_DIRECT_FORWARD;
 }
 
 void motor_set_backward(void)
 {
-    lock.motroTask.state = MOTOR_STATE_4;
+    lock.motorTask.state = MOTOR_STATE_4;
     lock.motorTask.latency = MOTOR_LATENCY;
     lock.motorTask.direction = MOTOR_DIRECT_BACKWARD;
 }
 
 void motor_set_stop(void)
 {
-    lock.motroTask.state = MOTOR_STATE_IDLE;
+    lock.motorTask.state = MOTOR_STATE_IDLE;
     lock.motorTask.latency = 0;
 }
 

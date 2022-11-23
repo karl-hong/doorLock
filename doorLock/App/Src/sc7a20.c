@@ -532,7 +532,6 @@ error:
 
 void sc7a20_interrupt_handle(void)
 {
-	Sensor.gSensorState = 1;
 	//printf("sc7a20!!!\r\n");
 }
 

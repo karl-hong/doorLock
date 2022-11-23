@@ -2,39 +2,35 @@
 #define __USER_DATA_H__
 #include <stdint.h>
 
-void onCmdQueryDeviceStatus(uint8_t *data, uint16_t length);
+void onCmdQuerySingleDevStatus(uint8_t *data, uint16_t length);
 
-void onCmdSetDeviceStatus(uint8_t *data, uint16_t length, uint8_t ack);
+void onCmdSetDeviceOnOff(uint8_t *data, uint16_t length, uint8_t ack);
 
-void onCmdModifyDeviceSetting(uint8_t *data, uint16_t length, uint8_t ack);
+void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack);
 
-void onCmdSetLedFlash(uint8_t *data, uint16_t length, uint8_t ack);
+void onCmdSetLight(uint8_t *data, uint16_t length, uint8_t ack);
 
 void onCmdClrDevAlarmSetting(uint8_t *data, uint16_t length, uint8_t ack);
 
-void onCmdGetWeight(uint8_t *data, uint16_t length);
-
-void onCmdSetDispContent(uint8_t *data, uint16_t length);
-
-void onCmdClrDispContent(uint8_t *data, uint16_t length, uint8_t ack);
+void onCmdGetGsensorData(uint8_t *data, uint16_t length);
 
 void onReportDeviceStatus(void);
 
-void onReportDeviceOptResult(void);
+void onReportSetDevOnOffStatus(void);
 
-void onReportSetDeviceResult(void);
+void onReportBasicSetting(void);
 
-void onReportSetLedFlashStatus(void);
+void onReportSetLightStatus(void);
 
 void onReportClearDevAlarmSetting(void);
 
-void onReportDevAlarm(uint8_t alarmType);
+void onReportManualAlarm(uint8_t alarmType);
 
-void onReportWeight(void);
+void onReportAutoLockAlarm(void);
 
-void onReportMagazineNum(void);
+void onReportFaultAlarm(void);
 
-void onReportClrDisp(void);
+void onReportGsensorData(void);
 
 void user_database_init(void);
 

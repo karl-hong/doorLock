@@ -1,10 +1,11 @@
 #include "main.h"
 #include "led.h"
+#include "common.h"
 
 
 static void led_set_status(uint8_t led, uint8_t status)
 {
-    uint8_t s;
+    GPIO_PinState s;
     if(status)  s = GPIO_PIN_SET;
     else        s = GPIO_PIN_RESET;
     switch(led){
@@ -25,7 +26,7 @@ static void led_set_status(uint8_t led, uint8_t status)
 
 static void light_set_status(uint8_t light, uint8_t status)
 {
-    uint8_t s;
+    GPIO_PinState s;
     if(status)  s = GPIO_PIN_SET;
     else        s = GPIO_PIN_RESET;
 
@@ -73,5 +74,68 @@ void set_light2_off(void)
 
 void led_task(void)
 {
+	switch(lock.ledTask.state){
+		case LED_TASK_STATE_FLASH:{
+			if(lock.ledFlashStatus){
+				if(lock.lockState){
+					if(lock.ledTask.flashOn)	led_set_status(LED_GREEN, LED_ON);
+					else						led_set_status(LED_GREEN, LED_OFF);
+					led_set_status(LED_RED, LED_OFF);
+				}else{
+					led_set_status(LED_GREEN, LED_OFF);
+					if(lock.ledTask.flashOn)	led_set_status(LED_RED, LED_ON);
+					else						led_set_status(LED_RED, LED_OFF);
+				}
+			}else{
+				if(lock.lockState){
+					led_set_status(LED_GREEN, LED_ON);
+					led_set_status(LED_RED, LED_OFF);
+				}else{
+					led_set_status(LED_GREEN, LED_OFF);
+					led_set_status(LED_RED, LED_ON);
+				}
+			}
+			break;
+		}
 
+		case LED_TASK_STATE_IDLE:{
+			if(lock.lockState){
+				led_set_status(LED_GREEN, LED_ON);
+				led_set_status(LED_RED, LED_OFF);
+			}else{
+				led_set_status(LED_GREEN, LED_OFF);
+				led_set_status(LED_RED, LED_ON);
+			}
+			break;
+		}
+
+		default:{
+			break;
+		}
+	}
 }
+
+void Auto_Lock_Task(void)
+{
+    if(!lock.autoLockFlag || !lock.doorDetectState1 || !lock.doorDetectState2){
+        return;
+    }
+
+	if(lock.lockDetectState1  && !lock.lockDetectState2){
+		if(lock.HoldOnDetectEnable == 0){
+			lock.HoldOnDetectEnable = 1;
+			lock.HoldOnLatencyCnt = 0;
+		}
+	}else if(!lock.lockDetectState1 && lock.lockDetectState2){
+		lock.HoldOnDetectEnable = 0;
+		lock.HoldOnLatencyCnt = 0;
+	}else{
+		if(lock.HoldOnDetectEnable == 0){
+			lock.HoldOnDetectEnable = 1;
+			lock.HoldOnLatencyCnt = 0;
+		}
+	}
+}
+
+
+

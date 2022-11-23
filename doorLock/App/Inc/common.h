@@ -21,6 +21,12 @@ enum {
 };
 
 typedef struct {
+	int16_t x;
+	int16_t y;
+	int16_t z;
+}gSensor_Data_t;
+
+typedef struct {
     uint8_t sendCmdEnable;
     uint16_t sendCmdDelay;
 }cmd_setting_t;
@@ -74,6 +80,7 @@ typedef struct {
     uint32_t uid0;
     uint32_t uid1;
     uint32_t uid2;
+    gSensor_Data_t gSensor;
     cmd_control_t cmdControl;
     led_task_ctrl_t ledTask;
     motor_task_ctrl_t motorTask;
@@ -96,13 +103,13 @@ enum {
 };
 
 enum {
-	GREEN_LED = 0,
-	RED_LED,
+    LED_ON = 0,
+    LED_OFF,
 };
 
 enum {
-	LED_ON = 0,
-	LED_OFF,
+    LED_RED = 0,
+    LED_GREEN,
 };
 
 
@@ -110,10 +117,8 @@ typedef struct {
     uint16_t magic;
     uint16_t address;
     uint16_t autoReportFlag;
-    uint16_t ledFlash;
     uint16_t lockDelayLow;
     uint16_t lockDelayHigh;
-    uint16_t lockReplyDelay;
     uint16_t alarmStatus;
 }database_t;
 
@@ -122,5 +127,6 @@ extern lock_ctrl_t lock;
 
 void gpio_interrupt_callback(uint16_t GPIO_Pin);
 void tim_interrupt_callback(void);
+void lock_state_init(void);
 
 #endif

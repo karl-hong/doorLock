@@ -31,7 +31,8 @@
 #include "common.h"
 #include "user_data.h"
 #include "led.h"
-#include "lock.h"
+#include "motor.h"
+#include "sc7a20.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -99,9 +100,8 @@ int main(void)
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
-	AIP650Init();
   user_database_init();
-  lock_state_detect();
+  lock_state_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -112,6 +112,10 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     MX_IWDG_Refresh();
+		led_task();
+    motor_task();
+    user_protocol_handle();
+    user_reply_handle();
   }
   /* USER CODE END 3 */
 }
