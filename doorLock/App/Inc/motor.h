@@ -14,8 +14,9 @@ enum {
 };
 
 enum {
-    MOTOR_DIRECT_FORWARD = 0,
-    MOTOR_DIRECT_BACKWARD,
+    MOTOR_TASK_IDLE = 0,
+    MOTOR_TASK_FORWARD,
+    MOTOR_TASK_BACKWARD,
 };
 
 enum {
@@ -26,7 +27,6 @@ enum {
     MOTOR_STATE_4,
 };
 
-void motor_latency_ctrl(void);
 void motor_task(void);
 void motor_set_forward(void);
 void motor_set_backward(void);

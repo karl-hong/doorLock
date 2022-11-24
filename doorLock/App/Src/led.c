@@ -115,27 +115,6 @@ void led_task(void)
 	}
 }
 
-void Auto_Lock_Task(void)
-{
-    if(!lock.autoLockFlag || !lock.doorDetectState1 || !lock.doorDetectState2){
-        return;
-    }
-
-	if(lock.lockDetectState1  && !lock.lockDetectState2){
-		if(lock.HoldOnDetectEnable == 0){
-			lock.HoldOnDetectEnable = 1;
-			lock.HoldOnLatencyCnt = 0;
-		}
-	}else if(!lock.lockDetectState1 && lock.lockDetectState2){
-		lock.HoldOnDetectEnable = 0;
-		lock.HoldOnLatencyCnt = 0;
-	}else{
-		if(lock.HoldOnDetectEnable == 0){
-			lock.HoldOnDetectEnable = 1;
-			lock.HoldOnLatencyCnt = 0;
-		}
-	}
-}
 
 
 

@@ -13,7 +13,8 @@
 #define DELAY_BASE                  (10)//100ms*10 = 1s
 #define FLASH_FREQ                  (1)
 #define FAULT_DECT                  (5*DELAY_BASE)
-#define MOTOR_LATENCY               (2*DELAY_BASE)
+#define MOTOR_LATENCY               (2)
+#define MOTOR_TIMEOUT               (2*DELAY_BASE)
 
 enum {
     CMD_DISABLE = 0,
@@ -51,7 +52,10 @@ typedef struct {
 
 typedef struct {
     uint8_t state;
-    uint8_t direction;
+    uint8_t task;
+    uint8_t faultType;
+    uint8_t faultDectEnable;
+    uint16_t faultDectLatency;
     uint16_t latency;
 }motor_task_ctrl_t;
 
@@ -65,21 +69,20 @@ typedef struct {
     uint8_t keyDetectState;
     uint8_t lockState;
     uint8_t manulLockState;
-    uint8_t lockTaskState;
-    uint16_t lockTaskLatencyCnt;
     uint16_t lockReplyDelay;
     uint8_t  ledFlashStatus;
     uint8_t  alarmStatus;
     uint8_t  autoReportFlag;
     uint8_t  address;
-    uint8_t faultType;
     uint8_t autoLockFlag;
+    uint8_t autoLockEnable;
     uint8_t HoldOnDetectEnable;
     uint16_t HoldOnLatencyCnt;
     uint32_t autoLockTime;
     uint32_t uid0;
     uint32_t uid1;
     uint32_t uid2;
+    uint16_t gSensorDelay;
     gSensor_Data_t gSensor;
     cmd_control_t cmdControl;
     led_task_ctrl_t ledTask;
@@ -128,5 +131,7 @@ extern lock_ctrl_t lock;
 void gpio_interrupt_callback(uint16_t GPIO_Pin);
 void tim_interrupt_callback(void);
 void lock_state_init(void);
+void lock_stop_detect(void);
+void autolock_task(void);
 
 #endif

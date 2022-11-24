@@ -46,6 +46,11 @@
 *.mod*
 *.cmd
 *.rar
+*.crf
+*.lnp
+*.htm
+*.dep
+*.axf
 .tmp_versions/
 modules.order
 Module.symvers

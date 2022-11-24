@@ -535,7 +535,12 @@ void sc7a20_interrupt_handle(void)
 	//printf("sc7a20!!!\r\n");
 }
 
-
+void sc7a20_task(void)
+{
+	if(lock.gSensorDelay)	return;
+	lock.gSensorDelay = 10;
+	sc7a20_get_acceleration_data(&sc7a20_misc_data, (uint16_t *)&lock.gSensor);	
+}
 
 
 

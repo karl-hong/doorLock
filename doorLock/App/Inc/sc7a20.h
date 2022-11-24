@@ -145,7 +145,7 @@ typedef struct {
 
 
 void sc7a20_init(struct sc7a20_data *acc);
-int sc7a20_get_acceleration_data(struct sc7a20_data *acc, int16_t *xyz);
+void sc7a20_task(void);
 
 
 #endif

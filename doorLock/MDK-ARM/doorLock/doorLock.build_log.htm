@@ -22,16 +22,17 @@ Dialog DLL:      TARMCM1.DLL V1.9.0.0
  
 <h2>Project:</h2>
 F:\experience\doorLock\doorLock\MDK-ARM\doorLock.uvprojx
-Project File Date:  11/20/2022
+Project File Date:  11/24/2022
 
 <h2>Output:</h2>
 Build target 'doorLock'
-compiling user_data.c...
-..\App\Src\user_data.c(593): warning:  #223-D: function "memset" declared implicitly
-      memset((uint8_t *)&lock, 0, sizeof(lock));
-..\App\Src\user_data.c: 1 warning, 0 errors
+compiling common.c...
+..\App\Src\common.c(50): warning:  #223-D: function "user_database_save" declared implicitly
+                user_database_save();
+..\App\Src\common.c: 1 warning, 0 errors
+compiling motor.c...
 linking...
-Program Size: Code=14816 RO-data=2200 RW-data=28 ZI-data=2756  
+Program Size: Code=18252 RO-data=2276 RW-data=116 ZI-data=2780  
 FromELF: creating hex file...
 "doorLock\doorLock.axf" - 0 Error(s), 1 Warning(s).
 

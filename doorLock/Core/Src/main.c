@@ -95,13 +95,15 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C2_Init();
-  MX_IWDG_Init();
+//  MX_IWDG_Init();
   MX_TIM14_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   user_database_init();
   lock_state_init();
+  lock_stop_detect();
+  sc7a20_init(&sc7a20_misc_data);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -111,11 +113,13 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    MX_IWDG_Refresh();
+//    MX_IWDG_Refresh();
 		led_task();
     motor_task();
     user_protocol_handle();
     user_reply_handle();
+    sc7a20_task();
+    autolock_task();
   }
   /* USER CODE END 3 */
 }

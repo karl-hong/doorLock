@@ -4,6 +4,7 @@
 #include "user_protocol.h"
 #include "stm32f0xx_hal.h"
 #include "stm32f0xx_hal_flash_ex.h"  
+#include "led.h"
 
 void onCmdQuerySingleDevStatus(uint8_t *data, uint16_t length)
 {
@@ -91,12 +92,10 @@ void onCmdSetDeviceOnOff(uint8_t *data, uint16_t length, uint8_t ack)
     }
 out:
     /* set dev state here */
-    if(lockSetState == 0 && lock.lockState){
-        lock.lockTaskState = LOCK_TASK_STATE_UNLOCK;//unlock
-        /* set led state here */
-        // lock.ledTask.state = LED_TASK_STATE_FLASH;
-    }else if(lockSetState && !lock.lockState){
-        lock.lockTaskState = LOCK_TASK_STATE_LOCK;//lock
+    if(lockSetState == 0 && lock.lockState){//unlock
+        motor_set_backward();
+    }else if(lockSetState && !lock.lockState){//lock
+        motor_set_forward();
     }
     /* send ack msg here */
     if(ack){
@@ -234,13 +233,20 @@ out:
 
     /* send ack msg here */
     if(ack){
-        lock.lightState1 = lightState1;
-        lock.lightState2 = lightState2;
+        if(lightState1) set_light1_on();
+        else            set_light1_off();
+        if(lightState2) set_light2_on();
+        else            set_light2_off();
         lock.cmdControl.singleSetLight.sendCmdEnable = CMD_ENABLE;
         lock.cmdControl.singleSetLight.sendCmdDelay = 0;
     }else{
-        lock.lightState1 = lightState1;
-        lock.lightState2 = lightState1;
+        if(lightState1){
+            set_light1_on();
+            set_light2_on();
+        }else{
+            set_light1_off();
+            set_light2_off();
+        }         
     }
 }
 
@@ -531,7 +537,7 @@ void onReportFaultAlarm(void)
     uint8_t buffer[23];
     uint8_t pos = 0;
     buffer[pos++] = lock.address;
-    buffer[pos++] = lock.faultType;
+    buffer[pos++] = lock.motorTask.faultType;
     buffer[pos++] = (lock.uid0 >> 24)& 0xff;
     buffer[pos++] = (lock.uid0 >> 16) & 0xff;
     buffer[pos++] = (lock.uid0 >> 8) & 0xff;

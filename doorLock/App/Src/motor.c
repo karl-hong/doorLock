@@ -34,38 +34,37 @@ static void motor_set_status(uint8_t index, uint8_t status)
     }
 }
 
-void motor_latency_ctrl(void)
+static void motor_latency_ctrl(void)
 {
-    if(lock.motorTask.latency == 0 || lock.motorTask.direction == MOTOR_STATE_IDLE){
-        lock.motorTask.latency = 0;
+    if(lock.motorTask.task == MOTOR_TASK_IDLE || lock.motorTask.latency > 0){
         return;        
     }
-   
-    lock.motorTask.latency --;
 
-    if(lock.motorTask.latency == 0){
-        switch(lock.motorTask.direction){
-            case MOTOR_DIRECT_FORWARD:{
-                if(lock.motorTask.direction >= MOTOR_STATE_4)   lock.motorTask.direction = MOTOR_STATE_1;
-                else                                            lock.motorTask.direction ++;
-                break;
-            }
-
-            case MOTOR_DIRECT_BACKWARD:{
-                if(lock.motorTask.direction <= MOTOR_STATE_1)   lock.motorTask.direction = MOTOR_STATE_4;
-                else                                            lock.motorTask.direction --;
-                break;
-            }
-            
-            default:
-                break;
+    switch(lock.motorTask.task){
+        case MOTOR_TASK_FORWARD:{
+            if(lock.motorTask.state >= MOTOR_STATE_4)   lock.motorTask.state = MOTOR_STATE_1;
+            else                                            lock.motorTask.state ++;
+            lock.motorTask.latency = MOTOR_LATENCY;
+            break;
         }
+
+        case MOTOR_TASK_BACKWARD:{
+            if(lock.motorTask.state <= MOTOR_STATE_1)   lock.motorTask.state = MOTOR_STATE_4;
+            else                                            lock.motorTask.state --;
+            lock.motorTask.latency = MOTOR_LATENCY;
+            break;
+        }
+        
+        default:
+            break;
     }
 }
 
 void motor_task(void)
 {
     static uint8_t state = 0xff;
+
+    motor_latency_ctrl();
 
     switch(lock.motorTask.state){
         case MOTOR_STATE_1:{
@@ -130,19 +129,28 @@ void motor_set_forward(void)
 {
     lock.motorTask.state = MOTOR_STATE_1;
     lock.motorTask.latency = MOTOR_LATENCY;
-    lock.motorTask.direction = MOTOR_DIRECT_FORWARD;
+    lock.motorTask.task = MOTOR_TASK_FORWARD;
+    lock.motorTask.faultType = LOCK_STATE_LOCK;
+    lock.motorTask.faultDectEnable = 1;
+	lock.motorTask.faultDectLatency = FAULT_DECT;
 }
 
 void motor_set_backward(void)
 {
     lock.motorTask.state = MOTOR_STATE_4;
     lock.motorTask.latency = MOTOR_LATENCY;
-    lock.motorTask.direction = MOTOR_DIRECT_BACKWARD;
+    lock.motorTask.task = MOTOR_TASK_BACKWARD;
+    lock.motorTask.faultType = LOCK_STATE_UNLOCK;
+    lock.motorTask.faultDectEnable = 1;
+	lock.motorTask.faultDectLatency = FAULT_DECT;
 }
 
 void motor_set_stop(void)
 {
     lock.motorTask.state = MOTOR_STATE_IDLE;
+    lock.motorTask.task = MOTOR_TASK_IDLE;
     lock.motorTask.latency = 0;
+    lock.motorTask.faultDectEnable = 0;
+	lock.motorTask.faultDectLatency = 0;
 }
 
