@@ -13,7 +13,7 @@
 #define DELAY_BASE                  (10)//100ms*10 = 1s
 #define FLASH_FREQ                  (1)
 #define FAULT_DECT                  (5*DELAY_BASE)
-#define MOTOR_LATENCY               (2)
+#define MOTOR_LATENCY               (3)
 #define MOTOR_TIMEOUT               (2*DELAY_BASE)
 
 enum {
@@ -77,7 +77,7 @@ typedef struct {
     uint8_t autoLockFlag;
     uint8_t autoLockEnable;
     uint8_t HoldOnDetectEnable;
-    uint16_t HoldOnLatencyCnt;
+    uint32_t HoldOnLatencyCnt;
     uint32_t autoLockTime;
     uint32_t uid0;
     uint32_t uid1;

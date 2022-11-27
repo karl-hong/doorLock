@@ -95,7 +95,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_I2C2_Init();
-//  MX_IWDG_Init();
+  MX_IWDG_Init();
   MX_TIM14_Init();
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
@@ -113,7 +113,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//    MX_IWDG_Refresh();
+    MX_IWDG_Refresh();
 		led_task();
     motor_task();
     user_protocol_handle();

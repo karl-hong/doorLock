@@ -122,7 +122,7 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
     }
 
     if(ack) cmdLength = 18;
-    else    cmdLength = 17;
+    else    cmdLength = 5;
 
     if(cmdLength > length){
         printf("[%s]length error!\r\n", __FUNCTION__);

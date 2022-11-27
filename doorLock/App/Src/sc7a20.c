@@ -368,7 +368,7 @@ int sc7a20_get_acceleration_data(struct sc7a20_data *acc, int16_t *xyz)
 				xyz[0] = xyzBuf[0];
 				xyz[1] = xyzBuf[1];
 				xyz[2] = xyzBuf[2];
-				printf("state %d: data not ready!\r\n", state);
+//				printf("state %d: data not ready!\r\n", state);
 				return err;
 			}
 			/* goto next state */
