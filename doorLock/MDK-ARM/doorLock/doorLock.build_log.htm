@@ -26,49 +26,12 @@ Project File Date:  11/24/2022
 
 <h2>Output:</h2>
 Build target 'doorLock'
-compiling main.c...
-compiling gpio.c...
-compiling tim.c...
 compiling common.c...
-..\App\Src\common.c(50): warning:  #223-D: function "user_database_save" declared implicitly
-                user_database_save();
-..\App\Src\common.c: 1 warning, 0 errors
-compiling led.c...
 compiling motor.c...
-compiling sc7a20.c...
-..\App\Src\sc7a20.c(127): warning:  #177-D: variable "buf" was declared but never referenced
-        uint8_t buf[2];
-..\App\Src\sc7a20.c(158): warning:  #177-D: variable "buf" was declared but never referenced
-        uint8_t buf[2];
-..\App\Src\sc7a20.c(188): warning:  #177-D: variable "buf" was declared but never referenced
-        uint8_t buf[2];
-..\App\Src\sc7a20.c(221): warning:  #177-D: variable "buf" was declared but never referenced
-        uint8_t buf[2];
-..\App\Src\sc7a20.c(293): warning:  #186-D: pointless comparison of unsigned integer with zero
-        if(0 > rc){
-..\App\Src\sc7a20.c(301): warning:  #186-D: pointless comparison of unsigned integer with zero
-        if(0 > rc){
-..\App\Src\sc7a20.c(309): warning:  #186-D: pointless comparison of unsigned integer with zero
-        if(0 > rc){
-..\App\Src\sc7a20.c(317): warning:  #186-D: pointless comparison of unsigned integer with zero
-        if(0 > rc){
-..\App\Src\sc7a20.c(326): warning:  #186-D: pointless comparison of unsigned integer with zero
-        if(0 > rc){
-..\App\Src\sc7a20.c(542): warning:  #167-D: argument of type "uint16_t *" is incompatible with parameter of type "int16_t *"
-        sc7a20_get_acceleration_data(&sc7a20_misc_data, (uint16_t *)&lock.gSensor);     
-..\App\Src\sc7a20.c: 10 warnings, 0 errors
-compiling user_data.c...
-..\App\Src\user_data.c(96): warning:  #223-D: function "motor_set_backward" declared implicitly
-          motor_set_backward();
-..\App\Src\user_data.c(98): warning:  #223-D: function "motor_set_forward" declared implicitly
-          motor_set_forward();
-..\App\Src\user_data.c(599): warning:  #223-D: function "memset" declared implicitly
-      memset((uint8_t *)&lock, 0, sizeof(lock));
-..\App\Src\user_data.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=18404 RO-data=2276 RW-data=116 ZI-data=2796  
+Program Size: Code=18424 RO-data=2276 RW-data=116 ZI-data=2796  
 FromELF: creating hex file...
-"doorLock\doorLock.axf" - 0 Error(s), 14 Warning(s).
+"doorLock\doorLock.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 

@@ -115,7 +115,6 @@ enum {
     LED_GREEN,
 };
 
-
 typedef struct {
     uint16_t magic;
     uint16_t address;
@@ -127,6 +126,7 @@ typedef struct {
 
 
 extern lock_ctrl_t lock;
+extern uint8_t motorLatency;
 
 void gpio_interrupt_callback(uint16_t GPIO_Pin);
 void tim_interrupt_callback(void);

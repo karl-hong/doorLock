@@ -2,6 +2,7 @@
 #include "common.h"
 #include "led.h"
 #include "motor.h"
+#include "user_data.h"
 
 static uint16_t timeBase = 0;
 
@@ -142,6 +143,8 @@ void tim_interrupt_callback(void)
     if(lock.motorTask.latency > 0)  lock.motorTask.latency --;
 
     if(lock.gSensorDelay > 0)   lock.gSensorDelay --;
+		
+//		if(motorLatency > 0)	motorLatency --;
 }
 
 

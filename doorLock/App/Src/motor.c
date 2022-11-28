@@ -2,6 +2,8 @@
 #include "motor.h"
 #include "common.h"
 
+uint8_t motorLatency  = 0;
+
 static void motor_set_status(uint8_t index, uint8_t status)
 {
     GPIO_PinState s;
@@ -113,7 +115,7 @@ void motor_task(void)
 
         case MOTOR_STATE_IDLE:
         default:{
-            if(state != lock.motorTask.state){
+            if(state != lock.motorTask.state /*&& motorLatency == 0*/){
                 state = lock.motorTask.state;
                 motor_set_status(MOTOR_A, MOTOR_L);
                 motor_set_status(MOTOR_B, MOTOR_L);
@@ -152,5 +154,6 @@ void motor_set_stop(void)
     lock.motorTask.latency = 0;
     lock.motorTask.faultDectEnable = 0;
 	lock.motorTask.faultDectLatency = 0;
+//	motorLatency = 100;
 }
 
