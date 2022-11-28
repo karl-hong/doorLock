@@ -156,9 +156,11 @@ void lock_state_init(void)
 
 void autolock_task(void)
 {
-    // if(!lock.autoLockFlag || !lock.doorDetectState1 || !lock.doorDetectState2){
-    //     return;
-    // }
+    if(!lock.autoLockFlag || !lock.doorDetectState1 || !lock.doorDetectState2){
+        lock.HoldOnDetectEnable = 0;
+		lock.HoldOnLatencyCnt = 0;
+        return;
+    }
 
 	if(lock.lockDetectState1  && !lock.lockDetectState2){
 		if(lock.HoldOnDetectEnable == 0){
