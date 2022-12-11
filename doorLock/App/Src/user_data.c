@@ -95,7 +95,7 @@ out:
     if(lockSetState == 0 && lock.lockState){//unlock
         motor_set_backward();
     }else if(lockSetState && !lock.lockState){//lock
-        motor_set_forward();
+        if(lock.doorDetectState1 && lock.doorDetectState2)    motor_set_forward();
     }
     /* send ack msg here */
     if(ack){
@@ -179,7 +179,7 @@ out:
     }
 }
 
-void onCmdSetLight(uint8_t *data, uint16_t length, uint8_t ack)
+void  onCmdSetLight(uint8_t *data, uint16_t length, uint8_t ack)
 {
     uint32_t uid0;
     uint32_t uid1;
@@ -701,7 +701,8 @@ void user_reply_handle(void)
 
     if(lock.cmdControl.singleManualAlarm.sendCmdEnable && !lock.cmdControl.singleManualAlarm.sendCmdDelay){
         lock.cmdControl.singleManualAlarm.sendCmdEnable = CMD_DISABLE;
-        onReportManualAlarm(lock.lockState);
+        //onReportManualAlarm(lock.lockState);
+        onReportManualAlarm(lock.keyDetectState);
     }
 		
     if(lock.cmdControl.autoLockAlarm.sendCmdEnable && !lock.cmdControl.autoLockAlarm.sendCmdDelay){

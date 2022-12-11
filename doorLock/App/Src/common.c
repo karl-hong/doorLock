@@ -9,7 +9,11 @@ static uint16_t timeBase = 0;
 void lock_stop_detect(void)
 {
 	static uint8_t lastState = 0;
+    static uint8_t lastKeyState = 0xff;
 	uint8_t stateChange = 0;
+
+    if(lastKeyState == 0xff) lastKeyState = lock.keyDetectState;
+
 	if(lock.lockDetectState1  && !lock.lockDetectState2){
 		lock.lockState = LOCK_STATE_UNLOCK;//unlock state
 
@@ -40,16 +44,26 @@ void lock_stop_detect(void)
         /* manual operate alarm */
         lock.alarmStatus = LOCK_STATE_LOCK;
 
-		if(lock.autoReportFlag){
-			lock.cmdControl.singleManualAlarm.sendCmdEnable = 1;
-			lock.cmdControl.singleManualAlarm.sendCmdDelay = 0;
-		}
+		// if(lock.autoReportFlag){
+		// 	lock.cmdControl.singleManualAlarm.sendCmdEnable = 1;
+		// 	lock.cmdControl.singleManualAlarm.sendCmdDelay = 0;
+		// }
 
 		lock.autoLockEnable = 0;
 		
 		/* save database */
 		user_database_save();
 	}
+
+    if(lastKeyState != lock.keyDetectState){
+        lastKeyState = lock.keyDetectState;
+        if(lock.autoReportFlag){
+			lock.cmdControl.singleManualAlarm.sendCmdEnable = 1;
+			lock.cmdControl.singleManualAlarm.sendCmdDelay = 0;
+		}
+
+        
+    }
 }
 
 void gpio_interrupt_callback(uint16_t GPIO_Pin)

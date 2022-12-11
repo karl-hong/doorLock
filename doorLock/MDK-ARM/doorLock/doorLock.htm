@@ -3,7 +3,7 @@
 <title>Static Call Graph - [doorLock\doorLock.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image doorLock\doorLock.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Mon Nov 28 21:43:58 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Mon Dec 12 00:09:07 2022
 <BR><P>
 <H3>Maximum Stack Usage =        416 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -328,11 +328,11 @@ Global Symbols
 <LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FLASH_PageErase
 <LI><a href="#[3a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FLASH_WaitForLastOperation
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
+<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 </UL>
 
 <P><STRONG><a name="[cc]"></a>HAL_FLASH_Lock</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, stm32f0xx_hal_flash.o(i.HAL_FLASH_Lock))
-<BR><BR>[Called By]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
+<BR><BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 </UL>
 
 <P><STRONG><a name="[40]"></a>HAL_FLASH_Program</STRONG> (Thumb, 110 bytes, Stack size 40 bytes, stm32f0xx_hal_flash.o(i.HAL_FLASH_Program))
@@ -342,11 +342,11 @@ Global Symbols
 <LI><a href="#[41]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FLASH_Program_HalfWord
 <LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_llsr
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
+<BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 </UL>
 
 <P><STRONG><a name="[cb]"></a>HAL_FLASH_Unlock</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, stm32f0xx_hal_flash.o(i.HAL_FLASH_Unlock))
-<BR><BR>[Called By]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
+<BR><BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 </UL>
 
 <P><STRONG><a name="[42]"></a>HAL_GPIO_EXTI_Callback</STRONG> (Thumb, 8 bytes, Stack size 8 bytes, gpio.o(i.HAL_GPIO_EXTI_Callback))
@@ -938,7 +938,7 @@ Global Symbols
 <LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_g_range
 <LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_ble
 <LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_bdu
-<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 </UL>
 
 <P><STRONG><a name="[5a]"></a>__ARM_common_ll_muluu</STRONG> (Thumb, 48 bytes, Stack size 24 bytes, stm32f0xx_hal_rcc.o(i.__ARM_common_ll_muluu))
@@ -1021,11 +1021,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[95]"></a>lock_stop_detect</STRONG> (Thumb, 130 bytes, Stack size 24 bytes, common.o(i.lock_stop_detect))
+<P><STRONG><a name="[95]"></a>lock_stop_detect</STRONG> (Thumb, 158 bytes, Stack size 24 bytes, common.o(i.lock_stop_detect))
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = lock_stop_detect &rArr; user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
-<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_stop
+<BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
+<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_stop
 </UL>
 <BR>[Called By]<UL><LI><a href="#[43]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;gpio_interrupt_callback
 <LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -1065,7 +1065,7 @@ Global Symbols
 <LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetDeviceOnOff
 </UL>
 
-<P><STRONG><a name="[9d]"></a>motor_set_stop</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, motor.o(i.motor_set_stop))
+<P><STRONG><a name="[9c]"></a>motor_set_stop</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, motor.o(i.motor_set_stop))
 <BR><BR>[Called By]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tim_interrupt_callback
 <LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lock_stop_detect
 </UL>
@@ -1082,7 +1082,7 @@ Global Symbols
 <P><STRONG><a name="[a7]"></a>onCmdClrDevAlarmSetting</STRONG> (Thumb, 130 bytes, Stack size 24 bytes, user_data.o(i.onCmdClrDevAlarmSetting))
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = onCmdClrDevAlarmSetting &rArr; user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
+<BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
@@ -1099,7 +1099,7 @@ Global Symbols
 <P><STRONG><a name="[a9]"></a>onCmdModifyDeviceBasicSetting</STRONG> (Thumb, 254 bytes, Stack size 40 bytes, user_data.o(i.onCmdModifyDeviceBasicSetting))
 <BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = onCmdModifyDeviceBasicSetting &rArr; user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
+<BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
@@ -1113,7 +1113,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
 </UL>
 
-<P><STRONG><a name="[ab]"></a>onCmdSetDeviceOnOff</STRONG> (Thumb, 180 bytes, Stack size 24 bytes, user_data.o(i.onCmdSetDeviceOnOff))
+<P><STRONG><a name="[ab]"></a>onCmdSetDeviceOnOff</STRONG> (Thumb, 192 bytes, Stack size 24 bytes, user_data.o(i.onCmdSetDeviceOnOff))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = onCmdSetDeviceOnOff &rArr; __2printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_backward
@@ -1276,7 +1276,7 @@ Global Symbols
 <P><STRONG><a name="[6d]"></a>tim_interrupt_callback</STRONG> (Thumb, 212 bytes, Stack size 24 bytes, common.o(i.tim_interrupt_callback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = tim_interrupt_callback
 </UL>
-<BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_stop
+<BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_stop
 <LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_forward
 </UL>
 <BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
@@ -1323,13 +1323,13 @@ Global Symbols
 <LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetUIDw1
 <LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetUIDw0
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
-<LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
+<LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[9c]"></a>user_database_save</STRONG> (Thumb, 116 bytes, Stack size 48 bytes, user_data.o(i.user_database_save))
+<P><STRONG><a name="[9d]"></a>user_database_save</STRONG> (Thumb, 116 bytes, Stack size 48 bytes, user_data.o(i.user_database_save))
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASHEx_Erase
