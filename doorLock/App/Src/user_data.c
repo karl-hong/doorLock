@@ -614,6 +614,7 @@ void user_database_init(void)
         lock.lockReplyDelay = DEFAULT_LOCK_REPLY_DELAY;
         lock.autoReportFlag = DEFAULT_LOCK_REPORT;
         lock.ledFlashStatus = DEFAULT_LOCK_LED_FLASH;
+        lock.alarmStatus = lock.keyDetectState;
         user_database_save();
     }else{
         printf("Read database from flash!!!\r\n");
@@ -622,6 +623,7 @@ void user_database_init(void)
         lock.autoLockTime += (readDataBase.lockDelayHigh << 16);
         lock.lockReplyDelay = DEFAULT_LOCK_REPLY_DELAY;
         lock.autoReportFlag = (uint8_t)readDataBase.autoReportFlag;
+        lock.alarmStatus = readDataBase.alarmStatus;
         //lock.ledFlashStatus = (uint8_t)readDataBase.ledFlash;
     }
 
@@ -649,6 +651,7 @@ void user_database_save(void)
     //writeDataBase.ledFlash = lock.ledFlashStatus;
     writeDataBase.lockDelayLow = lock.autoLockTime & 0xffff;
     writeDataBase.lockDelayHigh = (lock.autoLockTime >> 16) & 0xffff;
+    writeDataBase.alarmStatus = lock.alarmStatus;
 
     HAL_FLASH_Unlock();
 
@@ -702,6 +705,7 @@ void user_reply_handle(void)
     if(lock.cmdControl.singleManualAlarm.sendCmdEnable && !lock.cmdControl.singleManualAlarm.sendCmdDelay){
         lock.cmdControl.singleManualAlarm.sendCmdEnable = CMD_DISABLE;
         //onReportManualAlarm(lock.lockState);
+        printf("keyDetectState: %d\r\n", lock.keyDetectState);
         onReportManualAlarm(lock.keyDetectState);
     }
 		

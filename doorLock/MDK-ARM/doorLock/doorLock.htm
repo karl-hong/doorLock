@@ -3,7 +3,7 @@
 <title>Static Call Graph - [doorLock\doorLock.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image doorLock\doorLock.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Mon Dec 12 00:09:07 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Mon Dec 12 22:27:35 2022
 <BR><P>
 <H3>Maximum Stack Usage =        416 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -922,7 +922,8 @@ Global Symbols
 <P><STRONG><a name="[38]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf8.o(i.__0printf$8))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_init
+<BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_reply_handle
+<LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_init
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_init
 <LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ComUnpack
@@ -980,7 +981,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> printf8.o(i.__0printf$8)
 </UL>
-<P><STRONG><a name="[43]"></a>gpio_interrupt_callback</STRONG> (Thumb, 114 bytes, Stack size 8 bytes, common.o(i.gpio_interrupt_callback))
+<P><STRONG><a name="[43]"></a>gpio_interrupt_callback</STRONG> (Thumb, 124 bytes, Stack size 8 bytes, common.o(i.gpio_interrupt_callback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = gpio_interrupt_callback &rArr; lock_stop_detect &rArr; user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[95]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lock_stop_detect
@@ -1021,7 +1022,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[95]"></a>lock_stop_detect</STRONG> (Thumb, 158 bytes, Stack size 24 bytes, common.o(i.lock_stop_detect))
+<P><STRONG><a name="[95]"></a>lock_stop_detect</STRONG> (Thumb, 152 bytes, Stack size 24 bytes, common.o(i.lock_stop_detect))
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = lock_stop_detect &rArr; user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
@@ -1316,7 +1317,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_push_data
 </UL>
 
-<P><STRONG><a name="[9e]"></a>user_database_init</STRONG> (Thumb, 184 bytes, Stack size 32 bytes, user_data.o(i.user_database_init))
+<P><STRONG><a name="[9e]"></a>user_database_init</STRONG> (Thumb, 194 bytes, Stack size 32 bytes, user_data.o(i.user_database_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = user_database_init &rArr; user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetUIDw2
@@ -1329,7 +1330,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[9d]"></a>user_database_save</STRONG> (Thumb, 116 bytes, Stack size 48 bytes, user_data.o(i.user_database_save))
+<P><STRONG><a name="[9d]"></a>user_database_save</STRONG> (Thumb, 120 bytes, Stack size 48 bytes, user_data.o(i.user_database_save))
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASHEx_Erase
@@ -1406,7 +1407,7 @@ Global Symbols
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportAutoLockAlarm
 </UL>
 
-<P><STRONG><a name="[a2]"></a>user_reply_handle</STRONG> (Thumb, 180 bytes, Stack size 16 bytes, user_data.o(i.user_reply_handle))
+<P><STRONG><a name="[a2]"></a>user_reply_handle</STRONG> (Thumb, 188 bytes, Stack size 16 bytes, user_data.o(i.user_reply_handle))
 <BR><BR>[Stack]<UL><LI>Max Depth = 328<LI>Call Chain = user_reply_handle &rArr; onReportDeviceStatus &rArr; user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
 </UL>
 <BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportSetLightStatus
@@ -1418,6 +1419,7 @@ Global Symbols
 <LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportClearDevAlarmSetting
 <LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportBasicSetting
 <LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportAutoLockAlarm
+<LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>

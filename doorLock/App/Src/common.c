@@ -42,27 +42,34 @@ void lock_stop_detect(void)
 		lock.motorTask.faultDectEnable = 0;
 	}else if(MOTOR_TASK_IDLE == lock.motorTask.task && stateChange){
         /* manual operate alarm */
-        lock.alarmStatus = LOCK_STATE_LOCK;
+        // lock.alarmStatus = LOCK_STATE_LOCK;
 
 		// if(lock.autoReportFlag){
 		// 	lock.cmdControl.singleManualAlarm.sendCmdEnable = 1;
 		// 	lock.cmdControl.singleManualAlarm.sendCmdDelay = 0;
 		// }
 
-		lock.autoLockEnable = 0;
+		// lock.autoLockEnable = 0;
 		
-		/* save database */
-		user_database_save();
+		// /* save database */
+		// user_database_save();
 	}
 
     if(lastKeyState != lock.keyDetectState){
         lastKeyState = lock.keyDetectState;
+
+        if(lock.alarmStatus != LOCK_STATE_LOCK){
+           lock.alarmStatus = LOCK_STATE_LOCK; 
+           /* save database */
+		   user_database_save();
+        }
+
         if(lock.autoReportFlag){
 			lock.cmdControl.singleManualAlarm.sendCmdEnable = 1;
 			lock.cmdControl.singleManualAlarm.sendCmdDelay = 0;
 		}
 
-        
+        lock.autoLockEnable = 0;
     }
 }
 
@@ -90,7 +97,7 @@ void gpio_interrupt_callback(uint16_t GPIO_Pin)
         }
 
         case KEY_Detect_Pin:{
-            lock.keyDetectState = HAL_GPIO_ReadPin(KEY_Detect_GPIO_Port, KEY_Detect_Pin);
+            lock.keyDetectState = HAL_GPIO_ReadPin(KEY_Detect_GPIO_Port, KEY_Detect_Pin) ? 0 : 1;
             break;
         }
 
