@@ -5,14 +5,12 @@
 #include "user_data.h"
 
 static uint16_t timeBase = 0;
+static uint8_t lastKeyState = 0;
 
 void lock_stop_detect(void)
 {
 	static uint8_t lastState = 0;
-    static uint8_t lastKeyState = 0xff;
 	uint8_t stateChange = 0;
-
-    if(lastKeyState == 0xff) lastKeyState = lock.keyDetectState;
 
 	if(lock.lockDetectState1  && !lock.lockDetectState2){
 		lock.lockState = LOCK_STATE_UNLOCK;//unlock state
@@ -66,7 +64,7 @@ void lock_stop_detect(void)
 
         if(lock.autoReportFlag){
 			lock.cmdControl.singleManualAlarm.sendCmdEnable = 1;
-			lock.cmdControl.singleManualAlarm.sendCmdDelay = 0;
+			lock.cmdControl.singleManualAlarm.sendCmdDelay = 2;
 		}
 
         lock.autoLockEnable = 0;
@@ -134,6 +132,8 @@ void tim_interrupt_callback(void)
 
         if(lock.cmdControl.singleQueryGsensor.sendCmdDelay > 0) lock.cmdControl.singleQueryGsensor.sendCmdDelay --;
 
+        if(lock.cmdControl.singleQueryAllStatus.sendCmdDelay > 0) lock.cmdControl.singleQueryAllStatus.sendCmdDelay --;
+
         /* auto lock detect */
         if(lock.HoldOnDetectEnable){
             lock.HoldOnLatencyCnt ++;
@@ -175,7 +175,8 @@ void lock_state_init(void)
 	lock.lockDetectState2 = HAL_GPIO_ReadPin(lock_Detect2_GPIO_Port, lock_Detect2_Pin);
 	lock.doorDetectState1 = HAL_GPIO_ReadPin(doorDetect1_GPIO_Port, doorDetect1_Pin) ? 0 : 1;
 	lock.doorDetectState2 = HAL_GPIO_ReadPin(doorDetect2_GPIO_Port, doorDetect2_Pin) ? 0 : 1;
-	lock.keyDetectState = HAL_GPIO_ReadPin(KEY_Detect_GPIO_Port, KEY_Detect_Pin);
+	lock.keyDetectState = HAL_GPIO_ReadPin(KEY_Detect_GPIO_Port, KEY_Detect_Pin) ? 0 : 1;
+	lastKeyState = lock.keyDetectState;
 }
 
 void autolock_task(void)

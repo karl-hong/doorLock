@@ -14,6 +14,8 @@ void onCmdClrDevAlarmSetting(uint8_t *data, uint16_t length, uint8_t ack);
 
 void onCmdGetGsensorData(uint8_t *data, uint16_t length);
 
+void onCmdQuerySingleDevAllStatus(uint8_t *data, uint16_t length);
+
 void onReportDeviceStatus(void);
 
 void onReportSetDevOnOffStatus(void);

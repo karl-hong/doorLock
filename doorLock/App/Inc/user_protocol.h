@@ -74,6 +74,7 @@ enum {
 	OPT_CODE_AUTO_LOCK,//延时自动关锁上报指令
 	OPT_CODE_FAULT_ALARM,//开关锁异常上报指令
 	OPT_CODE_SINGLE_DEV_QUERY_GSENSOR,//单锁振动查询指令
+	OPT_CODE_SINGLE_DEV_QUERY_ALL_STATUS,//单锁查询所有状态
 };
 
 

@@ -338,6 +338,43 @@ void onCmdGetGsensorData(uint8_t *data, uint16_t length)
     lock.cmdControl.singleQueryGsensor.sendCmdDelay = 0;    
 }
 
+void onCmdQuerySingleDevAllStatus(uint8_t *data, uint16_t length)
+{
+    uint32_t uid0;
+    uint32_t uid1;
+    uint32_t uid2;
+    uint16_t pos = 0;
+
+    if(length < 12){
+        printf("[%s]length error!\r\n", __FUNCTION__);
+        return;
+    }
+
+    uid0 = (data[pos++] << 24);
+    uid0 += (data[pos++] << 16);
+    uid0 += (data[pos++] << 8);
+    uid0 += data[pos++];
+
+    uid1 = (data[pos++] << 24);
+    uid1 += (data[pos++] << 16);
+    uid1 += (data[pos++] << 8);
+    uid1 += data[pos++];
+
+    uid2 = (data[pos++] << 24);
+    uid2 += (data[pos++] << 16);
+    uid2 += (data[pos++] << 8);
+    uid2 += data[pos++];
+
+    if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
+        printf("[%s]UID is not matched!\r\n", __FUNCTION__);
+        return;
+    }
+
+    /* send dev status here */
+    lock.cmdControl.singleQueryAllStatus.sendCmdEnable = CMD_ENABLE;
+    lock.cmdControl.singleQueryAllStatus.sendCmdDelay = 0;
+}
+
 void onReportDeviceStatus(void)
 {
     uint8_t buffer[40];
@@ -584,6 +621,56 @@ void onReportGsensorData(void)
     user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_QUERY_GSENSOR, buffer, pos);     
 }
 
+void onReportDeviceAllStatus(void)
+{
+    uint8_t buffer[40];
+    uint8_t pos = 0;
+    /* addr */
+    buffer[pos++] = lock.address;
+    /* lock state */
+    buffer[pos++] = lock.lockState;
+    /* door detect */
+    buffer[pos++] = lock.doorDetectState1;
+    buffer[pos++] = lock.doorDetectState2;
+    /* key detect */
+    buffer[pos++] = lock.keyDetectState;
+    /* auto lock time */
+    buffer[pos++] = (lock.autoLockTime >> 16) & 0xff;
+    buffer[pos++] = (lock.autoLockTime >> 8) & 0xff;
+    buffer[pos++] = lock.autoLockTime & 0xff;
+    /* auto lock flag */
+    buffer[pos++] = lock.autoLockFlag;
+    /* light status */
+    buffer[pos++] = lock.lightState1;
+    buffer[pos++] = lock.lightState2;
+    /* alarm status */
+    buffer[pos++] = lock.alarmStatus;
+    /* auto report flag */
+    buffer[pos++] = lock.autoReportFlag;
+    /* gsensor data */
+    buffer[pos++] = (lock.gSensor.x >> 8) & 0xff;
+    buffer[pos++] = lock.gSensor.x & 0xff;
+    buffer[pos++] = (lock.gSensor.y >> 8) & 0xff;
+    buffer[pos++] = lock.gSensor.y & 0xff;
+    buffer[pos++] = (lock.gSensor.z >> 8) & 0xff;
+    buffer[pos++] = lock.gSensor.z & 0xff;
+    /* UID */
+    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
+    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
+    buffer[pos++] = lock.uid0 & 0xff;
+    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
+    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
+    buffer[pos++] = lock.uid1 & 0xff;
+    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
+    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
+    buffer[pos++] = lock.uid2 & 0xff;
+    
+    user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_QUERY_ALL_STATUS, buffer, pos);       
+}
+
 uint16_t user_read_flash(uint32_t address)
 {
     return *(__IO uint16_t*)address;
@@ -722,6 +809,11 @@ void user_reply_handle(void)
     if(lock.cmdControl.singleQueryGsensor.sendCmdEnable && !lock.cmdControl.singleQueryGsensor.sendCmdDelay){
         lock.cmdControl.singleQueryGsensor.sendCmdEnable = CMD_DISABLE;
         onReportGsensorData();
+    }
+
+    if(lock.cmdControl.singleQueryAllStatus.sendCmdEnable && !lock.cmdControl.singleQueryAllStatus.sendCmdDelay){
+        lock.cmdControl.singleQueryAllStatus.sendCmdEnable = CMD_DISABLE;
+        onReportDeviceAllStatus();
     }
 }
 

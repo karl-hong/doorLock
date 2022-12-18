@@ -248,6 +248,11 @@ void user_event_process(uint8_t cmd, uint8_t opt, uint8_t *data, uint16_t lenOfD
 					onCmdGetGsensorData(data, lenOfData);
 					break;
 				}
+
+				case OPT_CODE_SINGLE_DEV_QUERY_ALL_STATUS:{
+					onCmdQuerySingleDevAllStatus(data, lenOfData);
+					break;
+				}
 				
 				default:
 					break;

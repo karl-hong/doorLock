@@ -3,7 +3,7 @@
 <title>Static Call Graph - [doorLock\doorLock.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image doorLock\doorLock.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Mon Dec 12 22:27:35 2022
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5050106: Last Updated: Sun Dec 18 16:01:13 2022
 <BR><P>
 <H3>Maximum Stack Usage =        416 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -69,7 +69,7 @@ Global Symbols
 <P><STRONG><a name="[25]"></a>__main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry.o(.ARM.Collect$$$$00000000))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f051x8.o(.text)
 </UL>
-<P><STRONG><a name="[d1]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
+<P><STRONG><a name="[d3]"></a>_main_stk</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry2.o(.ARM.Collect$$$$00000001))
 
 <P><STRONG><a name="[2a]"></a>_main_scatterload</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry5.o(.ARM.Collect$$$$00000004))
 <BR><BR>[Calls]<UL><LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
@@ -79,15 +79,15 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[2b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__scatterload
 </UL>
 
-<P><STRONG><a name="[d2]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
+<P><STRONG><a name="[d4]"></a>_main_clock</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry7b.o(.ARM.Collect$$$$00000008))
 
-<P><STRONG><a name="[d3]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
+<P><STRONG><a name="[d5]"></a>_main_cpp_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry8b.o(.ARM.Collect$$$$0000000A))
 
-<P><STRONG><a name="[d4]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
+<P><STRONG><a name="[d6]"></a>_main_init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry9a.o(.ARM.Collect$$$$0000000B))
 
-<P><STRONG><a name="[d5]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000D))
+<P><STRONG><a name="[d7]"></a>__rt_final_cpp</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry10a.o(.ARM.Collect$$$$0000000D))
 
-<P><STRONG><a name="[d6]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$0000000F))
+<P><STRONG><a name="[d8]"></a>__rt_final_exit</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, entry11a.o(.ARM.Collect$$$$0000000F))
 
 <P><STRONG><a name="[0]"></a>Reset_Handler</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, startup_stm32f051x8.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f051x8.o(RESET)
@@ -174,7 +174,7 @@ Global Symbols
 <P><STRONG><a name="[6]"></a>WWDG_IRQHandler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup_stm32f051x8.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f051x8.o(RESET)
 </UL>
-<P><STRONG><a name="[d7]"></a>__aeabi_uidiv</STRONG> (Thumb, 0 bytes, Stack size 12 bytes, uidiv.o(.text), UNUSED)
+<P><STRONG><a name="[d9]"></a>__aeabi_uidiv</STRONG> (Thumb, 0 bytes, Stack size 12 bytes, uidiv.o(.text), UNUSED)
 
 <P><STRONG><a name="[53]"></a>__aeabi_uidivmod</STRONG> (Thumb, 44 bytes, Stack size 12 bytes, uidiv.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = __aeabi_uidivmod
@@ -200,32 +200,32 @@ Global Symbols
 <LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
 </UL>
 
-<P><STRONG><a name="[d8]"></a>_ll_ushift_r</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llushr.o(.text), UNUSED)
+<P><STRONG><a name="[da]"></a>_ll_ushift_r</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llushr.o(.text), UNUSED)
 
 <P><STRONG><a name="[34]"></a>__aeabi_memcpy</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, memcpya.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ComUnpack
 <LI><a href="#[33]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ComPack
-<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_write_items
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_read_items
+<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_write_items
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_read_items
 </UL>
 
-<P><STRONG><a name="[d9]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text), UNUSED)
+<P><STRONG><a name="[db]"></a>__aeabi_memcpy4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text), UNUSED)
 
-<P><STRONG><a name="[da]"></a>__aeabi_memcpy8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text), UNUSED)
+<P><STRONG><a name="[dc]"></a>__aeabi_memcpy8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memcpya.o(.text), UNUSED)
 
 <P><STRONG><a name="[30]"></a>__aeabi_memset</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, memseta.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_memset$wrapper
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 </UL>
 
-<P><STRONG><a name="[db]"></a>__aeabi_memset4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
+<P><STRONG><a name="[dd]"></a>__aeabi_memset4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 
-<P><STRONG><a name="[dc]"></a>__aeabi_memset8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
+<P><STRONG><a name="[de]"></a>__aeabi_memset8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 
 <P><STRONG><a name="[2f]"></a>__aeabi_memclr</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, memseta.o(.text))
 <BR><BR>[Calls]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+<BR>[Called By]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
 </UL>
 
 <P><STRONG><a name="[37]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text))
@@ -238,7 +238,7 @@ Global Symbols
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ComUnpack
 </UL>
 
-<P><STRONG><a name="[dd]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
+<P><STRONG><a name="[df]"></a>__aeabi_memclr8</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, memseta.o(.text), UNUSED)
 
 <P><STRONG><a name="[31]"></a>_memset$wrapper</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, memseta.o(.text), UNUSED)
 <BR><BR>[Calls]<UL><LI><a href="#[30]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memset
@@ -250,7 +250,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uldivmod
 </UL>
 
-<P><STRONG><a name="[de]"></a>_ll_shift_l</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llshl.o(.text), UNUSED)
+<P><STRONG><a name="[e0]"></a>_ll_shift_l</STRONG> (Thumb, 0 bytes, Stack size 8 bytes, llshl.o(.text), UNUSED)
 
 <P><STRONG><a name="[2b]"></a>__scatterload</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, init.o(.text))
 <BR><BR>[Calls]<UL><LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__main_after_scatterload
@@ -258,7 +258,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_main_scatterload
 </UL>
 
-<P><STRONG><a name="[df]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
+<P><STRONG><a name="[e1]"></a>__scatterload_rt2</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, init.o(.text), UNUSED)
 
 <P><STRONG><a name="[33]"></a>ComPack</STRONG> (Thumb, 170 bytes, Stack size 120 bytes, user_protocol.o(i.ComPack))
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = ComPack &rArr; cal_crc16
@@ -266,7 +266,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
 <LI><a href="#[35]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cal_crc16
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+<BR>[Called By]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
 </UL>
 
 <P><STRONG><a name="[36]"></a>ComUnpack</STRONG> (Thumb, 274 bytes, Stack size 120 bytes, user_protocol.o(i.ComUnpack))
@@ -331,7 +331,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 </UL>
 
-<P><STRONG><a name="[cc]"></a>HAL_FLASH_Lock</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, stm32f0xx_hal_flash.o(i.HAL_FLASH_Lock))
+<P><STRONG><a name="[ce]"></a>HAL_FLASH_Lock</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, stm32f0xx_hal_flash.o(i.HAL_FLASH_Lock))
 <BR><BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 </UL>
 
@@ -345,7 +345,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 </UL>
 
-<P><STRONG><a name="[cb]"></a>HAL_FLASH_Unlock</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, stm32f0xx_hal_flash.o(i.HAL_FLASH_Unlock))
+<P><STRONG><a name="[cd]"></a>HAL_FLASH_Unlock</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, stm32f0xx_hal_flash.o(i.HAL_FLASH_Unlock))
 <BR><BR>[Called By]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 </UL>
 
@@ -402,15 +402,15 @@ Global Symbols
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_CheckIdleState
 </UL>
 
-<P><STRONG><a name="[c8]"></a>HAL_GetUIDw0</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f0xx_hal.o(i.HAL_GetUIDw0))
+<P><STRONG><a name="[ca]"></a>HAL_GetUIDw0</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f0xx_hal.o(i.HAL_GetUIDw0))
 <BR><BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_init
 </UL>
 
-<P><STRONG><a name="[c9]"></a>HAL_GetUIDw1</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f0xx_hal.o(i.HAL_GetUIDw1))
+<P><STRONG><a name="[cb]"></a>HAL_GetUIDw1</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f0xx_hal.o(i.HAL_GetUIDw1))
 <BR><BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_init
 </UL>
 
-<P><STRONG><a name="[ca]"></a>HAL_GetUIDw2</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f0xx_hal.o(i.HAL_GetUIDw2))
+<P><STRONG><a name="[cc]"></a>HAL_GetUIDw2</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, stm32f0xx_hal.o(i.HAL_GetUIDw2))
 <BR><BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_init
 </UL>
 
@@ -731,7 +731,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[3b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetTick
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UART_WaitOnFlagUntilTimeout
 </UL>
-<BR>[Called By]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_uart1_send_data
+<BR>[Called By]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_uart1_send_data
 <LI><a href="#[29]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fputc
 </UL>
 
@@ -917,7 +917,7 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;_printf_core
 </UL>
 
-<P><STRONG><a name="[e0]"></a>__1printf$8</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf8.o(i.__0printf$8), UNUSED)
+<P><STRONG><a name="[e2]"></a>__1printf$8</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf8.o(i.__0printf$8), UNUSED)
 
 <P><STRONG><a name="[38]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf8.o(i.__0printf$8))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2printf
@@ -925,20 +925,21 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_reply_handle
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_init
 <LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_init
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ComUnpack
-<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetLight
-<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetDeviceOnOff
-<LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdQuerySingleDevStatus
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetLight
+<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetDeviceOnOff
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdQuerySingleDevStatus
+<LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdQuerySingleDevAllStatus
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdModifyDeviceBasicSetting
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdGetGsensorData
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdClrDevAlarmSetting
-<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_create
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_get_acceleration_data
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_hr
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_g_range
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_ble
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_bdu
+<LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_create
+<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_get_acceleration_data
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_hr
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_g_range
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_ble
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_bdu
 <LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 </UL>
 
@@ -948,18 +949,18 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_RCC_GetSysClockFreq
 </UL>
 
-<P><STRONG><a name="[be]"></a>__ARM_common_switch8</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, stm32f0xx_hal_dma.o(i.__ARM_common_switch8))
+<P><STRONG><a name="[c0]"></a>__ARM_common_switch8</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, stm32f0xx_hal_dma.o(i.__ARM_common_switch8))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = __ARM_common_switch8
 </UL>
-<BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_get_acceleration_data
+<BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
+<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_get_acceleration_data
 </UL>
 
-<P><STRONG><a name="[e1]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
+<P><STRONG><a name="[e3]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
 
-<P><STRONG><a name="[e2]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
+<P><STRONG><a name="[e4]"></a>__scatterload_null</STRONG> (Thumb, 2 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_null), UNUSED)
 
-<P><STRONG><a name="[e3]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
+<P><STRONG><a name="[e5]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
 <P><STRONG><a name="[a4]"></a>autolock_task</STRONG> (Thumb, 58 bytes, Stack size 12 bytes, common.o(i.autolock_task))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = autolock_task
@@ -995,7 +996,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_Mem_Read
 </UL>
-<BR>[Called By]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
+<BR>[Called By]<UL><LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
 </UL>
 
 <P><STRONG><a name="[97]"></a>i2c_transmit</STRONG> (Thumb, 22 bytes, Stack size 24 bytes, i2c.o(i.i2c_transmit))
@@ -1003,7 +1004,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_I2C_Mem_Write
 </UL>
-<BR>[Called By]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_write
+<BR>[Called By]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_write
 </UL>
 
 <P><STRONG><a name="[99]"></a>led_task</STRONG> (Thumb, 90 bytes, Stack size 8 bytes, led.o(i.led_task))
@@ -1014,7 +1015,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[9b]"></a>lock_state_init</STRONG> (Thumb, 82 bytes, Stack size 16 bytes, common.o(i.lock_state_init))
+<P><STRONG><a name="[9b]"></a>lock_state_init</STRONG> (Thumb, 96 bytes, Stack size 16 bytes, common.o(i.lock_state_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = lock_state_init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[94]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_ReadPin
@@ -1022,7 +1023,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[95]"></a>lock_stop_detect</STRONG> (Thumb, 152 bytes, Stack size 24 bytes, common.o(i.lock_stop_detect))
+<P><STRONG><a name="[95]"></a>lock_stop_detect</STRONG> (Thumb, 142 bytes, Stack size 24 bytes, common.o(i.lock_stop_detect))
 <BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = lock_stop_detect &rArr; user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
@@ -1057,13 +1058,13 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
 </UL>
-<P><STRONG><a name="[ac]"></a>motor_set_backward</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, motor.o(i.motor_set_backward))
-<BR><BR>[Called By]<UL><LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetDeviceOnOff
+<P><STRONG><a name="[ad]"></a>motor_set_backward</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, motor.o(i.motor_set_backward))
+<BR><BR>[Called By]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetDeviceOnOff
 </UL>
 
-<P><STRONG><a name="[ad]"></a>motor_set_forward</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, motor.o(i.motor_set_forward))
+<P><STRONG><a name="[ae]"></a>motor_set_forward</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, motor.o(i.motor_set_forward))
 <BR><BR>[Called By]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;tim_interrupt_callback
-<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetDeviceOnOff
+<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetDeviceOnOff
 </UL>
 
 <P><STRONG><a name="[9c]"></a>motor_set_stop</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, motor.o(i.motor_set_stop))
@@ -1086,7 +1087,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
+<BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
 </UL>
 
 <P><STRONG><a name="[a8]"></a>onCmdGetGsensorData</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, user_data.o(i.onCmdGetGsensorData))
@@ -1094,7 +1095,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
+<BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
 </UL>
 
 <P><STRONG><a name="[a9]"></a>onCmdModifyDeviceBasicSetting</STRONG> (Thumb, 254 bytes, Stack size 40 bytes, user_data.o(i.onCmdModifyDeviceBasicSetting))
@@ -1103,117 +1104,133 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
+<BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
 </UL>
 
-<P><STRONG><a name="[aa]"></a>onCmdQuerySingleDevStatus</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, user_data.o(i.onCmdQuerySingleDevStatus))
+<P><STRONG><a name="[aa]"></a>onCmdQuerySingleDevAllStatus</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, user_data.o(i.onCmdQuerySingleDevAllStatus))
+<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = onCmdQuerySingleDevAllStatus &rArr; __2printf
+</UL>
+<BR>[Calls]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+</UL>
+<BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
+</UL>
+
+<P><STRONG><a name="[ab]"></a>onCmdQuerySingleDevStatus</STRONG> (Thumb, 116 bytes, Stack size 16 bytes, user_data.o(i.onCmdQuerySingleDevStatus))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = onCmdQuerySingleDevStatus &rArr; __2printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
+<BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
 </UL>
 
-<P><STRONG><a name="[ab]"></a>onCmdSetDeviceOnOff</STRONG> (Thumb, 192 bytes, Stack size 24 bytes, user_data.o(i.onCmdSetDeviceOnOff))
+<P><STRONG><a name="[ac]"></a>onCmdSetDeviceOnOff</STRONG> (Thumb, 192 bytes, Stack size 24 bytes, user_data.o(i.onCmdSetDeviceOnOff))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = onCmdSetDeviceOnOff &rArr; __2printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_backward
-<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_forward
+<BR>[Calls]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_backward
+<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_forward
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
+<BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
 </UL>
 
-<P><STRONG><a name="[ae]"></a>onCmdSetLight</STRONG> (Thumb, 196 bytes, Stack size 24 bytes, user_data.o(i.onCmdSetLight))
+<P><STRONG><a name="[af]"></a>onCmdSetLight</STRONG> (Thumb, 196 bytes, Stack size 24 bytes, user_data.o(i.onCmdSetLight))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = onCmdSetLight &rArr; __2printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light2_on
-<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light2_off
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light1_on
-<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light1_off
+<BR>[Calls]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light2_on
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light2_off
+<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light1_on
+<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light1_off
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
+<BR>[Called By]<UL><LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
 </UL>
 
-<P><STRONG><a name="[b3]"></a>onReportAutoLockAlarm</STRONG> (Thumb, 76 bytes, Stack size 32 bytes, user_data.o(i.onReportAutoLockAlarm))
+<P><STRONG><a name="[b4]"></a>onReportAutoLockAlarm</STRONG> (Thumb, 76 bytes, Stack size 32 bytes, user_data.o(i.onReportAutoLockAlarm))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296<LI>Call Chain = onReportAutoLockAlarm &rArr; user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_reply_handle
 </UL>
 
-<P><STRONG><a name="[b5]"></a>onReportBasicSetting</STRONG> (Thumb, 96 bytes, Stack size 32 bytes, user_data.o(i.onReportBasicSetting))
+<P><STRONG><a name="[b6]"></a>onReportBasicSetting</STRONG> (Thumb, 96 bytes, Stack size 32 bytes, user_data.o(i.onReportBasicSetting))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296<LI>Call Chain = onReportBasicSetting &rArr; user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_reply_handle
 </UL>
 
-<P><STRONG><a name="[b6]"></a>onReportClearDevAlarmSetting</STRONG> (Thumb, 80 bytes, Stack size 32 bytes, user_data.o(i.onReportClearDevAlarmSetting))
+<P><STRONG><a name="[b7]"></a>onReportClearDevAlarmSetting</STRONG> (Thumb, 80 bytes, Stack size 32 bytes, user_data.o(i.onReportClearDevAlarmSetting))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296<LI>Call Chain = onReportClearDevAlarmSetting &rArr; user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_reply_handle
 </UL>
 
-<P><STRONG><a name="[b7]"></a>onReportDeviceStatus</STRONG> (Thumb, 124 bytes, Stack size 48 bytes, user_data.o(i.onReportDeviceStatus))
+<P><STRONG><a name="[b8]"></a>onReportDeviceAllStatus</STRONG> (Thumb, 148 bytes, Stack size 48 bytes, user_data.o(i.onReportDeviceAllStatus))
+<BR><BR>[Stack]<UL><LI>Max Depth = 312<LI>Call Chain = onReportDeviceAllStatus &rArr; user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
+</UL>
+<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+</UL>
+<BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_reply_handle
+</UL>
+
+<P><STRONG><a name="[b9]"></a>onReportDeviceStatus</STRONG> (Thumb, 124 bytes, Stack size 48 bytes, user_data.o(i.onReportDeviceStatus))
 <BR><BR>[Stack]<UL><LI>Max Depth = 312<LI>Call Chain = onReportDeviceStatus &rArr; user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_reply_handle
 </UL>
 
-<P><STRONG><a name="[b8]"></a>onReportFaultAlarm</STRONG> (Thumb, 86 bytes, Stack size 32 bytes, user_data.o(i.onReportFaultAlarm))
+<P><STRONG><a name="[ba]"></a>onReportFaultAlarm</STRONG> (Thumb, 86 bytes, Stack size 32 bytes, user_data.o(i.onReportFaultAlarm))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296<LI>Call Chain = onReportFaultAlarm &rArr; user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_reply_handle
 </UL>
 
-<P><STRONG><a name="[b9]"></a>onReportGsensorData</STRONG> (Thumb, 100 bytes, Stack size 32 bytes, user_data.o(i.onReportGsensorData))
+<P><STRONG><a name="[bb]"></a>onReportGsensorData</STRONG> (Thumb, 100 bytes, Stack size 32 bytes, user_data.o(i.onReportGsensorData))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296<LI>Call Chain = onReportGsensorData &rArr; user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_reply_handle
 </UL>
 
-<P><STRONG><a name="[ba]"></a>onReportManualAlarm</STRONG> (Thumb, 78 bytes, Stack size 32 bytes, user_data.o(i.onReportManualAlarm))
+<P><STRONG><a name="[bc]"></a>onReportManualAlarm</STRONG> (Thumb, 78 bytes, Stack size 32 bytes, user_data.o(i.onReportManualAlarm))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296<LI>Call Chain = onReportManualAlarm &rArr; user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_reply_handle
 </UL>
 
-<P><STRONG><a name="[bb]"></a>onReportSetDevOnOffStatus</STRONG> (Thumb, 80 bytes, Stack size 32 bytes, user_data.o(i.onReportSetDevOnOffStatus))
+<P><STRONG><a name="[bd]"></a>onReportSetDevOnOffStatus</STRONG> (Thumb, 80 bytes, Stack size 32 bytes, user_data.o(i.onReportSetDevOnOffStatus))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296<LI>Call Chain = onReportSetDevOnOffStatus &rArr; user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_reply_handle
 </UL>
 
-<P><STRONG><a name="[bc]"></a>onReportSetLightStatus</STRONG> (Thumb, 104 bytes, Stack size 32 bytes, user_data.o(i.onReportSetLightStatus))
+<P><STRONG><a name="[be]"></a>onReportSetLightStatus</STRONG> (Thumb, 104 bytes, Stack size 32 bytes, user_data.o(i.onReportSetLightStatus))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296<LI>Call Chain = onReportSetLightStatus &rArr; user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
 </UL>
-<BR>[Calls]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+<BR>[Calls]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_reply_handle
 </UL>
 
-<P><STRONG><a name="[bd]"></a>sc7a20_get_acceleration_data</STRONG> (Thumb, 352 bytes, Stack size 56 bytes, sc7a20.o(i.sc7a20_get_acceleration_data))
+<P><STRONG><a name="[bf]"></a>sc7a20_get_acceleration_data</STRONG> (Thumb, 352 bytes, Stack size 56 bytes, sc7a20.o(i.sc7a20_get_acceleration_data))
 <BR><BR>[Stack]<UL><LI>Max Depth = 288<LI>Call Chain = sc7a20_get_acceleration_data &rArr; sc7a20_init &rArr; sc7a20_update_hr &rArr; sc7a20_register_write &rArr; i2c_transmit &rArr; HAL_I2C_Mem_Write &rArr; I2C_RequestMemoryWrite &rArr; I2C_WaitOnTXISFlagUntilTimeout &rArr; I2C_IsAcknowledgeFailed
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_init
-<LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_common_switch8
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
+<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_common_switch8
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_task
@@ -1222,68 +1239,68 @@ Global Symbols
 <P><STRONG><a name="[9f]"></a>sc7a20_init</STRONG> (Thumb, 216 bytes, Stack size 24 bytes, sc7a20.o(i.sc7a20_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 232<LI>Call Chain = sc7a20_init &rArr; sc7a20_update_hr &rArr; sc7a20_register_write &rArr; i2c_transmit &rArr; HAL_I2C_Mem_Write &rArr; I2C_RequestMemoryWrite &rArr; I2C_WaitOnTXISFlagUntilTimeout &rArr; I2C_IsAcknowledgeFailed
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_hr
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_g_range
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_ble
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_bdu
-<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_write
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
+<BR>[Calls]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_hr
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_g_range
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_ble
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_bdu
+<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_write
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_get_acceleration_data
+<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_get_acceleration_data
 </UL>
 
 <P><STRONG><a name="[a3]"></a>sc7a20_task</STRONG> (Thumb, 26 bytes, Stack size 8 bytes, sc7a20.o(i.sc7a20_task))
 <BR><BR>[Stack]<UL><LI>Max Depth = 296<LI>Call Chain = sc7a20_task &rArr; sc7a20_get_acceleration_data &rArr; sc7a20_init &rArr; sc7a20_update_hr &rArr; sc7a20_register_write &rArr; i2c_transmit &rArr; HAL_I2C_Mem_Write &rArr; I2C_RequestMemoryWrite &rArr; I2C_WaitOnTXISFlagUntilTimeout &rArr; I2C_IsAcknowledgeFailed
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_get_acceleration_data
+<BR>[Calls]<UL><LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_get_acceleration_data
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[b1]"></a>set_light1_off</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, led.o(i.set_light1_off))
+<P><STRONG><a name="[b2]"></a>set_light1_off</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, led.o(i.set_light1_off))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = set_light1_off &rArr; light_set_status
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;light_set_status
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetLight
+<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetLight
 </UL>
 
-<P><STRONG><a name="[af]"></a>set_light1_on</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, led.o(i.set_light1_on))
+<P><STRONG><a name="[b0]"></a>set_light1_on</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, led.o(i.set_light1_on))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = set_light1_on &rArr; light_set_status
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;light_set_status
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetLight
+<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetLight
 </UL>
 
-<P><STRONG><a name="[b2]"></a>set_light2_off</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, led.o(i.set_light2_off))
+<P><STRONG><a name="[b3]"></a>set_light2_off</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, led.o(i.set_light2_off))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = set_light2_off &rArr; light_set_status
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;light_set_status
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetLight
+<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetLight
 </UL>
 
-<P><STRONG><a name="[b0]"></a>set_light2_on</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, led.o(i.set_light2_on))
+<P><STRONG><a name="[b1]"></a>set_light2_on</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, led.o(i.set_light2_on))
 <BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = set_light2_on &rArr; light_set_status
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;light_set_status
 </UL>
-<BR>[Called By]<UL><LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetLight
+<BR>[Called By]<UL><LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetLight
 </UL>
 
-<P><STRONG><a name="[6d]"></a>tim_interrupt_callback</STRONG> (Thumb, 212 bytes, Stack size 24 bytes, common.o(i.tim_interrupt_callback))
+<P><STRONG><a name="[6d]"></a>tim_interrupt_callback</STRONG> (Thumb, 222 bytes, Stack size 24 bytes, common.o(i.tim_interrupt_callback))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = tim_interrupt_callback
 </UL>
 <BR>[Calls]<UL><LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_stop
-<LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_forward
+<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_set_forward
 </UL>
 <BR>[Called By]<UL><LI><a href="#[69]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_TIM_PeriodElapsedCallback
 </UL>
 
-<P><STRONG><a name="[c5]"></a>user_buffer_create</STRONG> (Thumb, 58 bytes, Stack size 24 bytes, user_buffer.o(i.user_buffer_create))
+<P><STRONG><a name="[c7]"></a>user_buffer_create</STRONG> (Thumb, 58 bytes, Stack size 24 bytes, user_buffer.o(i.user_buffer_create))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = user_buffer_create &rArr; __2printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
@@ -1291,11 +1308,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_init
 </UL>
 
-<P><STRONG><a name="[ce]"></a>user_buffer_item_count</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, user_buffer.o(i.user_buffer_item_count))
+<P><STRONG><a name="[d0]"></a>user_buffer_item_count</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, user_buffer.o(i.user_buffer_item_count))
 <BR><BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_handle
 </UL>
 
-<P><STRONG><a name="[c6]"></a>user_buffer_read_items</STRONG> (Thumb, 92 bytes, Stack size 32 bytes, user_buffer.o(i.user_buffer_read_items))
+<P><STRONG><a name="[c8]"></a>user_buffer_read_items</STRONG> (Thumb, 92 bytes, Stack size 32 bytes, user_buffer.o(i.user_buffer_read_items))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = user_buffer_read_items
 </UL>
 <BR>[Calls]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
@@ -1303,13 +1320,13 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_handle
 </UL>
 
-<P><STRONG><a name="[cf]"></a>user_buffer_release_items</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, user_buffer.o(i.user_buffer_release_items))
+<P><STRONG><a name="[d1]"></a>user_buffer_release_items</STRONG> (Thumb, 36 bytes, Stack size 8 bytes, user_buffer.o(i.user_buffer_release_items))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = user_buffer_release_items
 </UL>
 <BR>[Called By]<UL><LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_handle
 </UL>
 
-<P><STRONG><a name="[c7]"></a>user_buffer_write_items</STRONG> (Thumb, 116 bytes, Stack size 32 bytes, user_buffer.o(i.user_buffer_write_items))
+<P><STRONG><a name="[c9]"></a>user_buffer_write_items</STRONG> (Thumb, 116 bytes, Stack size 32 bytes, user_buffer.o(i.user_buffer_write_items))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = user_buffer_write_items
 </UL>
 <BR>[Calls]<UL><LI><a href="#[34]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy
@@ -1320,9 +1337,9 @@ Global Symbols
 <P><STRONG><a name="[9e]"></a>user_database_init</STRONG> (Thumb, 194 bytes, Stack size 32 bytes, user_data.o(i.user_database_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 144<LI>Call Chain = user_database_init &rArr; user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
-<BR>[Calls]<UL><LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetUIDw2
-<LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetUIDw1
-<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetUIDw0
+<BR>[Calls]<UL><LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetUIDw2
+<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetUIDw1
+<LI><a href="#[ca]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GetUIDw0
 <LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[9d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_save
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
@@ -1334,9 +1351,9 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 112<LI>Call Chain = user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASHEx_Erase
-<LI><a href="#[cb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASH_Unlock
+<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASH_Unlock
 <LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASH_Program
-<LI><a href="#[cc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASH_Lock
+<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_FLASH_Lock
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_database_init
@@ -1345,13 +1362,14 @@ Global Symbols
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdClrDevAlarmSetting
 </UL>
 
-<P><STRONG><a name="[cd]"></a>user_event_process</STRONG> (Thumb, 130 bytes, Stack size 24 bytes, user_protocol.o(i.user_event_process))
+<P><STRONG><a name="[cf]"></a>user_event_process</STRONG> (Thumb, 140 bytes, Stack size 24 bytes, user_protocol.o(i.user_event_process))
 <BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = user_event_process &rArr; onCmdModifyDeviceBasicSetting &rArr; user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
-<BR>[Calls]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_common_switch8
-<LI><a href="#[ae]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetLight
-<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetDeviceOnOff
-<LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdQuerySingleDevStatus
+<BR>[Calls]<UL><LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__ARM_common_switch8
+<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetLight
+<LI><a href="#[ac]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdSetDeviceOnOff
+<LI><a href="#[ab]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdQuerySingleDevStatus
+<LI><a href="#[aa]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdQuerySingleDevAllStatus
 <LI><a href="#[a9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdModifyDeviceBasicSetting
 <LI><a href="#[a8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdGetGsensorData
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onCmdClrDevAlarmSetting
@@ -1364,11 +1382,11 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 416<LI>Call Chain = user_protocol_handle &rArr; user_event_process &rArr; onCmdModifyDeviceBasicSetting &rArr; user_database_save &rArr; HAL_FLASH_Program &rArr; FLASH_WaitForLastOperation &rArr; FLASH_SetErrorCode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[37]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
-<LI><a href="#[cd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
+<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_event_process
 <LI><a href="#[36]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ComUnpack
-<LI><a href="#[cf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_release_items
-<LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_read_items
-<LI><a href="#[ce]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_item_count
+<LI><a href="#[d1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_release_items
+<LI><a href="#[c8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_read_items
+<LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_item_count
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -1376,7 +1394,7 @@ Global Symbols
 <P><STRONG><a name="[8b]"></a>user_protocol_init</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, user_protocol.o(i.user_protocol_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56<LI>Call Chain = user_protocol_init &rArr; user_buffer_create &rArr; __2printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_create
+<BR>[Calls]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_create
 </UL>
 <BR>[Called By]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;MX_USART1_UART_Init
 </UL>
@@ -1384,52 +1402,54 @@ Global Symbols
 <P><STRONG><a name="[7a]"></a>user_protocol_push_data</STRONG> (Thumb, 14 bytes, Stack size 8 bytes, user_protocol.o(i.user_protocol_push_data))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = user_protocol_push_data &rArr; user_buffer_write_items
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_write_items
+<BR>[Calls]<UL><LI><a href="#[c9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_buffer_write_items
 </UL>
 <BR>[Called By]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_RxCpltCallback
 </UL>
 
-<P><STRONG><a name="[b4]"></a>user_protocol_send_data</STRONG> (Thumb, 50 bytes, Stack size 128 bytes, user_protocol.o(i.user_protocol_send_data))
+<P><STRONG><a name="[b5]"></a>user_protocol_send_data</STRONG> (Thumb, 50 bytes, Stack size 128 bytes, user_protocol.o(i.user_protocol_send_data))
 <BR><BR>[Stack]<UL><LI>Max Depth = 264<LI>Call Chain = user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
 </UL>
-<BR>[Calls]<UL><LI><a href="#[d0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_uart1_send_data
+<BR>[Calls]<UL><LI><a href="#[d2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_uart1_send_data
 <LI><a href="#[2f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr
 <LI><a href="#[33]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ComPack
 </UL>
-<BR>[Called By]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportSetLightStatus
-<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportSetDevOnOffStatus
-<LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportManualAlarm
-<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportGsensorData
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportFaultAlarm
-<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportDeviceStatus
-<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportClearDevAlarmSetting
-<LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportBasicSetting
-<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportAutoLockAlarm
+<BR>[Called By]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportSetLightStatus
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportSetDevOnOffStatus
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportManualAlarm
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportGsensorData
+<LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportFaultAlarm
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportDeviceStatus
+<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportDeviceAllStatus
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportClearDevAlarmSetting
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportBasicSetting
+<LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportAutoLockAlarm
 </UL>
 
-<P><STRONG><a name="[a2]"></a>user_reply_handle</STRONG> (Thumb, 188 bytes, Stack size 16 bytes, user_data.o(i.user_reply_handle))
+<P><STRONG><a name="[a2]"></a>user_reply_handle</STRONG> (Thumb, 206 bytes, Stack size 16 bytes, user_data.o(i.user_reply_handle))
 <BR><BR>[Stack]<UL><LI>Max Depth = 328<LI>Call Chain = user_reply_handle &rArr; onReportDeviceStatus &rArr; user_protocol_send_data &rArr; ComPack &rArr; cal_crc16
 </UL>
-<BR>[Calls]<UL><LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportSetLightStatus
-<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportSetDevOnOffStatus
-<LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportManualAlarm
-<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportGsensorData
-<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportFaultAlarm
-<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportDeviceStatus
-<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportClearDevAlarmSetting
-<LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportBasicSetting
-<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportAutoLockAlarm
+<BR>[Calls]<UL><LI><a href="#[be]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportSetLightStatus
+<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportSetDevOnOffStatus
+<LI><a href="#[bc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportManualAlarm
+<LI><a href="#[bb]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportGsensorData
+<LI><a href="#[ba]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportFaultAlarm
+<LI><a href="#[b9]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportDeviceStatus
+<LI><a href="#[b8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportDeviceAllStatus
+<LI><a href="#[b7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportClearDevAlarmSetting
+<LI><a href="#[b6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportBasicSetting
+<LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;onReportAutoLockAlarm
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[23]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[d0]"></a>user_uart1_send_data</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, usart.o(i.user_uart1_send_data))
+<P><STRONG><a name="[d2]"></a>user_uart1_send_data</STRONG> (Thumb, 16 bytes, Stack size 8 bytes, usart.o(i.user_uart1_send_data))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = user_uart1_send_data &rArr; HAL_UART_Transmit &rArr; UART_WaitOnFlagUntilTimeout
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_UART_Transmit
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
+<BR>[Called By]<UL><LI><a href="#[b5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;user_protocol_send_data
 </UL>
 <P>
 <H3>
@@ -1573,10 +1593,10 @@ Local Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;HAL_GPIO_WritePin
 </UL>
-<BR>[Called By]<UL><LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light2_on
-<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light2_off
-<LI><a href="#[af]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light1_on
-<LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light1_off
+<BR>[Called By]<UL><LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light2_on
+<LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light2_off
+<LI><a href="#[b0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light1_on
+<LI><a href="#[b2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;set_light1_off
 </UL>
 
 <P><STRONG><a name="[a6]"></a>motor_latency_ctrl</STRONG> (Thumb, 56 bytes, Stack size 0 bytes, motor.o(i.motor_latency_ctrl))
@@ -1591,66 +1611,66 @@ Local Symbols
 <BR>[Called By]<UL><LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;motor_task
 </UL>
 
-<P><STRONG><a name="[bf]"></a>sc7a20_register_read</STRONG> (Thumb, 48 bytes, Stack size 32 bytes, sc7a20.o(i.sc7a20_register_read))
+<P><STRONG><a name="[c1]"></a>sc7a20_register_read</STRONG> (Thumb, 48 bytes, Stack size 32 bytes, sc7a20.o(i.sc7a20_register_read))
 <BR><BR>[Stack]<UL><LI>Max Depth = 176<LI>Call Chain = sc7a20_register_read &rArr; i2c_receive &rArr; HAL_I2C_Mem_Read &rArr; I2C_RequestMemoryRead &rArr; I2C_WaitOnTXISFlagUntilTimeout &rArr; I2C_IsAcknowledgeFailed
 </UL>
 <BR>[Calls]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_receive
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_init
-<LI><a href="#[bd]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_get_acceleration_data
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_hr
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_g_range
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_ble
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_bdu
+<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_get_acceleration_data
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_hr
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_g_range
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_ble
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_bdu
 </UL>
 
-<P><STRONG><a name="[c4]"></a>sc7a20_register_write</STRONG> (Thumb, 52 bytes, Stack size 40 bytes, sc7a20.o(i.sc7a20_register_write))
+<P><STRONG><a name="[c6]"></a>sc7a20_register_write</STRONG> (Thumb, 52 bytes, Stack size 40 bytes, sc7a20.o(i.sc7a20_register_write))
 <BR><BR>[Stack]<UL><LI>Max Depth = 184<LI>Call Chain = sc7a20_register_write &rArr; i2c_transmit &rArr; HAL_I2C_Mem_Write &rArr; I2C_RequestMemoryWrite &rArr; I2C_WaitOnTXISFlagUntilTimeout &rArr; I2C_IsAcknowledgeFailed
 </UL>
 <BR>[Calls]<UL><LI><a href="#[97]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;i2c_transmit
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_init
-<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_hr
-<LI><a href="#[c0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_g_range
-<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_ble
-<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_bdu
+<LI><a href="#[c5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_hr
+<LI><a href="#[c2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_g_range
+<LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_ble
+<LI><a href="#[c3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_update_bdu
 </UL>
 
-<P><STRONG><a name="[c1]"></a>sc7a20_update_bdu</STRONG> (Thumb, 84 bytes, Stack size 24 bytes, sc7a20.o(i.sc7a20_update_bdu))
+<P><STRONG><a name="[c3]"></a>sc7a20_update_bdu</STRONG> (Thumb, 84 bytes, Stack size 24 bytes, sc7a20.o(i.sc7a20_update_bdu))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = sc7a20_update_bdu &rArr; sc7a20_register_write &rArr; i2c_transmit &rArr; HAL_I2C_Mem_Write &rArr; I2C_RequestMemoryWrite &rArr; I2C_WaitOnTXISFlagUntilTimeout &rArr; I2C_IsAcknowledgeFailed
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_write
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
+<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_write
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_init
 </UL>
 
-<P><STRONG><a name="[c2]"></a>sc7a20_update_ble</STRONG> (Thumb, 84 bytes, Stack size 24 bytes, sc7a20.o(i.sc7a20_update_ble))
+<P><STRONG><a name="[c4]"></a>sc7a20_update_ble</STRONG> (Thumb, 84 bytes, Stack size 24 bytes, sc7a20.o(i.sc7a20_update_ble))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = sc7a20_update_ble &rArr; sc7a20_register_write &rArr; i2c_transmit &rArr; HAL_I2C_Mem_Write &rArr; I2C_RequestMemoryWrite &rArr; I2C_WaitOnTXISFlagUntilTimeout &rArr; I2C_IsAcknowledgeFailed
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_write
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
+<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_write
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_init
 </UL>
 
-<P><STRONG><a name="[c0]"></a>sc7a20_update_g_range</STRONG> (Thumb, 122 bytes, Stack size 24 bytes, sc7a20.o(i.sc7a20_update_g_range))
+<P><STRONG><a name="[c2]"></a>sc7a20_update_g_range</STRONG> (Thumb, 122 bytes, Stack size 24 bytes, sc7a20.o(i.sc7a20_update_g_range))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = sc7a20_update_g_range &rArr; sc7a20_register_write &rArr; i2c_transmit &rArr; HAL_I2C_Mem_Write &rArr; I2C_RequestMemoryWrite &rArr; I2C_WaitOnTXISFlagUntilTimeout &rArr; I2C_IsAcknowledgeFailed
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_write
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
+<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_write
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_init
 </UL>
 
-<P><STRONG><a name="[c3]"></a>sc7a20_update_hr</STRONG> (Thumb, 84 bytes, Stack size 24 bytes, sc7a20.o(i.sc7a20_update_hr))
+<P><STRONG><a name="[c5]"></a>sc7a20_update_hr</STRONG> (Thumb, 84 bytes, Stack size 24 bytes, sc7a20.o(i.sc7a20_update_hr))
 <BR><BR>[Stack]<UL><LI>Max Depth = 208<LI>Call Chain = sc7a20_update_hr &rArr; sc7a20_register_write &rArr; i2c_transmit &rArr; HAL_I2C_Mem_Write &rArr; I2C_RequestMemoryWrite &rArr; I2C_WaitOnTXISFlagUntilTimeout &rArr; I2C_IsAcknowledgeFailed
 </UL>
-<BR>[Calls]<UL><LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_write
-<LI><a href="#[bf]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
+<BR>[Calls]<UL><LI><a href="#[c6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_write
+<LI><a href="#[c1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_register_read
 <LI><a href="#[38]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[9f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sc7a20_init

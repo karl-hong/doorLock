@@ -42,6 +42,7 @@ typedef struct {
     cmd_setting_t autoLockAlarm;
     cmd_setting_t faultAlarm;
     cmd_setting_t singleQueryGsensor;
+    cmd_setting_t singleQueryAllStatus;
 }cmd_control_t;
 
 typedef struct {
