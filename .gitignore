@@ -11,6 +11,12 @@
 *.ilk
 *.map
 *.exp
+*.crf*
+*.axf*
+*.htm*
+*.lnp*
+*.dep*
+*.iex*
 
 # Precompiled Headers
 *.gch
@@ -46,12 +52,9 @@
 *.mod*
 *.cmd
 *.rar
-*.crf
-*.lnp
-*.htm
-*.dep
-*.axf
+/doorLock/MDK-ARM/doorLock/
 .tmp_versions/
+.vscode/
 modules.order
 Module.symvers
 Mkfile.old

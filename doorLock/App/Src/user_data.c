@@ -701,6 +701,7 @@ void user_database_init(void)
         lock.lockReplyDelay = DEFAULT_LOCK_REPLY_DELAY;
         lock.autoReportFlag = DEFAULT_LOCK_REPORT;
         lock.ledFlashStatus = DEFAULT_LOCK_LED_FLASH;
+        lock.autoLockFlag = DEFAULT_AUTO_LOCK_FLAG;
         lock.alarmStatus = lock.keyDetectState;
         user_database_save();
     }else{
@@ -711,13 +712,14 @@ void user_database_init(void)
         lock.lockReplyDelay = DEFAULT_LOCK_REPLY_DELAY;
         lock.autoReportFlag = (uint8_t)readDataBase.autoReportFlag;
         lock.alarmStatus = readDataBase.alarmStatus;
+				lock.autoLockFlag = readDataBase.autoLockFlag ? 1 : 0;
         //lock.ledFlashStatus = (uint8_t)readDataBase.ledFlash;
     }
 
     printf("Chip uuid: 0x%04x%04x%04x\r\n", lock.uid0, lock.uid1, lock.uid2);
     printf("address: 0x%02X\r\n", lock.address);
     printf("autoReportFlag: 0x%02X\r\n", lock.autoReportFlag);
-    printf("ledFlash: 0x%02X\r\n", lock.ledFlashStatus);
+    printf("lockDelayEnable: 0x%02X\r\n", lock.autoLockFlag);
     printf("lockDelay: 0x%04X\r\n", lock.autoLockTime);
     printf("lockReplyDelay: 0x%02X\r\n", lock.lockReplyDelay);
 }
@@ -739,6 +741,7 @@ void user_database_save(void)
     writeDataBase.lockDelayLow = lock.autoLockTime & 0xffff;
     writeDataBase.lockDelayHigh = (lock.autoLockTime >> 16) & 0xffff;
     writeDataBase.alarmStatus = lock.alarmStatus;
+    writeDataBase.autoLockFlag = lock.autoLockFlag;
 
     HAL_FLASH_Unlock();
 

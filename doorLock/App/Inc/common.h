@@ -9,6 +9,7 @@
 #define DEFAULT_LOCK_REPLY_DELAY    (2)
 #define DEFAULT_LOCK_LED_FLASH      (0)
 #define DEFAULT_LOCK_REPORT         (1)
+#define DEFAULT_AUTO_LOCK_FLAG      (0)
 
 #define DELAY_BASE                  (10)//100ms*10 = 1s
 #define FLASH_FREQ                  (1)
@@ -123,6 +124,7 @@ typedef struct {
     uint16_t lockDelayLow;
     uint16_t lockDelayHigh;
     uint16_t alarmStatus;
+    uint16_t autoLockFlag;
 }database_t;
 
 
