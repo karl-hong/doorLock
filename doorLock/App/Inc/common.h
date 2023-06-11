@@ -13,9 +13,13 @@
 
 #define DELAY_BASE                  (10)//100ms*10 = 1s
 #define FLASH_FREQ                  (1)
-#define FAULT_DECT                  (5*DELAY_BASE)
-#define MOTOR_LATENCY               (3)
+#define FAULT_DECT                  (2*DELAY_BASE)//(5*DELAY_BASE)
+#define MOTOR_LATENCY               (4)//selinda update //3
 #define MOTOR_TIMEOUT               (2*DELAY_BASE)
+#define MOTOR_DELAY_STOP_BASE				(MOTOR_LATENCY * 4)
+#define MOTOR_DELAY_STOP_LATENCY		(1*MOTOR_DELAY_STOP_BASE)
+#define LOCK_STOP_DEFAULT_DELAY     120//ms
+#define UNLOCK_STOP_DEFAULT_DELAY   60//ms
 
 enum {
     CMD_DISABLE = 0,
@@ -85,6 +89,8 @@ typedef struct {
     uint32_t uid1;
     uint32_t uid2;
     uint16_t gSensorDelay;
+    uint16_t lockStopDelay;
+    uint16_t unlockStopDelay;
     gSensor_Data_t gSensor;
     cmd_control_t cmdControl;
     led_task_ctrl_t ledTask;
@@ -125,6 +131,8 @@ typedef struct {
     uint16_t lockDelayHigh;
     uint16_t alarmStatus;
     uint16_t autoLockFlag;
+    uint16_t lockStopDelay;
+    uint16_t unlockStopDelay;
 }database_t;
 
 

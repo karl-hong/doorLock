@@ -6,6 +6,8 @@
 
 static uint16_t timeBase = 0;
 static uint8_t lastKeyState = 0;
+static uint8_t gMotorStopEnable = 0;
+static uint16_t gMotorStopLatency = 0;
 
 void lock_stop_detect(void)
 {
@@ -26,7 +28,8 @@ void lock_stop_detect(void)
 
 	if(MOTOR_TASK_FORWARD == lock.motorTask.task && lock.lockState){
 		/* totally lock and stop motor */
-		motor_set_stop();
+		gMotorStopEnable = 1;
+		gMotorStopLatency = lock.lockStopDelay;
 		if(lock.autoLockEnable && lock.autoReportFlag){
 			lock.cmdControl.autoLockAlarm.sendCmdEnable = 1;
 			lock.cmdControl.autoLockAlarm.sendCmdDelay = 0;
@@ -35,7 +38,8 @@ void lock_stop_detect(void)
 		lock.motorTask.faultDectEnable = 0;
 	}else if(MOTOR_TASK_BACKWARD == lock.motorTask.task && !lock.lockState){
 		/* totally unlock and stop motor */
-		motor_set_stop();
+		gMotorStopEnable = 1;
+		gMotorStopLatency = lock.unlockStopDelay;
 		lock.autoLockEnable = 0;
 		lock.motorTask.faultDectEnable = 0;
 	}else if(MOTOR_TASK_IDLE == lock.motorTask.task && stateChange){
@@ -164,6 +168,14 @@ void tim_interrupt_callback(void)
     if(lock.motorTask.latency > 0)  lock.motorTask.latency --;
 
     if(lock.gSensorDelay > 0)   lock.gSensorDelay --;
+		
+		if(gMotorStopEnable && (gMotorStopLatency > 0)){
+			gMotorStopLatency --;
+			if(!gMotorStopLatency){
+				gMotorStopEnable = 0;
+				motor_set_stop();
+			}
+		}
 		
 //		if(motorLatency > 0)	motorLatency --;
 }
