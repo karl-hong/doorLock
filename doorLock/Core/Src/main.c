@@ -120,6 +120,7 @@ int main(void)
     user_reply_handle();
     sc7a20_task();
     autolock_task();
+		user_huart_error_check();
   }
   /* USER CODE END 3 */
 }

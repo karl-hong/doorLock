@@ -68,7 +68,7 @@ PTL_STATUS ComUnpack(ComStream_t * inStream,UnPack_t *pResult)
 	//包不完整(包破坏或等待继续接收)
 	if (nTailPos < 1){
 		pResult->indexOfHead = indexOfHead;
-		printf("[%s]length1 error!\r\n", __FUNCTION__);
+		//printf("[%s]length1 error!\r\n", __FUNCTION__);
 		return PTL_LENGTH_ERROR;
 
 	}

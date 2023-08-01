@@ -742,6 +742,8 @@ void user_database_init(void)
 		lock.autoLockFlag = readDataBase.autoLockFlag ? 1 : 0;
         lock.lockStopDelay = readDataBase.lockStopDelay;
         lock.unlockStopDelay = readDataBase.unlockStopDelay;
+        if(lock.lockStopDelay  == 0xffff)   lock.lockStopDelay = LOCK_STOP_DEFAULT_DELAY;
+        if(lock.unlockStopDelay == 0xffff)  lock.unlockStopDelay = UNLOCK_STOP_DEFAULT_DELAY;
         //lock.ledFlashStatus = (uint8_t)readDataBase.ledFlash;
     }
 
