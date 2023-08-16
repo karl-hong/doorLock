@@ -3,6 +3,7 @@
 #include "led.h"
 #include "motor.h"
 #include "user_data.h"
+#include "sc7a20.h"
 
 static uint16_t timeBase = 0;
 static uint8_t lastKeyState = 0;
@@ -83,10 +84,10 @@ void gpio_interrupt_callback(uint16_t GPIO_Pin)
             break;
         }
 
-        case doorDetect1_Pin:{
-            lock.doorDetectState1 = HAL_GPIO_ReadPin(doorDetect1_GPIO_Port, doorDetect1_Pin) ? 0 : 1;
-            break;  
-        }
+        // case doorDetect1_Pin:{
+        //     lock.doorDetectState1 = HAL_GPIO_ReadPin(doorDetect1_GPIO_Port, doorDetect1_Pin) ? 0 : 1;
+        //     break;  
+        // }
 
         case lock_Detect1_Pin:{
             lock.lockDetectState1 = HAL_GPIO_ReadPin(lock_Detect1_GPIO_Port, lock_Detect1_Pin);
@@ -103,11 +104,21 @@ void gpio_interrupt_callback(uint16_t GPIO_Pin)
             break;
         }
 
+        case G_INT_Pin:{
+            sc7a20_interrupt_handle();
+            break;
+        }
+
         default:
             break;
     }
 
-    lock_stop_detect();
+    //lock_stop_detect();
+}
+
+void check_door_detect1_status(void)
+{
+    lock.doorDetectState1 = HAL_GPIO_ReadPin(doorDetect1_GPIO_Port, doorDetect1_Pin) ? 0 : 1;
 }
 
 void tim_interrupt_callback(void)
@@ -137,6 +148,8 @@ void tim_interrupt_callback(void)
         if(lock.cmdControl.singleQueryGsensor.sendCmdDelay > 0) lock.cmdControl.singleQueryGsensor.sendCmdDelay --;
 
         if(lock.cmdControl.singleQueryAllStatus.sendCmdDelay > 0) lock.cmdControl.singleQueryAllStatus.sendCmdDelay --;
+
+        if(lock.cmdControl.shakeReport.sendCmdDelay > 0) lock.cmdControl.shakeReport.sendCmdDelay --;
 
         /* auto lock detect */
         if(lock.HoldOnDetectEnable){
@@ -169,13 +182,17 @@ void tim_interrupt_callback(void)
 
     if(lock.gSensorDelay > 0)   lock.gSensorDelay --;
 		
-		if(gMotorStopEnable && (gMotorStopLatency > 0)){
-			gMotorStopLatency --;
-			if(!gMotorStopLatency){
-				gMotorStopEnable = 0;
-				motor_set_stop();
-			}
-		}
+    if(gMotorStopEnable && (gMotorStopLatency > 0)){
+        gMotorStopLatency --;
+        if(!gMotorStopLatency){
+            gMotorStopEnable = 0;
+            motor_set_stop();
+        }
+    }
+
+    lock_stop_detect();
+
+    if(lock.shakeReportTimeCnt > 0) lock.shakeReportTimeCnt --;
 		
 //		if(motorLatency > 0)	motorLatency --;
 }

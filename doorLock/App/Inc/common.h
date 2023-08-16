@@ -10,6 +10,11 @@
 #define DEFAULT_LOCK_LED_FLASH      (0)
 #define DEFAULT_LOCK_REPORT         (1)
 #define DEFAULT_AUTO_LOCK_FLAG      (0)
+#define DEFAULT_SHAKE_THRESOLD      (50)
+#define DEFAULT_SHAKE_INTERVAL      (3)
+#define DEFAULT_X_REPORT_FLAG       (1)
+#define DEFAULT_Y_REPORT_FLAG       (1)
+#define DEFAULT_Z_REPORT_FLAG       (1)
 
 #define DELAY_BASE                  (10)//100ms*10 = 1s
 #define FLASH_FREQ                  (1)
@@ -48,6 +53,7 @@ typedef struct {
     cmd_setting_t faultAlarm;
     cmd_setting_t singleQueryGsensor;
     cmd_setting_t singleQueryAllStatus;
+    cmd_setting_t shakeReport;
 }cmd_control_t;
 
 typedef struct {
@@ -91,6 +97,12 @@ typedef struct {
     uint16_t gSensorDelay;
     uint16_t lockStopDelay;
     uint16_t unlockStopDelay;
+    uint8_t shakeThreshold;
+    uint8_t xReportFlag;
+    uint8_t yReportFlag;
+    uint8_t zReportFlag;
+    uint16_t shakeReportInterval;
+    uint16_t shakeReportTimeCnt;
     gSensor_Data_t gSensor;
     cmd_control_t cmdControl;
     led_task_ctrl_t ledTask;
@@ -133,6 +145,11 @@ typedef struct {
     uint16_t autoLockFlag;
     uint16_t lockStopDelay;
     uint16_t unlockStopDelay;
+    uint16_t shakeThreshold;
+    uint16_t xReportFlag;
+    uint16_t yReportFlag;
+    uint16_t zReportFlag;
+    uint16_t shakeReportInterval;
 }database_t;
 
 
@@ -144,5 +161,6 @@ void tim_interrupt_callback(void);
 void lock_state_init(void);
 void lock_stop_detect(void);
 void autolock_task(void);
+void check_door_detect1_status(void);
 
 #endif

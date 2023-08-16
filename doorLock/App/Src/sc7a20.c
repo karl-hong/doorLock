@@ -213,7 +213,6 @@ error:
 	return err;	
 }
 
-
 static int sc7a20_update_odr(struct sc7a20_data *acc, int poll_interval_ms)
 {
 	int err = -1;
@@ -257,8 +256,8 @@ static void sc7a20_set_interrupt(void)
 	sc7a20_register_write(TIME_LATENCY, 0x05);
 	/* x/y/z Interrupt Detect Enable */
 	sc7a20_register_write(CLICK_CFG, 0x15);
-	/* enable x/y/z direction interrupt, low event */
-	sc7a20_register_write(INT1_CFG, 0x15); 
+	/* enable x/y/z direction interrupt, low and height event */
+	sc7a20_register_write(INT1_CFG, 0xff); 
 	/* Enable Interrupt */
 	sc7a20_register_write(CTRL_REG3, 0x80);
 }
@@ -530,16 +529,96 @@ error:
 	return -1;
 }
 
-void sc7a20_interrupt_handle(void)
-{
-	//printf("sc7a20!!!\r\n");
-}
-
 void sc7a20_task(void)
 {
 	if(lock.gSensorDelay)	return;
 	lock.gSensorDelay = 10;
 	sc7a20_get_acceleration_data(&sc7a20_misc_data, (uint16_t *)&lock.gSensor);	
+}
+
+void sc7a20_get_data_interrupt(struct sc7a20_data *acc, int16_t *xyz)
+{
+	uint8_t  acc_data[6];
+	uint8_t buf[1];
+	int ret = -1;
+	int16_t hw_d[3];
+
+	/* read XOUT_L reg */
+	ret = sc7a20_register_read(XOUT_L, buf);
+	if(0 != ret){
+		return;
+	}
+	acc_data[0] = buf[0];
+
+	/* read XOUT_H reg */
+	ret = sc7a20_register_read(XOUT_H, buf);
+	if(0 != ret){
+		return;
+	}
+	acc_data[1] = buf[0];
+
+	/* read YOUT_L reg */
+	ret = sc7a20_register_read(YOUT_L, buf);
+	if(0 != ret){
+		return;
+	}
+	acc_data[2] = buf[0];
+
+	/* read YOUT_H reg */
+	ret = sc7a20_register_read(YOUT_H, buf);
+	if(0 != ret){
+		return;
+	}
+	acc_data[3] = buf[0];
+
+	/* read ZOUT_L reg */
+	ret = sc7a20_register_read(ZOUT_L, buf);
+	if(0 != ret){
+		return;
+	}
+	acc_data[4] = buf[0];
+
+	/* read ZOUT_H  reg */
+	ret = sc7a20_register_read(ZOUT_H, buf);
+	if(0 != ret){
+		return;
+	}
+	acc_data[5] = buf[0];	
+
+	/* convert data */
+	hw_d[0] =  ((acc_data[1] << 8) & 0xff00) | acc_data[0];
+	hw_d[1] =  ((acc_data[3] << 8) & 0xff00) | acc_data[2];
+	hw_d[2] =  ((acc_data[5] << 8) & 0xff00) | acc_data[4];	
+
+	hw_d[0] = ((int16_t) hw_d[0] ) >> acc->sensitivity;
+	hw_d[1] = ((int16_t) hw_d[1] ) >> acc->sensitivity;
+	hw_d[2] = ((int16_t) hw_d[2] ) >> acc->sensitivity;
+
+	xyz[0] = hw_d[0];
+	xyz[1] = hw_d[1];
+	xyz[2] = hw_d[2];
+}
+
+void sc7a20_interrupt_handle(void)
+{
+	uint8_t source;
+	uint8_t xFlag;
+	uint8_t yFlag;
+	uint8_t zFlag;
+	uint8_t err = sc7a20_register_read(INT1_SOURCE, &source);
+	if(0 == err){
+		xFlag = (source & 0x03) ? 1 : 0;
+		yFlag = (source & 0xc0) ? 1 : 0;
+		zFlag = (source & 0x30) ? 1 : 0;
+
+		if(((xFlag && lock.xReportFlag) || (yFlag && lock.yReportFlag) || (zFlag && lock.zReportFlag)) && (lock.shakeReportTimeCnt == 0)){
+			lock.shakeReportTimeCnt = lock.shakeReportInterval * 1000;
+			lock.cmdControl.shakeReport.sendCmdEnable = CMD_ENABLE;
+			lock.cmdControl.singleQueryAllStatus.sendCmdDelay = 0; 
+		} 
+	}
+	// sc7a20_get_data_interrupt(&sc7a20_misc_data, (uint16_t *)&lock.gSensor);
+	// printf("sc7a20 source: 0x%x, x: %d, y: %d, z: %d, err: %d\r\n", source, lock.gSensor.x, lock.gSensor.y, lock.gSensor.z ,err);
 }
 
 

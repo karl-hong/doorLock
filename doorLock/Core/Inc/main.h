@@ -74,11 +74,13 @@ void Error_Handler(void);
 #define doorDetect2_EXTI_IRQn EXTI4_15_IRQn
 #define doorDetect1_Pin GPIO_PIN_15
 #define doorDetect1_GPIO_Port GPIOB
-#define doorDetect1_EXTI_IRQn EXTI4_15_IRQn
 #define gsensor_SCL_Pin GPIO_PIN_6
 #define gsensor_SCL_GPIO_Port GPIOF
 #define gsensor_SDA_Pin GPIO_PIN_7
 #define gsensor_SDA_GPIO_Port GPIOF
+#define G_INT_Pin GPIO_PIN_15
+#define G_INT_GPIO_Port GPIOA
+#define G_INT_EXTI_IRQn EXTI4_15_IRQn
 #define light2_Pin GPIO_PIN_3
 #define light2_GPIO_Port GPIOB
 #define light1_Pin GPIO_PIN_4

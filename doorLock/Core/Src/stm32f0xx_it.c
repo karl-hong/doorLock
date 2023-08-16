@@ -153,7 +153,7 @@ void EXTI4_15_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(lock_Detect2_Pin);
   HAL_GPIO_EXTI_IRQHandler(KEY_Detect_Pin);
   HAL_GPIO_EXTI_IRQHandler(doorDetect2_Pin);
-  HAL_GPIO_EXTI_IRQHandler(doorDetect1_Pin);
+  HAL_GPIO_EXTI_IRQHandler(G_INT_Pin);
   /* USER CODE BEGIN EXTI4_15_IRQn 1 */
 
   /* USER CODE END EXTI4_15_IRQn 1 */

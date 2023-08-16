@@ -117,6 +117,11 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
     uint16_t cmdLength;
     uint16_t lockStopDelay;
     uint16_t unlockStopDelay;
+    uint8_t shakeThresold;
+    uint8_t xReportFlag;
+    uint8_t yReportFlag;
+    uint8_t zReportFlag;
+    uint16_t shakeReportInterval;
 
     if(NULL == data){
         printf("[%s]data is null!\r\n", __FUNCTION__);
@@ -142,7 +147,7 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
     autoReportFlag = data[pos++];
 
     if(!ack){
-        goto out;
+        goto get_shake;
     }
 
     unlockStopDelay = data[pos++] << 8;
@@ -150,6 +155,19 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
 
     lockStopDelay = data[pos++] << 8;
     lockStopDelay += data[pos++];
+
+get_shake:
+    shakeThresold = data[pos++];
+    xReportFlag = data[pos++];
+    yReportFlag = data[pos++];
+    zReportFlag = data[pos++];
+    shakeReportInterval = data[pos++] << 8;
+    shakeReportInterval += data[pos++];
+
+
+    if(!ack){
+        goto out;
+    }
 
     uid0 = (data[pos++] << 24);
     uid0 += (data[pos++] << 16);
@@ -183,6 +201,11 @@ out:
     lock.autoLockFlag = autoLockFlag;
     // lock.lockReplyDelay = lockReplyDelay;
     lock.autoReportFlag = autoReportFlag;
+    lock.shakeThreshold = shakeThresold;
+    lock.xReportFlag = xReportFlag;
+    lock.yReportFlag = yReportFlag;
+    lock.zReportFlag = zReportFlag;
+    lock.shakeReportInterval = shakeReportInterval;
     
     user_database_save();
     /* send ack msg here */
@@ -390,7 +413,7 @@ void onCmdQuerySingleDevAllStatus(uint8_t *data, uint16_t length)
 
 void onReportDeviceStatus(void)
 {
-    uint8_t buffer[40];
+    uint8_t buffer[50];
     uint8_t pos = 0;
     /* addr */
     buffer[pos++] = lock.address;
@@ -414,6 +437,18 @@ void onReportDeviceStatus(void)
     buffer[pos++] = lock.alarmStatus;
     /* auto report flag */
     buffer[pos++] = lock.autoReportFlag;
+    /* shake thresold */
+    buffer[pos++] = lock.shakeThreshold;
+    /* x report flag */
+    buffer[pos++] = lock.xReportFlag;
+    /* y report flag */
+    buffer[pos++] = lock.yReportFlag;
+    /* z report flag */
+    buffer[pos++] = lock.zReportFlag;
+    /* shake report interval */
+    buffer[pos++] = (lock.shakeReportInterval >> 8) & 0xff;
+    buffer[pos++] = lock.shakeReportInterval & 0xff;
+
     /* UID */
     buffer[pos++] = (lock.uid0 >> 24)& 0xff;
     buffer[pos++] = (lock.uid0 >> 16) & 0xff;
@@ -642,7 +677,7 @@ void onReportGsensorData(void)
 
 void onReportDeviceAllStatus(void)
 {
-    uint8_t buffer[40];
+    uint8_t buffer[50];
     uint8_t pos = 0;
     /* addr */
     buffer[pos++] = lock.address;
@@ -673,6 +708,17 @@ void onReportDeviceAllStatus(void)
     buffer[pos++] = lock.gSensor.y & 0xff;
     buffer[pos++] = (lock.gSensor.z >> 8) & 0xff;
     buffer[pos++] = lock.gSensor.z & 0xff;
+    /* shake thresold */
+    buffer[pos++] = lock.shakeThreshold;
+    /* x report flag */
+    buffer[pos++] = lock.xReportFlag;
+    /* y report flag */
+    buffer[pos++] = lock.yReportFlag;
+    /* z report flag */
+    buffer[pos++] = lock.zReportFlag;
+    /* shake report interval */
+    buffer[pos++] = (lock.shakeReportInterval >> 8) & 0xff;
+    buffer[pos++] = lock.shakeReportInterval & 0xff;
     /* unlock stop delay */
     buffer[pos++] = (lock.unlockStopDelay >> 8) & 0xff;
     buffer[pos++] = lock.unlockStopDelay & 0xff;
@@ -694,6 +740,31 @@ void onReportDeviceAllStatus(void)
     buffer[pos++] = lock.uid2 & 0xff;
     
     user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_QUERY_ALL_STATUS, buffer, pos);       
+}
+
+
+void onReportShakeAlarm(void)
+{
+    uint8_t buffer[50];
+    uint8_t pos = 0;
+
+    /* addr */
+    buffer[pos++] = lock.address;
+    /* UID */
+    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
+    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
+    buffer[pos++] = lock.uid0 & 0xff;
+    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
+    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
+    buffer[pos++] = lock.uid1 & 0xff;
+    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
+    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
+    buffer[pos++] = lock.uid2 & 0xff;
+
+    user_protocol_send_data(CMD_ACK, OPT_CODE_REPORT_SHAKE_ALARM, buffer, pos);       
 }
 
 uint16_t user_read_flash(uint32_t address)
@@ -730,6 +801,13 @@ void user_database_init(void)
         lock.lockStopDelay = LOCK_STOP_DEFAULT_DELAY;
         lock.unlockStopDelay = UNLOCK_STOP_DEFAULT_DELAY;
         lock.alarmStatus = lock.keyDetectState;
+        lock.shakeThreshold = DEFAULT_SHAKE_THRESOLD;
+        lock.xReportFlag = DEFAULT_X_REPORT_FLAG;
+        lock.yReportFlag = DEFAULT_Y_REPORT_FLAG;
+        lock.zReportFlag = DEFAULT_Z_REPORT_FLAG;
+        lock.shakeReportInterval = DEFAULT_SHAKE_INTERVAL;
+
+  
         user_database_save();
     }else{
         printf("Read database from flash!!!\r\n");
@@ -744,6 +822,12 @@ void user_database_init(void)
         lock.unlockStopDelay = readDataBase.unlockStopDelay;
         if(lock.lockStopDelay  == 0xffff)   lock.lockStopDelay = LOCK_STOP_DEFAULT_DELAY;
         if(lock.unlockStopDelay == 0xffff)  lock.unlockStopDelay = UNLOCK_STOP_DEFAULT_DELAY;
+
+        lock.shakeThreshold = (readDataBase.shakeThreshold == 0xffff) ? DEFAULT_SHAKE_THRESOLD : readDataBase.shakeThreshold;
+        lock.xReportFlag = (readDataBase.xReportFlag == 0xffff) ? DEFAULT_X_REPORT_FLAG : readDataBase.xReportFlag;
+        lock.yReportFlag = (readDataBase.yReportFlag == 0xffff) ? DEFAULT_Y_REPORT_FLAG : readDataBase.yReportFlag;
+        lock.zReportFlag = (readDataBase.zReportFlag == 0xffff) ? DEFAULT_Z_REPORT_FLAG : readDataBase.zReportFlag;
+        lock.shakeReportInterval = (readDataBase.shakeReportInterval == 0xffff) ? DEFAULT_SHAKE_INTERVAL : readDataBase.shakeReportInterval;
         //lock.ledFlashStatus = (uint8_t)readDataBase.ledFlash;
     }
 
@@ -775,6 +859,12 @@ void user_database_save(void)
     writeDataBase.autoLockFlag = lock.autoLockFlag;
     writeDataBase.lockStopDelay = lock.lockStopDelay;
     writeDataBase.unlockStopDelay = lock.unlockStopDelay;
+
+    writeDataBase.shakeThreshold = lock.shakeThreshold;
+    writeDataBase.xReportFlag = lock.xReportFlag;
+    writeDataBase.yReportFlag = lock.yReportFlag;
+    writeDataBase.zReportFlag = lock.zReportFlag;
+    writeDataBase.shakeReportInterval = lock.shakeReportInterval;
 
     HAL_FLASH_Unlock();
 
@@ -851,5 +941,11 @@ void user_reply_handle(void)
         lock.cmdControl.singleQueryAllStatus.sendCmdEnable = CMD_DISABLE;
         onReportDeviceAllStatus();
     }
+
+    if(lock.cmdControl.shakeReport.sendCmdEnable && !lock.cmdControl.shakeReport.sendCmdDelay){
+        lock.cmdControl.shakeReport.sendCmdEnable = CMD_DISABLE;
+        onReportShakeAlarm();
+    }
+
 }
 

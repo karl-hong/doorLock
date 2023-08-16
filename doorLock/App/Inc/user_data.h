@@ -34,6 +34,8 @@ void onReportFaultAlarm(void);
 
 void onReportGsensorData(void);
 
+void onReportShakeAlarm(void);
+
 void user_database_init(void);
 
 void user_database_save(void);

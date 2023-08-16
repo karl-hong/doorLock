@@ -121,6 +121,7 @@ int main(void)
     sc7a20_task();
     autolock_task();
 		user_huart_error_check();
+    check_door_detect1_status();
   }
   /* USER CODE END 3 */
 }
