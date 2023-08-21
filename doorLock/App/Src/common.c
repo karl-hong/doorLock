@@ -106,19 +106,25 @@ void gpio_interrupt_callback(uint16_t GPIO_Pin)
 
         case G_INT_Pin:{
             sc7a20_interrupt_handle();
-            break;
+            return;
         }
 
         default:
             break;
     }
 
-    //lock_stop_detect();
+    lock_stop_detect();
 }
 
 void check_door_detect1_status(void)
 {
+    //static uint8_t lastState = 0;
     lock.doorDetectState1 = HAL_GPIO_ReadPin(doorDetect1_GPIO_Port, doorDetect1_Pin) ? 0 : 1;
+
+    // if(lastState != lock.doorDetectState1){
+    //     lastState = lock.doorDetectState1;
+    //     lock_stop_detect();
+    // }
 }
 
 void tim_interrupt_callback(void)
@@ -189,8 +195,6 @@ void tim_interrupt_callback(void)
             motor_set_stop();
         }
     }
-
-    lock_stop_detect();
 
     if(lock.shakeReportTimeCnt > 0) lock.shakeReportTimeCnt --;
 		
