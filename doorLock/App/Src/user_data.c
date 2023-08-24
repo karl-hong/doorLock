@@ -739,7 +739,7 @@ void onReportDeviceAllStatus(void)
     buffer[pos++] = (lock.uid2 >> 8) & 0xff;
     buffer[pos++] = lock.uid2 & 0xff;
     
-    user_protocol_send_data(CMD_QUERY, OPT_CODE_SINGLE_DEV_QUERY_ALL_STATUS, buffer, pos);       
+    user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_QUERY_ALL_STATUS, buffer, pos);       
 }
 
 
@@ -764,7 +764,7 @@ void onReportShakeAlarm(void)
     buffer[pos++] = (lock.uid2 >> 8) & 0xff;
     buffer[pos++] = lock.uid2 & 0xff;
 
-    user_protocol_send_data(CMD_ACK, OPT_CODE_REPORT_SHAKE_ALARM, buffer, pos);       
+    user_protocol_send_data(CMD_QUERY, OPT_CODE_REPORT_SHAKE_ALARM, buffer, pos);       
 }
 
 uint16_t user_read_flash(uint32_t address)
