@@ -253,6 +253,16 @@ void user_event_process(uint8_t cmd, uint8_t opt, uint8_t *data, uint16_t lenOfD
 					onCmdQuerySingleDevAllStatus(data, lenOfData);
 					break;
 				}
+
+				case OPT_CODE_SINGLE_MODIFY_BAUDRATE:{
+					onCmdModifyBaudRate(data, lenOfData, 1);
+					break;
+				}
+
+				case OPT_CODE_MULTI_MODIFY_BAUDRATE:{
+					onCmdModifyBaudRate(data, lenOfData, 0);
+					break;
+				}
 				
 				default:
 					break;

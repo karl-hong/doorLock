@@ -15,6 +15,7 @@
 #define DEFAULT_X_REPORT_FLAG       (1)
 #define DEFAULT_Y_REPORT_FLAG       (1)
 #define DEFAULT_Z_REPORT_FLAG       (1)
+#define DEFAULT_BAUD_RATE_INDEX     (4)
 
 #define DELAY_BASE                  (10)//100ms*10 = 1s
 #define FLASH_FREQ                  (1)
@@ -54,6 +55,7 @@ typedef struct {
     cmd_setting_t singleQueryGsensor;
     cmd_setting_t singleQueryAllStatus;
     cmd_setting_t shakeReport;
+    cmd_setting_t singleModifyBaudRate;
 }cmd_control_t;
 
 typedef struct {
@@ -103,6 +105,7 @@ typedef struct {
     uint8_t zReportFlag;
     uint16_t shakeReportInterval;
     uint16_t shakeReportTimeCnt;
+    uint16_t baudRateIndex;
     gSensor_Data_t gSensor;
     cmd_control_t cmdControl;
     led_task_ctrl_t ledTask;
@@ -150,6 +153,7 @@ typedef struct {
     uint16_t yReportFlag;
     uint16_t zReportFlag;
     uint16_t shakeReportInterval;
+    uint16_t baudRateIndex;
 }database_t;
 
 

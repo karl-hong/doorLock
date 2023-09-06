@@ -411,6 +411,53 @@ void onCmdQuerySingleDevAllStatus(uint8_t *data, uint16_t length)
     lock.cmdControl.singleQueryAllStatus.sendCmdDelay = 0;
 }
 
+void onCmdModifyBaudRate(uint8_t *data, uint16_t length, uint8_t ack)
+{
+    uint32_t uid0;
+    uint32_t uid1;
+    uint32_t uid2;
+    uint16_t pos = 0;
+    uint8_t baudRateIndex = 0;
+
+    baudRateIndex = data[pos++];
+
+    if(!ack){
+        goto out;
+    } 
+
+    uid0 = (data[pos++] << 24);
+    uid0 += (data[pos++] << 16);
+    uid0 += (data[pos++] << 8);
+    uid0 += data[pos++];
+
+    uid1 = (data[pos++] << 24);
+    uid1 += (data[pos++] << 16);
+    uid1 += (data[pos++] << 8);
+    uid1 += data[pos++];
+
+    uid2 = (data[pos++] << 24);
+    uid2 += (data[pos++] << 16);
+    uid2 += (data[pos++] << 8);
+    uid2 += data[pos++]; 
+
+    if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
+        printf("[%s]UID is not matched!\r\n", __FUNCTION__);
+        return;
+    }  
+out: 
+    lock.baudRateIndex = baudRateIndex;
+
+    user_database_save();
+
+    if(ack){
+        /* send ack msg */
+        lock.cmdControl.singleModifyBaudRate.sendCmdEnable = CMD_ENABLE;
+        lock.cmdControl.singleModifyBaudRate.sendCmdDelay = 0;
+    }else{
+        while(1);//wait for watchdog reset
+    }
+}
+
 void onReportDeviceStatus(void)
 {
     uint8_t buffer[50];
@@ -767,6 +814,33 @@ void onReportShakeAlarm(void)
     user_protocol_send_data(CMD_QUERY, OPT_CODE_REPORT_SHAKE_ALARM, buffer, pos);       
 }
 
+void onReportSingleModifyBaudRate(void)
+{
+    uint8_t buffer[23];
+    uint8_t pos = 0;
+    /* addr */
+    buffer[pos++] = lock.address;
+    /* lock baudRateIndex */
+    buffer[pos++] = lock.baudRateIndex;
+    /* UID */
+    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
+    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
+    buffer[pos++] = lock.uid0 & 0xff;
+    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
+    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
+    buffer[pos++] = lock.uid1 & 0xff;
+    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
+    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
+    buffer[pos++] = lock.uid2 & 0xff;
+
+    user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_MODIFY_BAUDRATE, buffer, pos); 
+
+    while(1);//wait for watchdog reset 
+}
+
 uint16_t user_read_flash(uint32_t address)
 {
     return *(__IO uint16_t*)address;
@@ -806,8 +880,8 @@ void user_database_init(void)
         lock.yReportFlag = DEFAULT_Y_REPORT_FLAG;
         lock.zReportFlag = DEFAULT_Z_REPORT_FLAG;
         lock.shakeReportInterval = DEFAULT_SHAKE_INTERVAL;
+        lock.baudRateIndex = DEFAULT_BAUD_RATE_INDEX;
 
-  
         user_database_save();
     }else{
         printf("Read database from flash!!!\r\n");
@@ -828,15 +902,9 @@ void user_database_init(void)
         lock.yReportFlag = (readDataBase.yReportFlag == 0xffff) ? DEFAULT_Y_REPORT_FLAG : readDataBase.yReportFlag;
         lock.zReportFlag = (readDataBase.zReportFlag == 0xffff) ? DEFAULT_Z_REPORT_FLAG : readDataBase.zReportFlag;
         lock.shakeReportInterval = (readDataBase.shakeReportInterval == 0xffff) ? DEFAULT_SHAKE_INTERVAL : readDataBase.shakeReportInterval;
+        lock.baudRateIndex = (readDataBase.baudRateIndex == 0xffff) ? DEFAULT_BAUD_RATE_INDEX : readDataBase.baudRateIndex;
         //lock.ledFlashStatus = (uint8_t)readDataBase.ledFlash;
     }
-
-    printf("Chip uuid: 0x%04x%04x%04x\r\n", lock.uid0, lock.uid1, lock.uid2);
-    printf("address: 0x%02X\r\n", lock.address);
-    printf("autoReportFlag: 0x%02X\r\n", lock.autoReportFlag);
-    printf("lockDelayEnable: 0x%02X\r\n", lock.autoLockFlag);
-    printf("lockDelay: 0x%04X\r\n", lock.autoLockTime);
-    printf("lockReplyDelay: 0x%02X\r\n", lock.lockReplyDelay);
 }
 
 void user_database_save(void)
@@ -865,6 +933,7 @@ void user_database_save(void)
     writeDataBase.yReportFlag = lock.yReportFlag;
     writeDataBase.zReportFlag = lock.zReportFlag;
     writeDataBase.shakeReportInterval = lock.shakeReportInterval;
+    writeDataBase.baudRateIndex = lock.baudRateIndex;
 
     HAL_FLASH_Unlock();
 
@@ -947,5 +1016,20 @@ void user_reply_handle(void)
         onReportShakeAlarm();
     }
 
+    if(lock.cmdControl.singleModifyBaudRate.sendCmdEnable && !lock.cmdControl.singleModifyBaudRate.sendCmdDelay){
+        lock.cmdControl.singleModifyBaudRate.sendCmdEnable = CMD_DISABLE;
+        onReportSingleModifyBaudRate();
+    }
+}
+
+void printSetting(void)
+{
+		printf("Chip uuid: 0x%04x%04x%04x\r\n", lock.uid0, lock.uid1, lock.uid2);
+    printf("address: 0x%02X\r\n", lock.address);
+    printf("autoReportFlag: 0x%02X\r\n", lock.autoReportFlag);
+    printf("lockDelayEnable: 0x%02X\r\n", lock.autoLockFlag);
+    printf("lockDelay: 0x%04X\r\n", lock.autoLockTime);
+    printf("lockReplyDelay: 0x%02X\r\n", lock.lockReplyDelay);
+		printf("baudRateIndex: 0x%02X\r\n", lock.baudRateIndex);
 }
 
