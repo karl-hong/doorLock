@@ -136,25 +136,29 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
 //        return;
 //    }
 
+	/* addr */
     if(ack) addr = data[pos++];
 
+	/* auto lock delay, 3bytes */
     autoLockDelay = data[pos++] << 16;
     autoLockDelay += data[pos++] << 8;
     autoLockDelay += data[pos++];
 
+	/* auto lock flag, 1byte */
     autoLockFlag = data[pos++];
-    
+
+	/* auto report flag, 1byte */
     autoReportFlag = data[pos++];
 
     if(!ack){
         goto get_shake;
     }
 
-    unlockStopDelay = data[pos++] << 8;
-    unlockStopDelay += data[pos++];
+	/* unlock stop delay, 1byte */
+    unlockStopDelay = data[pos++];
 
-    lockStopDelay = data[pos++] << 8;
-    lockStopDelay += data[pos++];
+	/* lock stop delay, 1byte */
+    lockStopDelay = data[pos++];
 
 get_shake:
     shakeThresold = data[pos++];
@@ -212,7 +216,9 @@ out:
     if(ack){
         lock.cmdControl.singleBasicSetting.sendCmdEnable = CMD_ENABLE;
         lock.cmdControl.singleBasicSetting.sendCmdDelay = 0;
-    }
+    }else{
+		while(1);//wait for reboot
+	}
 }
 
 void  onCmdSetLight(uint8_t *data, uint16_t length, uint8_t ack)
@@ -540,7 +546,7 @@ void onReportSetDevOnOffStatus(void)
 
 void onReportBasicSetting(void)
 {
-    uint8_t buffer[23];
+    uint8_t buffer[50];
     uint8_t pos = 0;
     /* addr */
     buffer[pos++] = lock.address;
@@ -553,11 +559,22 @@ void onReportBasicSetting(void)
     /* auto report flag */
     buffer[pos++] = lock.autoReportFlag;
     /* unlock stop delay */
-    buffer[pos++] = (lock.unlockStopDelay >> 8) & 0xff;
+    //buffer[pos++] = (lock.unlockStopDelay >> 8) & 0xff;
     buffer[pos++] = lock.unlockStopDelay & 0xff;
     /* lock stop delay */
-    buffer[pos++] = (lock.lockStopDelay >> 8) & 0xff;
+    //buffer[pos++] = (lock.lockStopDelay >> 8) & 0xff;
     buffer[pos++] = lock.lockStopDelay & 0xff;
+	/* shake thresold */
+    buffer[pos++] = lock.shakeThreshold;
+    /* x report flag */
+    buffer[pos++] = lock.xReportFlag;
+    /* y report flag */
+    buffer[pos++] = lock.yReportFlag;
+    /* z report flag */
+    buffer[pos++] = lock.zReportFlag;
+    /* shake report interval */
+    buffer[pos++] = (lock.shakeReportInterval >> 8) & 0xff;
+    buffer[pos++] = lock.shakeReportInterval & 0xff;
     /* UID */
     buffer[pos++] = (lock.uid0 >> 24)& 0xff;
     buffer[pos++] = (lock.uid0 >> 16) & 0xff;
@@ -572,7 +589,9 @@ void onReportBasicSetting(void)
     buffer[pos++] = (lock.uid2 >> 8) & 0xff;
     buffer[pos++] = lock.uid2 & 0xff;
 
-    user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_BASE_SETTING, buffer, pos);     
+    user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_BASE_SETTING, buffer, pos);   
+
+	while(1);//wait for reboot while setting shake threshold
 }
 
 void onReportSetLightStatus(void)

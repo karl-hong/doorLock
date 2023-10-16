@@ -613,8 +613,10 @@ void sc7a20_interrupt_handle(void)
 
 		if(((xFlag && lock.xReportFlag) || (yFlag && lock.yReportFlag) || (zFlag && lock.zReportFlag)) && (lock.shakeReportTimeCnt == 0)){
 			lock.shakeReportTimeCnt = lock.shakeReportInterval * 1000;
-			lock.cmdControl.shakeReport.sendCmdEnable = CMD_ENABLE;
-			lock.cmdControl.singleQueryAllStatus.sendCmdDelay = 0; 
+			if(lock.autoReportFlag){
+				lock.cmdControl.shakeReport.sendCmdEnable = CMD_ENABLE;
+				lock.cmdControl.singleQueryAllStatus.sendCmdDelay = 0; 
+			}
 		} 
 	}
 	// sc7a20_get_data_interrupt(&sc7a20_misc_data, (uint16_t *)&lock.gSensor);

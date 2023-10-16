@@ -82,12 +82,12 @@
         <Book>
           <Number>0</Number>
           <Title>Data Brief (STM32F051-Discovery)</Title>
-          <Path>E:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F0xx_DFP\2.0.0\MDK/Boards/ST/STM32F051-Discovery/Documents/DM00050631.pdf</Path>
+          <Path>D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F0xx_DFP\2.0.0\MDK/Boards/ST/STM32F051-Discovery/Documents/DM00050631.pdf</Path>
         </Book>
         <Book>
           <Number>1</Number>
           <Title>Schematics (STM32F051-Discovery)</Title>
-          <Path>E:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F0xx_DFP\2.0.0\MDK/Boards/ST/STM32F051-Discovery/Documents/MB1034.pdf</Path>
+          <Path>D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F0xx_DFP\2.0.0\MDK/Boards/ST/STM32F051-Discovery/Documents/MB1034.pdf</Path>
         </Book>
         <Book>
           <Number>2</Number>
@@ -223,7 +223,7 @@
 
   <Group>
     <GroupName>Application/MDK-ARM</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
