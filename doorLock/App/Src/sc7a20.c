@@ -613,7 +613,7 @@ void sc7a20_interrupt_handle(void)
 
 		if(((xFlag && lock.xReportFlag) || (yFlag && lock.yReportFlag) || (zFlag && lock.zReportFlag)) && (lock.shakeReportTimeCnt == 0)){
 			lock.shakeReportTimeCnt = lock.shakeReportInterval * 1000;
-			if(lock.autoReportFlag){
+			if(lock.autoReportFlag && !lock.disableReport){
 				lock.cmdControl.shakeReport.sendCmdEnable = CMD_ENABLE;
 				lock.cmdControl.singleQueryAllStatus.sendCmdDelay = 0; 
 			}

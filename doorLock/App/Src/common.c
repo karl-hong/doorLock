@@ -182,6 +182,11 @@ void tim_interrupt_callback(void)
             lock.cmdControl.faultAlarm.sendCmdDelay = 0;
           }
       }
+
+		if(lock.disableReportLatency){
+			lock.disableReportLatency --;
+			if(0 ==lock.disableReportLatency && lock.disableReport) lock.disableReport = 0;
+		}
     }
     
     if(lock.motorTask.latency > 0)  lock.motorTask.latency --;

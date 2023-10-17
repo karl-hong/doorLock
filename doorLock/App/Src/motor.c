@@ -135,6 +135,8 @@ void motor_set_forward(void)
     lock.motorTask.faultType = LOCK_STATE_LOCK;
     lock.motorTask.faultDectEnable = 1;
 	lock.motorTask.faultDectLatency = FAULT_DECT;
+	lock.disableReport = 1;
+	lock.disableReportLatency = DEFAULT_DISABLE_REPORT_LATENCY;
 }
 
 void motor_set_backward(void)
@@ -145,6 +147,8 @@ void motor_set_backward(void)
     lock.motorTask.faultType = LOCK_STATE_UNLOCK;
     lock.motorTask.faultDectEnable = 1;
 	lock.motorTask.faultDectLatency = FAULT_DECT;
+	lock.disableReport = 1;
+	lock.disableReportLatency = DEFAULT_DISABLE_REPORT_LATENCY;
 }
 
 void motor_set_stop(void)
@@ -154,6 +158,8 @@ void motor_set_stop(void)
     lock.motorTask.latency = 0;
     lock.motorTask.faultDectEnable = 0;
 	lock.motorTask.faultDectLatency = 0;
+	lock.disableReport = 0;
+	lock.disableReportLatency = 0;
 //	motorLatency = 100;
 }
 

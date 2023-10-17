@@ -154,11 +154,13 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
         goto get_shake;
     }
 
-	/* unlock stop delay, 1byte */
-    unlockStopDelay = data[pos++];
+	/* unlock stop delay, 2byte */
+    unlockStopDelay = data[pos++] << 8;
+	unlockStopDelay += data[pos++];
 
-	/* lock stop delay, 1byte */
-    lockStopDelay = data[pos++];
+	/* lock stop delay, 2byte */
+    lockStopDelay = data[pos++] << 8;
+	lockStopDelay += data[pos++];
 
 get_shake:
     shakeThresold = data[pos++];
@@ -559,10 +561,10 @@ void onReportBasicSetting(void)
     /* auto report flag */
     buffer[pos++] = lock.autoReportFlag;
     /* unlock stop delay */
-    //buffer[pos++] = (lock.unlockStopDelay >> 8) & 0xff;
+    buffer[pos++] = (lock.unlockStopDelay >> 8) & 0xff;
     buffer[pos++] = lock.unlockStopDelay & 0xff;
     /* lock stop delay */
-    //buffer[pos++] = (lock.lockStopDelay >> 8) & 0xff;
+    buffer[pos++] = (lock.lockStopDelay >> 8) & 0xff;
     buffer[pos++] = lock.lockStopDelay & 0xff;
 	/* shake thresold */
     buffer[pos++] = lock.shakeThreshold;
@@ -924,6 +926,9 @@ void user_database_init(void)
         lock.baudRateIndex = (readDataBase.baudRateIndex == 0xffff) ? DEFAULT_BAUD_RATE_INDEX : readDataBase.baudRateIndex;
         //lock.ledFlashStatus = (uint8_t)readDataBase.ledFlash;
     }
+
+	lock.disableReport = 0;
+	lock.disableReportLatency = 0;
 }
 
 void user_database_save(void)

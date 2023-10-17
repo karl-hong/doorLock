@@ -16,6 +16,7 @@
 #define DEFAULT_Y_REPORT_FLAG       (1)
 #define DEFAULT_Z_REPORT_FLAG       (1)
 #define DEFAULT_BAUD_RATE_INDEX     (4)
+#define DEFAULT_DISABLE_REPORT_LATENCY (100)//50*100ms
 
 #define DELAY_BASE                  (10)//100ms*10 = 1s
 #define FLASH_FREQ                  (1)
@@ -26,6 +27,7 @@
 #define MOTOR_DELAY_STOP_LATENCY		(1*MOTOR_DELAY_STOP_BASE)
 #define LOCK_STOP_DEFAULT_DELAY     120//ms
 #define UNLOCK_STOP_DEFAULT_DELAY   60//ms
+
 
 enum {
     CMD_DISABLE = 0,
@@ -106,6 +108,8 @@ typedef struct {
     uint16_t shakeReportInterval;
     uint16_t shakeReportTimeCnt;
     uint16_t baudRateIndex;
+	uint8_t disableReport;
+	uint16_t disableReportLatency;
     gSensor_Data_t gSensor;
     cmd_control_t cmdControl;
     led_task_ctrl_t ledTask;
