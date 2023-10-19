@@ -158,8 +158,8 @@ void motor_set_stop(void)
     lock.motorTask.latency = 0;
     lock.motorTask.faultDectEnable = 0;
 	lock.motorTask.faultDectLatency = 0;
-	lock.disableReport = 0;
-	lock.disableReportLatency = 0;
+	lock.disableReport = 1;
+	lock.disableReportLatency = 50;
 //	motorLatency = 100;
 }
 

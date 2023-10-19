@@ -117,24 +117,11 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
     uint16_t cmdLength;
     uint16_t lockStopDelay;
     uint16_t unlockStopDelay;
-    uint8_t shakeThresold;
-    uint8_t xReportFlag;
-    uint8_t yReportFlag;
-    uint8_t zReportFlag;
-    uint16_t shakeReportInterval;
 
     if(NULL == data){
         printf("[%s]data is null!\r\n", __FUNCTION__);
         return;
     }
-
-//    if(ack) cmdLength = 18;
-//    else    cmdLength = 5;
-
-//    if(cmdLength > length){
-//        printf("[%s]length error!\r\n", __FUNCTION__);
-//        return;
-//    }
 
 	/* addr */
     if(ack) addr = data[pos++];
@@ -151,7 +138,7 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
     autoReportFlag = data[pos++];
 
     if(!ack){
-        goto get_shake;
+        goto out;
     }
 
 	/* unlock stop delay, 2byte */
@@ -161,15 +148,6 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
 	/* lock stop delay, 2byte */
     lockStopDelay = data[pos++] << 8;
 	lockStopDelay += data[pos++];
-
-get_shake:
-    shakeThresold = data[pos++];
-    xReportFlag = data[pos++];
-    yReportFlag = data[pos++];
-    zReportFlag = data[pos++];
-    shakeReportInterval = data[pos++] << 8;
-    shakeReportInterval += data[pos++];
-
 
     if(!ack){
         goto out;
@@ -190,8 +168,6 @@ get_shake:
     uid2 += (data[pos++] << 8);
     uid2 += data[pos++];
 
-    printf("uid: 0x%x%x%x\r\n", uid0, uid1, uid2);
-
     if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
         printf("[%s]UID is not matched!\r\n", __FUNCTION__);
         return;
@@ -207,20 +183,13 @@ out:
     lock.autoLockFlag = autoLockFlag;
     // lock.lockReplyDelay = lockReplyDelay;
     lock.autoReportFlag = autoReportFlag;
-    lock.shakeThreshold = shakeThresold;
-    lock.xReportFlag = xReportFlag;
-    lock.yReportFlag = yReportFlag;
-    lock.zReportFlag = zReportFlag;
-    lock.shakeReportInterval = shakeReportInterval;
     
     user_database_save();
     /* send ack msg here */
     if(ack){
         lock.cmdControl.singleBasicSetting.sendCmdEnable = CMD_ENABLE;
         lock.cmdControl.singleBasicSetting.sendCmdDelay = 0;
-    }else{
-		while(1);//wait for reboot
-	}
+    }
 }
 
 void  onCmdSetLight(uint8_t *data, uint16_t length, uint8_t ack)
@@ -466,6 +435,73 @@ out:
     }
 }
 
+void onCmdModifyShakeConfig(uint8_t *data, uint16_t length, uint8_t ack)
+{
+	uint32_t uid0;
+	uint32_t uid1;
+	uint32_t uid2;
+	uint16_t pos = 0;
+	uint8_t shakeThresold;
+	uint8_t xReportFlag;
+	uint8_t yReportFlag;
+	uint8_t zReportFlag;
+	uint16_t shakeReportInterval;
+
+	if(NULL == data){
+		printf("[%s]data is null!\r\n", __FUNCTION__);
+		return;
+	}
+
+	shakeThresold = data[pos++];
+	xReportFlag = data[pos++];
+	yReportFlag = data[pos++];
+	zReportFlag = data[pos++];
+	shakeReportInterval = data[pos++] << 8;
+	shakeReportInterval += data[pos++];
+
+
+	if(!ack){
+		goto out;
+	}
+
+	uid0 = (data[pos++] << 24);
+	uid0 += (data[pos++] << 16);
+	uid0 += (data[pos++] << 8);
+	uid0 += data[pos++];
+
+	uid1 = (data[pos++] << 24);
+	uid1 += (data[pos++] << 16);
+	uid1 += (data[pos++] << 8);
+	uid1 += data[pos++];
+
+	uid2 = (data[pos++] << 24);
+	uid2 += (data[pos++] << 16);
+	uid2 += (data[pos++] << 8);
+	uid2 += data[pos++];
+
+	if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
+		printf("[%s]UID is not matched!\r\n", __FUNCTION__);
+		return;
+	}
+out:
+	/* set dev state here */
+	lock.shakeThreshold = shakeThresold;
+	lock.xReportFlag = xReportFlag;
+	lock.yReportFlag = yReportFlag;
+	lock.zReportFlag = zReportFlag;
+	lock.shakeReportInterval = shakeReportInterval;
+	
+	user_database_save();
+	/* send ack msg here */
+	if(ack){
+		lock.cmdControl.singleModifyShakeConfig.sendCmdEnable = CMD_ENABLE;
+		lock.cmdControl.singleModifyShakeConfig.sendCmdDelay = 0;
+	}else{
+		while(1);//wait for reboot
+	}
+}
+
+
 void onReportDeviceStatus(void)
 {
     uint8_t buffer[50];
@@ -566,17 +602,6 @@ void onReportBasicSetting(void)
     /* lock stop delay */
     buffer[pos++] = (lock.lockStopDelay >> 8) & 0xff;
     buffer[pos++] = lock.lockStopDelay & 0xff;
-	/* shake thresold */
-    buffer[pos++] = lock.shakeThreshold;
-    /* x report flag */
-    buffer[pos++] = lock.xReportFlag;
-    /* y report flag */
-    buffer[pos++] = lock.yReportFlag;
-    /* z report flag */
-    buffer[pos++] = lock.zReportFlag;
-    /* shake report interval */
-    buffer[pos++] = (lock.shakeReportInterval >> 8) & 0xff;
-    buffer[pos++] = lock.shakeReportInterval & 0xff;
     /* UID */
     buffer[pos++] = (lock.uid0 >> 24)& 0xff;
     buffer[pos++] = (lock.uid0 >> 16) & 0xff;
@@ -592,8 +617,6 @@ void onReportBasicSetting(void)
     buffer[pos++] = lock.uid2 & 0xff;
 
     user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_BASE_SETTING, buffer, pos);   
-
-	while(1);//wait for reboot while setting shake threshold
 }
 
 void onReportSetLightStatus(void)
@@ -862,6 +885,41 @@ void onReportSingleModifyBaudRate(void)
     while(1);//wait for watchdog reset 
 }
 
+void onReportSingleModifyShakeConfig(void)
+{
+	uint8_t buffer[50];
+	uint8_t pos = 0;
+	/* shake thresold */
+	buffer[pos++] = lock.shakeThreshold;
+	/* x report flag */
+	buffer[pos++] = lock.xReportFlag;
+	/* y report flag */
+	buffer[pos++] = lock.yReportFlag;
+	/* z report flag */
+	buffer[pos++] = lock.zReportFlag;
+	/* shake report interval */
+	buffer[pos++] = (lock.shakeReportInterval >> 8) & 0xff;
+	buffer[pos++] = lock.shakeReportInterval & 0xff;
+	/* UID */
+	buffer[pos++] = (lock.uid0 >> 24)& 0xff;
+	buffer[pos++] = (lock.uid0 >> 16) & 0xff;
+	buffer[pos++] = (lock.uid0 >> 8) & 0xff;
+	buffer[pos++] = lock.uid0 & 0xff;
+	buffer[pos++] = (lock.uid1 >> 24)& 0xff;
+	buffer[pos++] = (lock.uid1 >> 16) & 0xff;
+	buffer[pos++] = (lock.uid1 >> 8) & 0xff;
+	buffer[pos++] = lock.uid1 & 0xff;
+	buffer[pos++] = (lock.uid2 >> 24)& 0xff;
+	buffer[pos++] = (lock.uid2 >> 16) & 0xff;
+	buffer[pos++] = (lock.uid2 >> 8) & 0xff;
+	buffer[pos++] = lock.uid2 & 0xff;
+
+	user_protocol_send_data(CMD_ACK, OPT_CODE_SIGNLE_SET_SHAKE_CONFIG, buffer, pos);   
+
+	while(1);//wait for reboot while setting shake threshold
+
+}
+
 uint16_t user_read_flash(uint32_t address)
 {
     return *(__IO uint16_t*)address;
@@ -1043,6 +1101,11 @@ void user_reply_handle(void)
     if(lock.cmdControl.singleModifyBaudRate.sendCmdEnable && !lock.cmdControl.singleModifyBaudRate.sendCmdDelay){
         lock.cmdControl.singleModifyBaudRate.sendCmdEnable = CMD_DISABLE;
         onReportSingleModifyBaudRate();
+    }
+
+	if(lock.cmdControl.singleModifyShakeConfig.sendCmdEnable && !lock.cmdControl.singleModifyShakeConfig.sendCmdDelay){
+        lock.cmdControl.singleModifyShakeConfig.sendCmdEnable = CMD_DISABLE;
+        onReportSingleModifyShakeConfig();
     }
 }
 

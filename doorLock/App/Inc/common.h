@@ -16,7 +16,7 @@
 #define DEFAULT_Y_REPORT_FLAG       (1)
 #define DEFAULT_Z_REPORT_FLAG       (1)
 #define DEFAULT_BAUD_RATE_INDEX     (4)
-#define DEFAULT_DISABLE_REPORT_LATENCY (100)//50*100ms
+#define DEFAULT_DISABLE_REPORT_LATENCY (200)//50*100ms
 
 #define DELAY_BASE                  (10)//100ms*10 = 1s
 #define FLASH_FREQ                  (1)
@@ -58,6 +58,7 @@ typedef struct {
     cmd_setting_t singleQueryAllStatus;
     cmd_setting_t shakeReport;
     cmd_setting_t singleModifyBaudRate;
+	cmd_setting_t singleModifyShakeConfig;
 }cmd_control_t;
 
 typedef struct {

@@ -157,6 +157,8 @@ void tim_interrupt_callback(void)
 
         if(lock.cmdControl.shakeReport.sendCmdDelay > 0) lock.cmdControl.shakeReport.sendCmdDelay --;
 
+		if(lock.cmdControl.singleModifyShakeConfig.sendCmdDelay > 0) lock.cmdControl.singleModifyShakeConfig.sendCmdDelay --;
+
         /* auto lock detect */
         if(lock.HoldOnDetectEnable){
             lock.HoldOnLatencyCnt ++;

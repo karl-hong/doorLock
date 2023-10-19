@@ -263,6 +263,16 @@ void user_event_process(uint8_t cmd, uint8_t opt, uint8_t *data, uint16_t lenOfD
 					onCmdModifyBaudRate(data, lenOfData, 0);
 					break;
 				}
+
+				case OPT_CODE_MULTI_SET_SHAKE_CONFIG:{
+					onCmdModifyShakeConfig(data, lenOfData, 0);
+					break;
+				}
+
+				case OPT_CODE_SIGNLE_SET_SHAKE_CONFIG:{
+					onCmdModifyShakeConfig(data, lenOfData, 1);
+					break;
+				}
 				
 				default:
 					break;

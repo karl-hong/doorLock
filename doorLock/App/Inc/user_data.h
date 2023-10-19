@@ -18,6 +18,8 @@ void onCmdQuerySingleDevAllStatus(uint8_t *data, uint16_t length);
 
 void onCmdModifyBaudRate(uint8_t *data, uint16_t length, uint8_t ack);
 
+void onCmdModifyShakeConfig(uint8_t *data, uint16_t length, uint8_t ack);
+
 void onReportDeviceStatus(void);
 
 void onReportSetDevOnOffStatus(void);
@@ -39,6 +41,8 @@ void onReportGsensorData(void);
 void onReportShakeAlarm(void);
 
 void onReportSingleModifyBaudRate(void);
+
+void onReportSingleModifyShakeConfig(void);
 
 void user_database_init(void);
 
