@@ -117,6 +117,8 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
     uint16_t cmdLength;
     uint16_t lockStopDelay;
     uint16_t unlockStopDelay;
+	uint8_t autoCloseDoorEnable;
+	uint16_t autoCloseDoorDelay;
 
     if(NULL == data){
         printf("[%s]data is null!\r\n", __FUNCTION__);
@@ -138,6 +140,9 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
     autoReportFlag = data[pos++];
 
     if(!ack){
+		autoCloseDoorEnable = data[pos++];
+		autoCloseDoorDelay = data[pos++] << 8;
+		autoCloseDoorDelay += data[pos++];
         goto out;
     }
 
@@ -148,10 +153,11 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
 	/* lock stop delay, 2byte */
     lockStopDelay = data[pos++] << 8;
 	lockStopDelay += data[pos++];
-
-    if(!ack){
-        goto out;
-    }
+	
+	/* auto close door */
+	autoCloseDoorEnable = data[pos++];
+	autoCloseDoorDelay = data[pos++] << 8;
+	autoCloseDoorDelay += data[pos++];
 
     uid0 = (data[pos++] << 24);
     uid0 += (data[pos++] << 16);
@@ -183,6 +189,8 @@ out:
     lock.autoLockFlag = autoLockFlag;
     // lock.lockReplyDelay = lockReplyDelay;
     lock.autoReportFlag = autoReportFlag;
+	lock.autoCloseDoorEnable = autoCloseDoorEnable;
+	lock.autoCloseDoorDelay = autoCloseDoorDelay;
     
     user_database_save();
     /* send ack msg here */
@@ -504,8 +512,9 @@ out:
 
 void onReportDeviceStatus(void)
 {
-    uint8_t buffer[50];
+    uint8_t buffer[60];
     uint8_t pos = 0;
+	uint16_t version;
     /* addr */
     buffer[pos++] = lock.address;
     /* lock state */
@@ -539,6 +548,16 @@ void onReportDeviceStatus(void)
     /* shake report interval */
     buffer[pos++] = (lock.shakeReportInterval >> 8) & 0xff;
     buffer[pos++] = lock.shakeReportInterval & 0xff;
+	/* state auto lock enable */
+	buffer[pos++] = lock.autoCloseDoorEnable;
+	/* state auto lock delay */
+	buffer[pos++] = (lock.autoCloseDoorDelay >> 8) & 0xff;
+    buffer[pos++] = lock.autoCloseDoorDelay & 0xff;
+	/* version */
+	version = VERSION;
+	buffer[pos++] = (version >> 8) & 0xff;
+    buffer[pos++] = version & 0xff;
+	
 
     /* UID */
     buffer[pos++] = (lock.uid0 >> 24)& 0xff;
@@ -602,6 +621,11 @@ void onReportBasicSetting(void)
     /* lock stop delay */
     buffer[pos++] = (lock.lockStopDelay >> 8) & 0xff;
     buffer[pos++] = lock.lockStopDelay & 0xff;
+	/* state lock enable */
+	buffer[pos++] = lock.autoCloseDoorEnable;
+	/* state lock delay */
+	buffer[pos++] = (lock.autoCloseDoorDelay >> 8) & 0xff;
+    buffer[pos++] = lock.autoCloseDoorDelay & 0xff;
     /* UID */
     buffer[pos++] = (lock.uid0 >> 24)& 0xff;
     buffer[pos++] = (lock.uid0 >> 16) & 0xff;
@@ -960,6 +984,8 @@ void user_database_init(void)
         lock.zReportFlag = DEFAULT_Z_REPORT_FLAG;
         lock.shakeReportInterval = DEFAULT_SHAKE_INTERVAL;
         lock.baudRateIndex = DEFAULT_BAUD_RATE_INDEX;
+		lock.autoCloseDoorEnable = DEFAULT_AUTO_CLOSE_DOOR_FLAG;
+		lock.autoCloseDoorDelay = DEFAULT_AUTO_CLOSE_DOOR_DELAY;
 
         user_database_save();
     }else{
@@ -982,6 +1008,8 @@ void user_database_init(void)
         lock.zReportFlag = (readDataBase.zReportFlag == 0xffff) ? DEFAULT_Z_REPORT_FLAG : readDataBase.zReportFlag;
         lock.shakeReportInterval = (readDataBase.shakeReportInterval == 0xffff) ? DEFAULT_SHAKE_INTERVAL : readDataBase.shakeReportInterval;
         lock.baudRateIndex = (readDataBase.baudRateIndex == 0xffff) ? DEFAULT_BAUD_RATE_INDEX : readDataBase.baudRateIndex;
+		lock.autoCloseDoorEnable = (readDataBase.autoCloseDoorEnable == 0xffff) ? DEFAULT_AUTO_CLOSE_DOOR_FLAG : readDataBase.autoCloseDoorEnable;
+		lock.autoCloseDoorDelay = (readDataBase.autoCloseDoorDelay == 0xffff) ? DEFAULT_AUTO_CLOSE_DOOR_DELAY : readDataBase.autoCloseDoorDelay;
         //lock.ledFlashStatus = (uint8_t)readDataBase.ledFlash;
     }
 
@@ -1016,6 +1044,8 @@ void user_database_save(void)
     writeDataBase.zReportFlag = lock.zReportFlag;
     writeDataBase.shakeReportInterval = lock.shakeReportInterval;
     writeDataBase.baudRateIndex = lock.baudRateIndex;
+	writeDataBase.autoCloseDoorEnable = lock.autoCloseDoorEnable;
+	writeDataBase.autoCloseDoorDelay = lock.autoCloseDoorDelay;
 
     HAL_FLASH_Unlock();
 

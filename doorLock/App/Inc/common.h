@@ -17,6 +17,8 @@
 #define DEFAULT_Z_REPORT_FLAG       (1)
 #define DEFAULT_BAUD_RATE_INDEX     (4)
 #define DEFAULT_DISABLE_REPORT_LATENCY (200)//50*100ms
+#define DEFAULT_AUTO_CLOSE_DOOR_FLAG	(0)
+#define DEFAULT_AUTO_CLOSE_DOOR_DELAY	(3000)//ms
 
 #define DELAY_BASE                  (10)//100ms*10 = 1s
 #define FLASH_FREQ                  (1)
@@ -27,6 +29,8 @@
 #define MOTOR_DELAY_STOP_LATENCY		(1*MOTOR_DELAY_STOP_BASE)
 #define LOCK_STOP_DEFAULT_DELAY     120//ms
 #define UNLOCK_STOP_DEFAULT_DELAY   60//ms
+
+#define	VERSION						(10)
 
 
 enum {
@@ -85,6 +89,9 @@ typedef struct {
     uint8_t lightState2;
     uint8_t keyDetectState;
     uint8_t lockState;
+	uint8_t doorState;
+	uint8_t autoCloseDoorEnable;
+	uint8_t autoCloseDoorStart;
     uint8_t manulLockState;
     uint16_t lockReplyDelay;
     uint8_t  ledFlashStatus;
@@ -111,6 +118,7 @@ typedef struct {
     uint16_t baudRateIndex;
 	uint8_t disableReport;
 	uint16_t disableReportLatency;
+	uint16_t autoCloseDoorDelay;
     gSensor_Data_t gSensor;
     cmd_control_t cmdControl;
     led_task_ctrl_t ledTask;
@@ -143,6 +151,16 @@ enum {
     LED_GREEN,
 };
 
+enum {
+	DOOR_OPEN = 0,
+	DOOR_CLOSE,
+};
+
+enum {
+	AUTO_CLOSE_DOOR_IDLE = 0,
+	AUTO_CLOSE_DOOR_START,
+};
+
 typedef struct {
     uint16_t magic;
     uint16_t address;
@@ -159,6 +177,8 @@ typedef struct {
     uint16_t zReportFlag;
     uint16_t shakeReportInterval;
     uint16_t baudRateIndex;
+	uint16_t autoCloseDoorEnable;
+	uint16_t autoCloseDoorDelay;
 }database_t;
 
 

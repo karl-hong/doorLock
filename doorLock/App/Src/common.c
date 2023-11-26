@@ -9,6 +9,7 @@ static uint16_t timeBase = 0;
 static uint8_t lastKeyState = 0;
 static uint8_t gMotorStopEnable = 0;
 static uint16_t gMotorStopLatency = 0;
+static uint16_t gAutoCloseDoorCnt = 0;
 
 void lock_stop_detect(void)
 {
@@ -74,6 +75,68 @@ void lock_stop_detect(void)
 
         lock.autoLockEnable = 0;
     }
+}
+
+static void close_door_detect(void)
+{
+	uint8_t doorState;
+	static uint8_t stateCnt = 0;
+
+	if(lock.doorDetectState1 && lock.doorDetectState2){
+		doorState = DOOR_CLOSE;
+	}else{
+		doorState = DOOR_OPEN;
+	}
+
+	if(doorState == lock.doorState){
+		stateCnt = 0;
+		return;
+	}
+	
+	stateCnt ++;
+	if(stateCnt < 100){
+		return;
+	}
+	stateCnt = 0;
+
+	lock.doorState = doorState;
+
+	if(DOOR_OPEN == lock.doorState){
+		lock.autoCloseDoorStart = AUTO_CLOSE_DOOR_IDLE;
+		return;
+	}
+
+	/* door is close, check whether need to lock */
+	if(!lock.autoCloseDoorEnable){
+		return;//disable auto close door function
+	}
+
+	lock.autoCloseDoorStart = AUTO_CLOSE_DOOR_START;
+	gAutoCloseDoorCnt = lock.autoCloseDoorDelay;
+}
+
+static void auto_close_door_task(void)
+{
+	if(!lock.autoCloseDoorEnable || !lock.autoCloseDoorStart){
+		return;
+	}
+	
+	if(lock.lockState == LOCK_STATE_LOCK){
+		lock.autoCloseDoorStart = AUTO_CLOSE_DOOR_IDLE;
+		return;
+	}
+	
+	if(gAutoCloseDoorCnt){//ms
+		gAutoCloseDoorCnt --;
+	}
+	
+	if(0 == gAutoCloseDoorCnt){
+		lock.autoCloseDoorStart = AUTO_CLOSE_DOOR_IDLE;
+		if(lock.lockState == LOCK_STATE_UNLOCK){
+            motor_set_forward();
+            lock.autoLockEnable = 1;
+        }
+	}
 }
 
 void gpio_interrupt_callback(uint16_t GPIO_Pin)
@@ -206,6 +269,9 @@ void tim_interrupt_callback(void)
     if(lock.shakeReportTimeCnt > 0) lock.shakeReportTimeCnt --;
 		
 //		if(motorLatency > 0)	motorLatency --;
+
+	close_door_detect();
+	auto_close_door_task();
 }
 
 
@@ -217,6 +283,12 @@ void lock_state_init(void)
 	lock.doorDetectState2 = HAL_GPIO_ReadPin(doorDetect2_GPIO_Port, doorDetect2_Pin) ? 0 : 1;
 	lock.keyDetectState = HAL_GPIO_ReadPin(KEY_Detect_GPIO_Port, KEY_Detect_Pin) ? 0 : 1;
 	lastKeyState = lock.keyDetectState;
+
+	if(lock.doorDetectState1 && lock.doorDetectState2){
+		lock.doorState = DOOR_CLOSE;
+	}else{
+		lock.doorState = DOOR_OPEN;
+	}
 }
 
 void autolock_task(void)
