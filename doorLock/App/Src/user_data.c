@@ -944,6 +944,37 @@ void onReportSingleModifyShakeConfig(void)
 
 }
 
+void onReportSingleDoorState(void)
+{
+	uint8_t buffer[40];
+	uint8_t pos = 0;
+	/* addr */
+	buffer[pos++] = lock.address;
+
+	/* last state */
+	buffer[pos++] = lock.lastDoorState;
+	/* current state */
+	buffer[pos++] = lock.curDoorState;
+	/* uid */
+	buffer[pos++] = (lock.uid0 >> 24)& 0xff;
+	buffer[pos++] = (lock.uid0 >> 16) & 0xff;
+	buffer[pos++] = (lock.uid0 >> 8) & 0xff;
+	buffer[pos++] = lock.uid0 & 0xff;
+	buffer[pos++] = (lock.uid1 >> 24)& 0xff;
+	buffer[pos++] = (lock.uid1 >> 16) & 0xff;
+	buffer[pos++] = (lock.uid1 >> 8) & 0xff;
+	buffer[pos++] = lock.uid1 & 0xff;
+	buffer[pos++] = (lock.uid2 >> 24)& 0xff;
+	buffer[pos++] = (lock.uid2 >> 16) & 0xff;
+	buffer[pos++] = (lock.uid2 >> 8) & 0xff;
+	buffer[pos++] = lock.uid2 & 0xff;
+
+	user_protocol_send_data(CMD_QUERY, OPT_CODE_REPORT_DOOR_STATE, buffer, pos); 
+
+	lock.lastDoorState = lock.curDoorState;
+
+}
+
 uint16_t user_read_flash(uint32_t address)
 {
     return *(__IO uint16_t*)address;
@@ -1136,6 +1167,11 @@ void user_reply_handle(void)
 	if(lock.cmdControl.singleModifyShakeConfig.sendCmdEnable && !lock.cmdControl.singleModifyShakeConfig.sendCmdDelay){
         lock.cmdControl.singleModifyShakeConfig.sendCmdEnable = CMD_DISABLE;
         onReportSingleModifyShakeConfig();
+    }
+
+	if(lock.cmdControl.singleReportDoorState.sendCmdEnable && !lock.cmdControl.singleReportDoorState.sendCmdDelay){
+        onReportSingleDoorState();
+		lock.cmdControl.singleReportDoorState.sendCmdEnable = CMD_DISABLE;
     }
 }
 

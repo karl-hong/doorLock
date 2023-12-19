@@ -30,7 +30,7 @@
 #define LOCK_STOP_DEFAULT_DELAY     120//ms
 #define UNLOCK_STOP_DEFAULT_DELAY   60//ms
 
-#define	VERSION						(10)
+#define	VERSION						(11)
 
 
 enum {
@@ -63,6 +63,7 @@ typedef struct {
     cmd_setting_t shakeReport;
     cmd_setting_t singleModifyBaudRate;
 	cmd_setting_t singleModifyShakeConfig;
+	cmd_setting_t singleReportDoorState;
 }cmd_control_t;
 
 typedef struct {
@@ -119,6 +120,8 @@ typedef struct {
 	uint8_t disableReport;
 	uint16_t disableReportLatency;
 	uint16_t autoCloseDoorDelay;
+	uint8_t lastDoorState;//for report
+	uint8_t curDoorState;//for report
     gSensor_Data_t gSensor;
     cmd_control_t cmdControl;
     led_task_ctrl_t ledTask;

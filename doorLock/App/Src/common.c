@@ -188,6 +188,14 @@ void check_door_detect1_status(void)
     //     lastState = lock.doorDetectState1;
     //     lock_stop_detect();
     // }
+
+	if(lock.cmdControl.singleReportDoorState.sendCmdEnable == CMD_DISABLE){
+		lock.curDoorState = (lock.doorDetectState2 < 1) + lock.doorDetectState1;
+		if(lock.curDoorState != lock.lastDoorState){
+			lock.cmdControl.singleReportDoorState.sendCmdEnable = CMD_ENABLE;
+            lock.cmdControl.singleReportDoorState.sendCmdDelay = 0;
+		}
+	}
 }
 
 void tim_interrupt_callback(void)
@@ -289,6 +297,9 @@ void lock_state_init(void)
 	}else{
 		lock.doorState = DOOR_OPEN;
 	}
+
+	lock.lastDoorState = (lock.doorDetectState2 < 1) + lock.doorDetectState1;
+	lock.curDoorState = lock.lastDoorState;
 }
 
 void autolock_task(void)
