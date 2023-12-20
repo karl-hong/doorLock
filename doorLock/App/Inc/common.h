@@ -29,8 +29,9 @@
 #define MOTOR_DELAY_STOP_LATENCY		(1*MOTOR_DELAY_STOP_BASE)
 #define LOCK_STOP_DEFAULT_DELAY     120//ms
 #define UNLOCK_STOP_DEFAULT_DELAY   60//ms
+#define REPORT_DOOR_STATE_DELAY		100//ms
 
-#define	VERSION						(11)
+#define	VERSION						(12)
 
 
 enum {

@@ -10,6 +10,7 @@ static uint8_t lastKeyState = 0;
 static uint8_t gMotorStopEnable = 0;
 static uint16_t gMotorStopLatency = 0;
 static uint16_t gAutoCloseDoorCnt = 0;
+static uint16_t gReportDoorStateCnt = 0;
 
 void lock_stop_detect(void)
 {
@@ -183,17 +184,21 @@ void check_door_detect1_status(void)
 {
     //static uint8_t lastState = 0;
     lock.doorDetectState1 = HAL_GPIO_ReadPin(doorDetect1_GPIO_Port, doorDetect1_Pin) ? 0 : 1;
+}
 
-    // if(lastState != lock.doorDetectState1){
-    //     lastState = lock.doorDetectState1;
-    //     lock_stop_detect();
-    // }
-
+void check_door_state_change(void)
+{
 	if(lock.cmdControl.singleReportDoorState.sendCmdEnable == CMD_DISABLE){
-		lock.curDoorState = (lock.doorDetectState2 < 1) + lock.doorDetectState1;
+		lock.curDoorState = ((!lock.doorDetectState2) < 1) + (!lock.doorDetectState1);
 		if(lock.curDoorState != lock.lastDoorState){
-			lock.cmdControl.singleReportDoorState.sendCmdEnable = CMD_ENABLE;
-            lock.cmdControl.singleReportDoorState.sendCmdDelay = 0;
+			gReportDoorStateCnt ++;
+			if(gReportDoorStateCnt >= REPORT_DOOR_STATE_DELAY){
+				gReportDoorStateCnt = 0;
+				lock.cmdControl.singleReportDoorState.sendCmdEnable = CMD_ENABLE;
+            	lock.cmdControl.singleReportDoorState.sendCmdDelay = 0;
+			}
+		}else{
+			gReportDoorStateCnt = 0;
 		}
 	}
 }
@@ -280,6 +285,7 @@ void tim_interrupt_callback(void)
 
 	close_door_detect();
 	auto_close_door_task();
+	check_door_state_change();
 }
 
 
@@ -298,8 +304,9 @@ void lock_state_init(void)
 		lock.doorState = DOOR_OPEN;
 	}
 
-	lock.lastDoorState = (lock.doorDetectState2 < 1) + lock.doorDetectState1;
+	lock.lastDoorState = ((!lock.doorDetectState2) < 1) + (!lock.doorDetectState1);
 	lock.curDoorState = lock.lastDoorState;
+	gReportDoorStateCnt = 0;
 }
 
 void autolock_task(void)
