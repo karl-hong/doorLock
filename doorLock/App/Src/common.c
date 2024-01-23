@@ -136,6 +136,10 @@ static void auto_close_door_task(void)
 		if(lock.lockState == LOCK_STATE_UNLOCK){
             motor_set_forward();
             lock.autoLockEnable = 1;
+			if(lock.autoReportFlag){
+				lock.cmdControl.singleRportAutoLockByDoorState.sendCmdEnable = CMD_ENABLE;
+				lock.cmdControl.singleRportAutoLockByDoorState.sendCmdDelay = 0;
+			}
         }
 	}
 }
@@ -234,6 +238,8 @@ void tim_interrupt_callback(void)
         if(lock.cmdControl.shakeReport.sendCmdDelay > 0) lock.cmdControl.shakeReport.sendCmdDelay --;
 
 		if(lock.cmdControl.singleModifyShakeConfig.sendCmdDelay > 0) lock.cmdControl.singleModifyShakeConfig.sendCmdDelay --;
+
+		if(lock.cmdControl.singleRportAutoLockByDoorState.sendCmdDelay > 0) lock.cmdControl.singleRportAutoLockByDoorState.sendCmdDelay --;
 
         /* auto lock detect */
         if(lock.HoldOnDetectEnable){

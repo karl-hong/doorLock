@@ -975,6 +975,31 @@ void onReportSingleDoorState(void)
 
 }
 
+void onReportSingleAutoLockByDoorState(void)
+{
+	uint8_t buffer[40];
+	uint8_t pos = 0;
+	/* addr */
+	buffer[pos++] = lock.address;
+
+	/* uid */
+	buffer[pos++] = (lock.uid0 >> 24)& 0xff;
+	buffer[pos++] = (lock.uid0 >> 16) & 0xff;
+	buffer[pos++] = (lock.uid0 >> 8) & 0xff;
+	buffer[pos++] = lock.uid0 & 0xff;
+	buffer[pos++] = (lock.uid1 >> 24)& 0xff;
+	buffer[pos++] = (lock.uid1 >> 16) & 0xff;
+	buffer[pos++] = (lock.uid1 >> 8) & 0xff;
+	buffer[pos++] = lock.uid1 & 0xff;
+	buffer[pos++] = (lock.uid2 >> 24)& 0xff;
+	buffer[pos++] = (lock.uid2 >> 16) & 0xff;
+	buffer[pos++] = (lock.uid2 >> 8) & 0xff;
+	buffer[pos++] = lock.uid2 & 0xff;
+
+	user_protocol_send_data(CMD_QUERY, OPT_CODE_REPORT_AUTO_LOCK_BY_DOOR_STATE, buffer, pos); 
+}
+
+
 uint16_t user_read_flash(uint32_t address)
 {
     return *(__IO uint16_t*)address;
@@ -1173,6 +1198,11 @@ void user_reply_handle(void)
         onReportSingleDoorState();
 		lock.cmdControl.singleReportDoorState.sendCmdEnable = CMD_DISABLE;
     }
+
+	if(lock.cmdControl.singleRportAutoLockByDoorState.sendCmdEnable && !lock.cmdControl.singleRportAutoLockByDoorState.sendCmdDelay){
+		onReportSingleAutoLockByDoorState();
+		lock.cmdControl.singleRportAutoLockByDoorState.sendCmdEnable = CMD_DISABLE;
+	}
 }
 
 void printSetting(void)

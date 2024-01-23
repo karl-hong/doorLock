@@ -31,7 +31,7 @@
 #define UNLOCK_STOP_DEFAULT_DELAY   60//ms
 #define REPORT_DOOR_STATE_DELAY		100//ms
 
-#define	VERSION						(12)
+#define	VERSION						(13)
 
 
 enum {
@@ -65,6 +65,7 @@ typedef struct {
     cmd_setting_t singleModifyBaudRate;
 	cmd_setting_t singleModifyShakeConfig;
 	cmd_setting_t singleReportDoorState;
+	cmd_setting_t singleRportAutoLockByDoorState;
 }cmd_control_t;
 
 typedef struct {
