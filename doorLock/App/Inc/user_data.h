@@ -44,6 +44,9 @@ void onReportSingleModifyBaudRate(void);
 
 void onReportSingleModifyShakeConfig(void);
 
+void onReportSingleAutoLockByDoorState(void);
+
+
 void user_database_init(void);
 
 void user_database_save(void);
