@@ -113,6 +113,14 @@ void led_task(void)
 			break;
 		}
 	}
+
+    if(lock.lockState){//lock
+        set_light1_off();
+        set_light2_off();
+    }else{//unlock
+        set_light1_on();
+        set_light2_on();
+    }
 }
 
 
