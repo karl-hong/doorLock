@@ -39,7 +39,7 @@ volatile static uint8_t ringBuffer[MAX_BUFFER_SIZE];
 void user_buffer_create(RingBuffer* buffer, int buffer_size, int low_watermark, int high_watermark)
 {
     //initialise circular buffer
-    buffer->buffer_size = buffer_size + 1;
+    buffer->buffer_size = buffer_size;
     buffer->readIdx     = 0;
     buffer->writeIdx    = 0;
     buffer->endIdx      = buffer_size;
