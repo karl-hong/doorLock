@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include <string.h>
 #include "user_data.h"
 #include "common.h"
 #include "user_protocol.h"
 #include "stm32f0xx_hal.h"
 #include "stm32f0xx_hal_flash_ex.h"  
 #include "led.h"
+#include "motor.h"
 
 void onCmdQuerySingleDevStatus(uint8_t *data, uint16_t length)
 {
@@ -114,7 +116,6 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
     uint8_t autoLockFlag;
     uint8_t  autoReportFlag;
     uint8_t  addr;
-    uint16_t cmdLength;
     uint16_t lockStopDelay;
     uint16_t unlockStopDelay;
 	uint8_t autoCloseDoorEnable;

@@ -146,6 +146,7 @@ typedef struct {
 
 void sc7a20_init(struct sc7a20_data *acc);
 void sc7a20_task(void);
+void sc7a20_interrupt_handle(void);
 
 
 #endif
