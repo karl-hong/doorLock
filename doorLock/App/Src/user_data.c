@@ -8,35 +8,75 @@
 #include "led.h"
 #include "motor.h"
 
-void onCmdQuerySingleDevStatus(uint8_t *data, uint16_t length)
+/**
+ * @brief 添加监听指令步骤
+ * （1）在user_protocol.h中定义opt
+ * （2）编写监听解析函数
+ * （3）在query_cmd增加对应接口
+ */
+
+cmd_query_t query_cmd[] = {
+    {OPT_CODE_SINGLE_DEV_QUERY_STATUS,        onCmdQuerySingleDevStatus},
+    {OPT_CODE_SINGLE_DEV_SET_ONOFF,           onCmdSetDeviceOnOff},
+    {OPT_CODE_SINGLE_DEV_BASE_SETTING,        onCmdModifyDeviceBasicSetting},
+    {OPT_CODE_SINGLE_DEV_SET_LIGHT,           onCmdSetLight},
+    {OPT_CODE_SINGLE_DEV_CLEAR_ALARM,         onCmdClrDevAlarmSetting},
+    {OPT_CODE_SINGLE_DEV_QUERY_GSENSOR,       onCmdGetGsensorData},
+    {OPT_CODE_SINGLE_DEV_QUERY_ALL_STATUS,    onCmdQuerySingleDevAllStatus},
+    {OPT_CODE_SINGLE_MODIFY_BAUDRATE,         onCmdModifyShakeConfig},
+    {OPT_CODE_SET_ADDR_BY_UID,                onCmdSetAddrByUid},
+    {OPT_CODE_GET_INFO_BY_ADDR,               onCmdGetInfoByAddr},
+    {OPT_CODE_SET_ADDR_BY_ADDR,               onCmdSetAddrByAddr},
+    {OPT_CODE_CLEAR_UART_BUFFER,              onCmdClearUartBuffer},
+    {OPT_CODE_SIGNLE_SET_SHAKE_CONFIG,        onCmdModifyBaudRate},
+    {0, NULL},//must end with NULL
+};
+
+cmd_query_t factory_query_cmd[] = {
+    {OPT_CODE_FACTORY_QUERY,            onCmdFactoryQuery},
+    {0, NULL},//must end with NULL
+};
+
+/**
+ * @brief 添加发布指令步骤
+ * （1）在user_protocol.h中定义opt
+ * （2）修改common.h中结构体cmd_control_t，增加对应的发布指令
+ * （3）编写监听解析函数
+ * （4）在report_cmd增加对应接口
+ */
+
+cmd_report_t report_cmd[] = {
+    {&lock.cmdControl.singleQueryStatus.sendCmdEnable, &lock.cmdControl.singleQueryStatus.sendCmdDelay, onReportDeviceStatus},
+    {&lock.cmdControl.singleSetOnOff.sendCmdEnable, &lock.cmdControl.singleSetOnOff.sendCmdDelay, onReportSetDevOnOffStatus},
+    {&lock.cmdControl.singleBasicSetting.sendCmdEnable, &lock.cmdControl.singleBasicSetting.sendCmdDelay, onReportBasicSetting},
+    {&lock.cmdControl.singleSetLight.sendCmdEnable, &lock.cmdControl.singleSetLight.sendCmdDelay, onReportSetLightStatus},
+    {&lock.cmdControl.singleClrAlarm.sendCmdEnable, &lock.cmdControl.singleClrAlarm.sendCmdDelay, onReportClearDevAlarmSetting},
+    {&lock.cmdControl.singleManualAlarm.sendCmdEnable, &lock.cmdControl.singleManualAlarm.sendCmdDelay, onReportManualAlarm},
+    {&lock.cmdControl.autoLockAlarm.sendCmdEnable, &lock.cmdControl.autoLockAlarm.sendCmdDelay, onReportAutoLockAlarm},
+    {&lock.cmdControl.faultAlarm.sendCmdEnable, &lock.cmdControl.faultAlarm.sendCmdDelay, onReportFaultAlarm},
+    {&lock.cmdControl.singleQueryGsensor.sendCmdEnable, &lock.cmdControl.singleQueryGsensor.sendCmdDelay, onReportGsensorData},
+    {&lock.cmdControl.singleQueryAllStatus.sendCmdEnable, &lock.cmdControl.singleQueryAllStatus.sendCmdDelay, onReportDeviceAllStatus},
+    {&lock.cmdControl.shakeReport.sendCmdEnable, &lock.cmdControl.shakeReport.sendCmdDelay, onReportShakeAlarm},
+    {&lock.cmdControl.singleModifyShakeConfig.sendCmdEnable, &lock.cmdControl.singleModifyShakeConfig.sendCmdDelay, onReportSingleModifyShakeConfig},
+    {&lock.cmdControl.singleRportAutoLockByDoorState.sendCmdEnable, &lock.cmdControl.singleRportAutoLockByDoorState.sendCmdDelay, onReportSingleAutoLockByDoorState},
+    {&lock.cmdControl.singleReportDoorState.sendCmdEnable, &lock.cmdControl.singleReportDoorState.sendCmdDelay, onReportSingleDoorState},
+    {&lock.cmdControl.setAddrByUid.sendCmdEnable, &lock.cmdControl.setAddrByUid.sendCmdDelay, onReportSetAddrByUid},
+    {&lock.cmdControl.getInfoByAddr.sendCmdEnable, &lock.cmdControl.getInfoByAddr.sendCmdDelay, onReportGetInfoByAddr},
+    {&lock.cmdControl.setAddrByAddr.sendCmdEnable, &lock.cmdControl.setAddrByAddr.sendCmdDelay, onReportSetAddrByAddr},
+    {&lock.cmdControl.clearUartBuffer.sendCmdEnable, &lock.cmdControl.clearUartBuffer.sendCmdDelay, onReportClearUartBuffer},
+    {&lock.cmdControl.singleModifyBaudRate.sendCmdEnable, &lock.cmdControl.singleModifyBaudRate.sendCmdDelay, onReportSingleModifyBaudRate},
+    {&lock.cmdControl.factoryCmd.sendCmdEnable, &lock.cmdControl.factoryCmd.sendCmdDelay, onReportFactoryCmd},
+};
+
+void onCmdQuerySingleDevStatus(uint8_t *data, uint8_t length)
 {
-    uint32_t uid0;
-    uint32_t uid1;
-    uint32_t uid2;
-    uint16_t pos = 0;
+    uint8_t addr = 0;
+    uint8_t pos = 0;
 
-    if(length < 12){
-        printf("[%s]length error!\r\n", __FUNCTION__);
-        return;
-    }
+    addr = data[pos++];
 
-    uid0 = (data[pos++] << 24);
-    uid0 += (data[pos++] << 16);
-    uid0 += (data[pos++] << 8);
-    uid0 += data[pos++];
-
-    uid1 = (data[pos++] << 24);
-    uid1 += (data[pos++] << 16);
-    uid1 += (data[pos++] << 8);
-    uid1 += data[pos++];
-
-    uid2 = (data[pos++] << 24);
-    uid2 += (data[pos++] << 16);
-    uid2 += (data[pos++] << 8);
-    uid2 += data[pos++];
-
-    if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
-        printf("[%s]UID is not matched!\r\n", __FUNCTION__);
+    if(IS_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
         return;
     }
 
@@ -45,54 +85,21 @@ void onCmdQuerySingleDevStatus(uint8_t *data, uint16_t length)
     lock.cmdControl.singleQueryStatus.sendCmdDelay = 0;
 }
 
-void onCmdSetDeviceOnOff(uint8_t *data, uint16_t length, uint8_t ack)
+void onCmdSetDeviceOnOff(uint8_t *data, uint8_t length)
 {
-    uint32_t uid0;
-    uint32_t uid1;
-    uint32_t uid2;
-    uint16_t pos = 0;
+ 
+    uint8_t pos = 0;
     uint8_t lockSetState;
-    uint16_t cmdLength;
-
-    if(NULL == data){
-        printf("[%s]data is null!\r\n", __FUNCTION__);
-        return;
-    }
-
-    if(ack) cmdLength = 13;
-    else    cmdLength = 1;
-
-    if(cmdLength > length){
-        printf("[%s]length error!\r\n", __FUNCTION__);
-        return;
-    }
+    uint8_t addr = 0;
 
     lockSetState = data[pos++];
+    addr = data[pos++];
 
-    if(!ack){
-        goto out;
-    }
-
-    uid0 = (data[pos++] << 24);
-    uid0 += (data[pos++] << 16);
-    uid0 += (data[pos++] << 8);
-    uid0 += data[pos++];
-
-    uid1 = (data[pos++] << 24);
-    uid1 += (data[pos++] << 16);
-    uid1 += (data[pos++] << 8);
-    uid1 += data[pos++];
-
-    uid2 = (data[pos++] << 24);
-    uid2 += (data[pos++] << 16);
-    uid2 += (data[pos++] << 8);
-    uid2 += data[pos++];
-
-    if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
-        printf("[%s]UID is not matched!\r\n", __FUNCTION__);
+    if(CHECK_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
         return;
     }
-out:
+
     /* set dev state here */
     if(lockSetState == 0 && lock.lockState){//unlock
         motor_set_backward();
@@ -100,18 +107,15 @@ out:
         if(lock.doorDetectState1 && lock.doorDetectState2)    motor_set_forward();
     }
     /* send ack msg here */
-    if(ack){
+    if(CHECK_ACK(addr)){
         lock.cmdControl.singleSetOnOff.sendCmdEnable = CMD_ENABLE;
         lock.cmdControl.singleSetOnOff.sendCmdDelay = lock.lockReplyDelay * DELAY_BASE;
     }
 }
 
-void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
+void onCmdModifyDeviceBasicSetting(uint8_t *data, uint8_t length)
 {
-    uint32_t uid0;
-    uint32_t uid1;
-    uint32_t uid2;
-    uint16_t pos = 0;
+    uint8_t pos = 0;
     uint32_t autoLockDelay;
     uint8_t autoLockFlag;
     uint8_t  autoReportFlag;
@@ -120,14 +124,6 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
     uint16_t unlockStopDelay;
 	uint8_t autoCloseDoorEnable;
 	uint16_t autoCloseDoorDelay;
-
-    if(NULL == data){
-        printf("[%s]data is null!\r\n", __FUNCTION__);
-        return;
-    }
-
-	/* addr */
-    if(ack) addr = data[pos++];
 
 	/* auto lock delay, 3bytes */
     autoLockDelay = data[pos++] << 16;
@@ -139,13 +135,6 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
 
 	/* auto report flag, 1byte */
     autoReportFlag = data[pos++];
-
-    if(!ack){
-		autoCloseDoorEnable = data[pos++];
-		autoCloseDoorDelay = data[pos++] << 8;
-		autoCloseDoorDelay += data[pos++];
-        goto out;
-    }
 
 	/* unlock stop delay, 2byte */
     unlockStopDelay = data[pos++] << 8;
@@ -160,198 +149,86 @@ void onCmdModifyDeviceBasicSetting(uint8_t *data, uint16_t length, uint8_t ack)
 	autoCloseDoorDelay = data[pos++] << 8;
 	autoCloseDoorDelay += data[pos++];
 
-    uid0 = (data[pos++] << 24);
-    uid0 += (data[pos++] << 16);
-    uid0 += (data[pos++] << 8);
-    uid0 += data[pos++];
+    /* addr */
+    addr = data[pos++];
 
-    uid1 = (data[pos++] << 24);
-    uid1 += (data[pos++] << 16);
-    uid1 += (data[pos++] << 8);
-    uid1 += data[pos++];
-
-    uid2 = (data[pos++] << 24);
-    uid2 += (data[pos++] << 16);
-    uid2 += (data[pos++] << 8);
-    uid2 += data[pos++];
-
-    if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
-        printf("[%s]UID is not matched!\r\n", __FUNCTION__);
+    if(CHECK_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
         return;
     }
-out:
+
     /* set dev state here */
-    if(ack){
-        lock.address = addr;
-        lock.unlockStopDelay = unlockStopDelay;
-        lock.lockStopDelay = lockStopDelay;
-    }
+    lock.unlockStopDelay = unlockStopDelay;
+    lock.lockStopDelay = lockStopDelay;
     lock.autoLockTime = autoLockDelay;
     lock.autoLockFlag = autoLockFlag;
-    // lock.lockReplyDelay = lockReplyDelay;
     lock.autoReportFlag = autoReportFlag;
 	lock.autoCloseDoorEnable = autoCloseDoorEnable;
 	lock.autoCloseDoorDelay = autoCloseDoorDelay;
     
     user_database_save();
     /* send ack msg here */
-    if(ack){
+    if(CHECK_ACK(addr)){
         lock.cmdControl.singleBasicSetting.sendCmdEnable = CMD_ENABLE;
         lock.cmdControl.singleBasicSetting.sendCmdDelay = 0;
     }
 }
 
-void  onCmdSetLight(uint8_t *data, uint16_t length, uint8_t ack)
+void  onCmdSetLight(uint8_t *data, uint8_t length)
 {
-    uint32_t uid0;
-    uint32_t uid1;
-    uint32_t uid2;
-    uint16_t pos = 0;
+    uint8_t addr = 0;
+    uint8_t pos = 0;
     uint8_t  lightState1;
     uint8_t  lightState2;
-    uint16_t cmdLength;
-
-    if(NULL == data){
-        printf("[%s]data is null!\r\n", __FUNCTION__);
-        return;
-    }
-
-    if(ack) cmdLength = 14;
-    else    cmdLength = 1;
-
-    if(cmdLength > length){
-        printf("[%s]length error!\r\n", __FUNCTION__);
-        return;
-    }   
 
     lightState1 = data[pos++];
-
-    if(!ack){
-        goto out;
-    }
-
     lightState2 = data[pos++];
-
-    uid0 = (data[pos++] << 24);
-    uid0 += (data[pos++] << 16);
-    uid0 += (data[pos++] << 8);
-    uid0 += data[pos++];
-
-    uid1 = (data[pos++] << 24);
-    uid1 += (data[pos++] << 16);
-    uid1 += (data[pos++] << 8);
-    uid1 += data[pos++];
-
-    uid2 = (data[pos++] << 24);
-    uid2 += (data[pos++] << 16);
-    uid2 += (data[pos++] << 8);
-    uid2 += data[pos++];
-
-    if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
-        printf("[%s]UID is not matched!\r\n", __FUNCTION__);
+    addr = data[pos++];
+    if(CHECK_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
         return;
     }
-out:
+
+    if(lightState1) set_light1_on();
+    else            set_light1_off();
+    if(lightState2) set_light2_on();
+    else            set_light2_off();
 
     /* send ack msg here */
-    if(ack){
-        if(lightState1) set_light1_on();
-        else            set_light1_off();
-        if(lightState2) set_light2_on();
-        else            set_light2_off();
+    if(CHECK_ACK(addr)){
         lock.cmdControl.singleSetLight.sendCmdEnable = CMD_ENABLE;
         lock.cmdControl.singleSetLight.sendCmdDelay = 0;
-    }else{
-        if(lightState1){
-            set_light1_on();
-            set_light2_on();
-        }else{
-            set_light1_off();
-            set_light2_off();
-        }         
     }
 }
 
-void onCmdClrDevAlarmSetting(uint8_t *data, uint16_t length, uint8_t ack)
+void onCmdClrDevAlarmSetting(uint8_t *data, uint8_t length)
 {
-    uint32_t uid0;
-    uint32_t uid1;
-    uint32_t uid2;
-    uint16_t pos = 0;
-    uint16_t cmdLength; 
+    uint8_t pos = 0;
+    uint8_t addr = 0;
 
-    if(!ack){
-        goto out;
-    } 
-
-    cmdLength = 12;
-    if(cmdLength > length){
-       printf("[%s]length error!\r\n", __FUNCTION__);
+    addr = data[pos++];
+    if (CHECK_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
         return;
     }
-
-    uid0 = (data[pos++] << 24);
-    uid0 += (data[pos++] << 16);
-    uid0 += (data[pos++] << 8);
-    uid0 += data[pos++];
-
-    uid1 = (data[pos++] << 24);
-    uid1 += (data[pos++] << 16);
-    uid1 += (data[pos++] << 8);
-    uid1 += data[pos++];
-
-    uid2 = (data[pos++] << 24);
-    uid2 += (data[pos++] << 16);
-    uid2 += (data[pos++] << 8);
-    uid2 += data[pos++];
-
-    if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
-        printf("[%s]UID is not matched!\r\n", __FUNCTION__);
-        return;
-    }
-out:
+    /* clear device alarm setting here */
+    lock.alarmStatus = 0;
+    user_database_save();
     /* send ack msg here */
-    if(ack){
-        /* clear device alarm setting here */
-        lock.alarmStatus = 0;
+    if(CHECK_ACK(addr)){
         lock.cmdControl.singleClrAlarm.sendCmdEnable = CMD_ENABLE;
         lock.cmdControl.singleClrAlarm.sendCmdDelay = 0;
-    }else{
-        lock.alarmStatus = 0;
-    }
-
-    user_database_save();
+    } 
 }
 
-void onCmdGetGsensorData(uint8_t *data, uint16_t length)
+void onCmdGetGsensorData(uint8_t *data, uint8_t length)
 {
-    uint32_t uid0;
-    uint32_t uid1;
-    uint32_t uid2;
-    uint16_t pos = 0;
+    uint8_t pos = 0;
+    uint8_t addr = 0;
 
-    if(length < 12){
-        printf("[%s]length error!\r\n", __FUNCTION__);
-        return;
-    }
-
-    uid0 = (data[pos++] << 24);
-    uid0 += (data[pos++] << 16);
-    uid0 += (data[pos++] << 8);
-    uid0 += data[pos++];
-
-    uid1 = (data[pos++] << 24);
-    uid1 += (data[pos++] << 16);
-    uid1 += (data[pos++] << 8);
-    uid1 += data[pos++];
-
-    uid2 = (data[pos++] << 24);
-    uid2 += (data[pos++] << 16);
-    uid2 += (data[pos++] << 8);
-    uid2 += data[pos++];
-
-    if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
-        printf("[%s]UID is not matched!\r\n", __FUNCTION__);
+    addr = data[pos++];
+    if(IS_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
         return;
     }
 
@@ -360,35 +237,14 @@ void onCmdGetGsensorData(uint8_t *data, uint16_t length)
     lock.cmdControl.singleQueryGsensor.sendCmdDelay = 0;    
 }
 
-void onCmdQuerySingleDevAllStatus(uint8_t *data, uint16_t length)
+void onCmdQuerySingleDevAllStatus(uint8_t *data, uint8_t length)
 {
-    uint32_t uid0;
-    uint32_t uid1;
-    uint32_t uid2;
-    uint16_t pos = 0;
+    uint8_t pos = 0;
+    uint8_t addr = 0;
 
-    if(length < 12){
-        printf("[%s]length error!\r\n", __FUNCTION__);
-        return;
-    }
-
-    uid0 = (data[pos++] << 24);
-    uid0 += (data[pos++] << 16);
-    uid0 += (data[pos++] << 8);
-    uid0 += data[pos++];
-
-    uid1 = (data[pos++] << 24);
-    uid1 += (data[pos++] << 16);
-    uid1 += (data[pos++] << 8);
-    uid1 += data[pos++];
-
-    uid2 = (data[pos++] << 24);
-    uid2 += (data[pos++] << 16);
-    uid2 += (data[pos++] << 8);
-    uid2 += data[pos++];
-
-    if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
-        printf("[%s]UID is not matched!\r\n", __FUNCTION__);
+    addr = data[pos++];
+    if(IS_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
         return;
     }
 
@@ -397,69 +253,36 @@ void onCmdQuerySingleDevAllStatus(uint8_t *data, uint16_t length)
     lock.cmdControl.singleQueryAllStatus.sendCmdDelay = 0;
 }
 
-void onCmdModifyBaudRate(uint8_t *data, uint16_t length, uint8_t ack)
+void onCmdModifyBaudRate(uint8_t *data, uint8_t length)
 {
-    uint32_t uid0;
-    uint32_t uid1;
-    uint32_t uid2;
-    uint16_t pos = 0;
+    uint8_t addr = 0;
+    uint8_t pos = 0;
     uint8_t baudRateIndex = 0;
 
     baudRateIndex = data[pos++];
+    addr = data[pos++];
 
-    if(!ack){
-        goto out;
-    } 
-
-    uid0 = (data[pos++] << 24);
-    uid0 += (data[pos++] << 16);
-    uid0 += (data[pos++] << 8);
-    uid0 += data[pos++];
-
-    uid1 = (data[pos++] << 24);
-    uid1 += (data[pos++] << 16);
-    uid1 += (data[pos++] << 8);
-    uid1 += data[pos++];
-
-    uid2 = (data[pos++] << 24);
-    uid2 += (data[pos++] << 16);
-    uid2 += (data[pos++] << 8);
-    uid2 += data[pos++]; 
-
-    if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
-        printf("[%s]UID is not matched!\r\n", __FUNCTION__);
+    if(IS_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
         return;
-    }  
-out: 
-    lock.baudRateIndex = baudRateIndex;
+    }
 
+    lock.baudRateIndex = baudRateIndex;
     user_database_save();
 
-    if(ack){
-        /* send ack msg */
-        lock.cmdControl.singleModifyBaudRate.sendCmdEnable = CMD_ENABLE;
-        lock.cmdControl.singleModifyBaudRate.sendCmdDelay = 0;
-    }else{
-        while(1);//wait for watchdog reset
-    }
+    lock.cmdControl.singleModifyBaudRate.sendCmdEnable = CMD_ENABLE;
+    lock.cmdControl.singleModifyBaudRate.sendCmdDelay = 0;
 }
 
-void onCmdModifyShakeConfig(uint8_t *data, uint16_t length, uint8_t ack)
+void onCmdModifyShakeConfig(uint8_t *data, uint8_t length)
 {
-	uint32_t uid0;
-	uint32_t uid1;
-	uint32_t uid2;
-	uint16_t pos = 0;
+    uint8_t addr = 0;
+	uint8_t pos = 0;
 	uint8_t shakeThresold;
 	uint8_t xReportFlag;
 	uint8_t yReportFlag;
 	uint8_t zReportFlag;
 	uint16_t shakeReportInterval;
-
-	if(NULL == data){
-		printf("[%s]data is null!\r\n", __FUNCTION__);
-		return;
-	}
 
 	shakeThresold = data[pos++];
 	xReportFlag = data[pos++];
@@ -468,31 +291,12 @@ void onCmdModifyShakeConfig(uint8_t *data, uint16_t length, uint8_t ack)
 	shakeReportInterval = data[pos++] << 8;
 	shakeReportInterval += data[pos++];
 
+    addr = data[pos++];
+    if(CHECK_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
+        return;
+    }
 
-	if(!ack){
-		goto out;
-	}
-
-	uid0 = (data[pos++] << 24);
-	uid0 += (data[pos++] << 16);
-	uid0 += (data[pos++] << 8);
-	uid0 += data[pos++];
-
-	uid1 = (data[pos++] << 24);
-	uid1 += (data[pos++] << 16);
-	uid1 += (data[pos++] << 8);
-	uid1 += data[pos++];
-
-	uid2 = (data[pos++] << 24);
-	uid2 += (data[pos++] << 16);
-	uid2 += (data[pos++] << 8);
-	uid2 += data[pos++];
-
-	if(lock.uid0 != uid0 || lock.uid1 != uid1 || lock.uid2 != uid2){
-		printf("[%s]UID is not matched!\r\n", __FUNCTION__);
-		return;
-	}
-out:
 	/* set dev state here */
 	lock.shakeThreshold = shakeThresold;
 	lock.xReportFlag = xReportFlag;
@@ -502,22 +306,131 @@ out:
 	
 	user_database_save();
 	/* send ack msg here */
-	if(ack){
+	if(CHECK_ACK(addr)){
 		lock.cmdControl.singleModifyShakeConfig.sendCmdEnable = CMD_ENABLE;
 		lock.cmdControl.singleModifyShakeConfig.sendCmdDelay = 0;
 	}else{
-		while(1);//wait for reboot
+		HAL_NVIC_SystemReset();
 	}
 }
 
+void onCmdSetAddrByUid(uint8_t *data, uint8_t length)
+{
+    uint8_t addr = 0;
+    uint8_t pos = 0;
+    uint32_t uid0 = 0;
+    uint32_t uid1 = 0;
+    uint32_t uid2 = 0;
+
+    /* UID */
+    uid0 = data[pos++] << 24;
+    uid0 += data[pos++] << 16;
+    uid0 += data[pos++] << 8;
+    uid0 += data[pos++];
+    uid1 = data[pos++] << 24;
+    uid1 += data[pos++] << 16;
+    uid1 += data[pos++] << 8;
+    uid1 += data[pos++];
+    uid2 = data[pos++] << 24;
+    uid2 += data[pos++] << 16;
+    uid2 += data[pos++] << 8;
+    uid2 += data[pos++];
+    /* new address */
+    addr = data[pos++];
+
+    if(IS_UID_INVALID(uid0, uid1, uid2)){
+        printf("[%s]uid is not matched!\r\n", __FUNCTION__);
+        return;
+    }
+
+    if(BROADCAST_ADDR == addr){
+        printf("[%s]address is invalid!\r\n", __FUNCTION__);
+        return;
+    }
+
+    lock.address = addr;
+    user_database_save();
+    
+    /* send ack msg here */
+    lock.cmdControl.setAddrByUid.sendCmdEnable = CMD_ENABLE;
+    lock.cmdControl.setAddrByUid.sendCmdDelay = 0;
+}
+
+void onCmdGetInfoByAddr(uint8_t *data, uint8_t length)
+{
+    uint8_t addr = 0;
+    uint8_t pos = 0;
+
+    addr = data[pos++];
+    if(IS_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
+        return;
+    }
+
+    /* send dev status here */
+    lock.cmdControl.getInfoByAddr.sendCmdEnable = CMD_ENABLE;
+    lock.cmdControl.getInfoByAddr.sendCmdDelay = 0;
+}
+
+void onCmdSetAddrByAddr(uint8_t *data, uint8_t length)
+{
+    uint8_t addr = 0;
+    uint8_t pos = 0;
+    uint8_t newAddr = 0;
+
+    newAddr = data[pos++];
+    addr = data[pos++];
+
+    if(IS_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
+        return;
+    }
+
+    if(BROADCAST_ADDR == newAddr){
+        printf("[%s]address is invalid!\r\n", __FUNCTION__);
+        return;
+    }
+
+    lock.address = newAddr;
+    lock.oldAddr = addr;
+    user_database_save();
+    
+    /* send ack msg here */
+    lock.cmdControl.setAddrByAddr.sendCmdEnable = CMD_ENABLE;
+    lock.cmdControl.setAddrByAddr.sendCmdDelay = 0;
+}
+
+void onCmdClearUartBuffer(uint8_t *data, uint8_t length)
+{
+    uint8_t addr = 0;
+    uint8_t pos = 0;
+
+    addr = data[pos++];
+    if(IS_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
+        return;
+    }
+
+    /* clear uart buffer here */
+    user_set_clear_buffer_flag(1);
+    
+    /* send ack msg here */
+    lock.cmdControl.clearUartBuffer.sendCmdEnable = CMD_ENABLE;
+    lock.cmdControl.clearUartBuffer.sendCmdDelay = 0;
+}
+
+void onCmdFactoryQuery(uint8_t *data, uint8_t length)
+{
+    lock.cmdControl.factoryCmd.sendCmdEnable = CMD_ENABLE;
+    lock.cmdControl.factoryCmd.sendCmdDelay = 0;
+}
 
 void onReportDeviceStatus(void)
 {
     uint8_t buffer[60];
     uint8_t pos = 0;
 	uint16_t version;
-    /* addr */
-    buffer[pos++] = lock.address;
+    
     /* lock state */
     buffer[pos++] = lock.lockState;
     /* door detect */
@@ -558,21 +471,8 @@ void onReportDeviceStatus(void)
 	version = VERSION;
 	buffer[pos++] = (version >> 8) & 0xff;
     buffer[pos++] = version & 0xff;
-	
-
-    /* UID */
-    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-    buffer[pos++] = lock.uid0 & 0xff;
-    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-    buffer[pos++] = lock.uid1 & 0xff;
-    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-    buffer[pos++] = lock.uid2 & 0xff;
+    /* addr */
+    buffer[pos++] = lock.address;
     
     user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_QUERY_STATUS, buffer, pos);       
 }
@@ -581,23 +481,11 @@ void onReportSetDevOnOffStatus(void)
 {
     uint8_t buffer[23];
     uint8_t pos = 0;
-    /* addr */
-    buffer[pos++] = lock.address;
+    
     /* lock status */
     buffer[pos++] = lock.lockState;
-    /* UID */
-    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-    buffer[pos++] = lock.uid0 & 0xff;
-    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-    buffer[pos++] = lock.uid1 & 0xff;
-    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-    buffer[pos++] = lock.uid2 & 0xff;
+    /* addr */
+    buffer[pos++] = lock.address;
 
     user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_SET_ONOFF, buffer, pos);     
 }
@@ -606,8 +494,7 @@ void onReportBasicSetting(void)
 {
     uint8_t buffer[50];
     uint8_t pos = 0;
-    /* addr */
-    buffer[pos++] = lock.address;
+    
     /* auto lock time */
     buffer[pos++] = (lock.autoLockTime >> 16) & 0xff;
     buffer[pos++] = (lock.autoLockTime >> 8) & 0xff;
@@ -627,19 +514,8 @@ void onReportBasicSetting(void)
 	/* state lock delay */
 	buffer[pos++] = (lock.autoCloseDoorDelay >> 8) & 0xff;
     buffer[pos++] = lock.autoCloseDoorDelay & 0xff;
-    /* UID */
-    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-    buffer[pos++] = lock.uid0 & 0xff;
-    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-    buffer[pos++] = lock.uid1 & 0xff;
-    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-    buffer[pos++] = lock.uid2 & 0xff;
+    /* addr */
+    buffer[pos++] = lock.address;
 
     user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_BASE_SETTING, buffer, pos);   
 }
@@ -648,25 +524,13 @@ void onReportSetLightStatus(void)
 {
     uint8_t buffer[23];
     uint8_t pos = 0;
-    /* addr */
-    buffer[pos++] = lock.address;
+    
     /* light1 state */
     buffer[pos++] = lock.lightState1;
     /* light2 state */
     buffer[pos++] = lock.lightState2;
-    /* UID */
-    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-    buffer[pos++] = lock.uid0 & 0xff;
-    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-    buffer[pos++] = lock.uid1 & 0xff;
-    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-    buffer[pos++] = lock.uid2 & 0xff;
+    /* addr */
+    buffer[pos++] = lock.address;
 
     user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_SET_LIGHT, buffer, pos); 
 }
@@ -675,45 +539,22 @@ void onReportClearDevAlarmSetting(void)
 {
     uint8_t buffer[23];
     uint8_t pos = 0;
-    /* addr */
-    buffer[pos++] = lock.address;
+    
     /* alarm status */
     buffer[pos++] = lock.alarmStatus;
-    /* UID */
-    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-    buffer[pos++] = lock.uid0 & 0xff;
-    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-    buffer[pos++] = lock.uid1 & 0xff;
-    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-    buffer[pos++] = lock.uid2 & 0xff;
+    /* addr */
+    buffer[pos++] = lock.address;
 
     user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_CLEAR_ALARM, buffer, pos);     
 }
 
-void onReportManualAlarm(uint8_t alarmType)
+void onReportManualAlarm(void)
 {
     uint8_t buffer[23];
     uint8_t pos = 0;
+    
+    buffer[pos++] = lock.keyDetectState;
     buffer[pos++] = lock.address;
-    buffer[pos++] = alarmType;
-    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-    buffer[pos++] = lock.uid0 & 0xff;
-    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-    buffer[pos++] = lock.uid1 & 0xff;
-    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-    buffer[pos++] = lock.uid2 & 0xff;
 
     user_protocol_send_data(CMD_QUERY, OPT_CODE_MANUAL_ALARM, buffer, pos);     
 }
@@ -723,19 +564,6 @@ void onReportAutoLockAlarm(void)
     uint8_t buffer[23];
     uint8_t pos = 0;
     buffer[pos++] = lock.address;
-    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-    buffer[pos++] = lock.uid0 & 0xff;
-    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-    buffer[pos++] = lock.uid1 & 0xff;
-    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-    buffer[pos++] = lock.uid2 & 0xff;
-
     user_protocol_send_data(CMD_QUERY, OPT_CODE_AUTO_LOCK, buffer, pos);     
 }
 
@@ -743,20 +571,9 @@ void onReportFaultAlarm(void)
 {
     uint8_t buffer[23];
     uint8_t pos = 0;
-    buffer[pos++] = lock.address;
+    
     buffer[pos++] = lock.motorTask.faultType;
-    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-    buffer[pos++] = lock.uid0 & 0xff;
-    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-    buffer[pos++] = lock.uid1 & 0xff;
-    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-    buffer[pos++] = lock.uid2 & 0xff;
+    buffer[pos++] = lock.address;
 
     user_protocol_send_data(CMD_QUERY, OPT_CODE_FAULT_ALARM, buffer, pos);   
 }
@@ -765,8 +582,7 @@ void onReportGsensorData(void)
 {
     uint8_t buffer[23];
     uint8_t pos = 0;
-    /* addr */
-    buffer[pos++] = lock.address;
+    
     /* gsensor data */
     buffer[pos++] = (lock.gSensor.x >> 8) & 0xff;
     buffer[pos++] = lock.gSensor.x & 0xff;
@@ -774,19 +590,8 @@ void onReportGsensorData(void)
     buffer[pos++] = lock.gSensor.y & 0xff;
     buffer[pos++] = (lock.gSensor.z >> 8) & 0xff;
     buffer[pos++] = lock.gSensor.z & 0xff;
-    /* UID */
-    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-    buffer[pos++] = lock.uid0 & 0xff;
-    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-    buffer[pos++] = lock.uid1 & 0xff;
-    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-    buffer[pos++] = lock.uid2 & 0xff;
+    /* addr */
+    buffer[pos++] = lock.address;
 
     user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_QUERY_GSENSOR, buffer, pos);     
 }
@@ -795,8 +600,7 @@ void onReportDeviceAllStatus(void)
 {
     uint8_t buffer[50];
     uint8_t pos = 0;
-    /* addr */
-    buffer[pos++] = lock.address;
+    
     /* lock state */
     buffer[pos++] = lock.lockState;
     /* door detect */
@@ -841,19 +645,8 @@ void onReportDeviceAllStatus(void)
     /* lock stop delay */
     buffer[pos++] = (lock.lockStopDelay >> 8) & 0xff;
     buffer[pos++] = lock.lockStopDelay & 0xff;
-    /* UID */
-    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-    buffer[pos++] = lock.uid0 & 0xff;
-    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-    buffer[pos++] = lock.uid1 & 0xff;
-    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-    buffer[pos++] = lock.uid2 & 0xff;
+    /* addr */
+    buffer[pos++] = lock.address;
     
     user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_DEV_QUERY_ALL_STATUS, buffer, pos);       
 }
@@ -866,19 +659,6 @@ void onReportShakeAlarm(void)
 
     /* addr */
     buffer[pos++] = lock.address;
-    /* UID */
-    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-    buffer[pos++] = lock.uid0 & 0xff;
-    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-    buffer[pos++] = lock.uid1 & 0xff;
-    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-    buffer[pos++] = lock.uid2 & 0xff;
 
     user_protocol_send_data(CMD_QUERY, OPT_CODE_REPORT_SHAKE_ALARM, buffer, pos);       
 }
@@ -887,27 +667,16 @@ void onReportSingleModifyBaudRate(void)
 {
     uint8_t buffer[23];
     uint8_t pos = 0;
-    /* addr */
-    buffer[pos++] = lock.address;
+    
     /* lock baudRateIndex */
     buffer[pos++] = lock.baudRateIndex;
-    /* UID */
-    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-    buffer[pos++] = lock.uid0 & 0xff;
-    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-    buffer[pos++] = lock.uid1 & 0xff;
-    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-    buffer[pos++] = lock.uid2 & 0xff;
+    /* addr */
+    buffer[pos++] = lock.address;
 
     user_protocol_send_data(CMD_ACK, OPT_CODE_SINGLE_MODIFY_BAUDRATE, buffer, pos); 
 
-    while(1);//wait for watchdog reset 
+    HAL_Delay(100);
+    HAL_NVIC_SystemReset();
 }
 
 void onReportSingleModifyShakeConfig(void)
@@ -925,50 +694,26 @@ void onReportSingleModifyShakeConfig(void)
 	/* shake report interval */
 	buffer[pos++] = (lock.shakeReportInterval >> 8) & 0xff;
 	buffer[pos++] = lock.shakeReportInterval & 0xff;
-	/* UID */
-	buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-	buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-	buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-	buffer[pos++] = lock.uid0 & 0xff;
-	buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-	buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-	buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-	buffer[pos++] = lock.uid1 & 0xff;
-	buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-	buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-	buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-	buffer[pos++] = lock.uid2 & 0xff;
+	/* addr */
+    buffer[pos++] = lock.address;
 
 	user_protocol_send_data(CMD_ACK, OPT_CODE_SIGNLE_SET_SHAKE_CONFIG, buffer, pos);   
 
-	while(1);//wait for reboot while setting shake threshold
-
+	HAL_Delay(100);
+    HAL_NVIC_SystemReset();
 }
 
 void onReportSingleDoorState(void)
 {
 	uint8_t buffer[40];
 	uint8_t pos = 0;
-	/* addr */
-	buffer[pos++] = lock.address;
 
 	/* last state */
 	buffer[pos++] = lock.lastDoorState;
 	/* current state */
 	buffer[pos++] = lock.curDoorState;
-	/* uid */
-	buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-	buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-	buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-	buffer[pos++] = lock.uid0 & 0xff;
-	buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-	buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-	buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-	buffer[pos++] = lock.uid1 & 0xff;
-	buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-	buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-	buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-	buffer[pos++] = lock.uid2 & 0xff;
+    /* addr */
+	buffer[pos++] = lock.address;
 
 	user_protocol_send_data(CMD_QUERY, OPT_CODE_REPORT_DOOR_STATE, buffer, pos); 
 
@@ -983,21 +728,110 @@ void onReportSingleAutoLockByDoorState(void)
 	/* addr */
 	buffer[pos++] = lock.address;
 
-	/* uid */
-	buffer[pos++] = (lock.uid0 >> 24)& 0xff;
-	buffer[pos++] = (lock.uid0 >> 16) & 0xff;
-	buffer[pos++] = (lock.uid0 >> 8) & 0xff;
-	buffer[pos++] = lock.uid0 & 0xff;
-	buffer[pos++] = (lock.uid1 >> 24)& 0xff;
-	buffer[pos++] = (lock.uid1 >> 16) & 0xff;
-	buffer[pos++] = (lock.uid1 >> 8) & 0xff;
-	buffer[pos++] = lock.uid1 & 0xff;
-	buffer[pos++] = (lock.uid2 >> 24)& 0xff;
-	buffer[pos++] = (lock.uid2 >> 16) & 0xff;
-	buffer[pos++] = (lock.uid2 >> 8) & 0xff;
-	buffer[pos++] = lock.uid2 & 0xff;
-
 	user_protocol_send_data(CMD_QUERY, OPT_CODE_REPORT_AUTO_LOCK_BY_DOOR_STATE, buffer, pos); 
+}
+
+void onReportSetAddrByUid(void)
+{
+    uint8_t buffer[23];
+    uint8_t pos = 0;
+    
+    /* UID */
+    buffer[pos++] = (lock.uid0 >> 24) & 0xff;
+    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
+    buffer[pos++] = lock.uid0 & 0xff;
+    buffer[pos++] = (lock.uid1 >> 24) & 0xff;
+    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
+    buffer[pos++] = lock.uid1 & 0xff;
+    buffer[pos++] = (lock.uid2 >> 24) & 0xff;
+    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
+    buffer[pos++] = lock.uid2 & 0xff;
+    /* addr */
+    buffer[pos++] = lock.address;
+
+    user_protocol_send_data(CMD_ACK, OPT_CODE_SET_ADDR_BY_UID, buffer, pos);     
+}
+
+void onReportGetInfoByAddr(void)
+{
+    uint8_t buffer[30];
+    uint8_t pos = 0;
+
+    /* UID */
+    buffer[pos++] = (lock.uid0 >> 24) & 0xff;
+    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
+    buffer[pos++] = lock.uid0 & 0xff;
+    buffer[pos++] = (lock.uid1 >> 24) & 0xff;
+    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
+    buffer[pos++] = lock.uid1 & 0xff;
+    buffer[pos++] = (lock.uid2 >> 24) & 0xff;
+    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
+    buffer[pos++] = lock.uid2 & 0xff;
+    /* version */
+    buffer[pos++] = (VERSION >> 8) & 0xff;
+    buffer[pos++] = VERSION & 0xff;
+    /* addr */
+    buffer[pos++] = lock.address;
+
+    user_protocol_send_data(CMD_ACK, OPT_CODE_GET_INFO_BY_ADDR, buffer, pos);     
+}
+
+void onReportSetAddrByAddr(void)
+{
+    uint8_t buffer[23];
+    uint8_t pos = 0;
+    
+    /* addr */
+    buffer[pos++] = lock.address;
+    /* old addr */
+    buffer[pos++] = lock.oldAddr;
+
+    user_protocol_send_data(CMD_ACK, OPT_CODE_SET_ADDR_BY_ADDR, buffer, pos);     
+}
+
+void onReportClearUartBuffer(void)
+{
+    uint8_t buffer[23];
+    uint8_t pos = 0;
+    
+    /* addr */
+    buffer[pos++] = lock.address;
+
+    user_protocol_send_data(CMD_ACK, OPT_CODE_CLEAR_UART_BUFFER, buffer, pos);     
+}
+
+void onReportFactoryCmd(void)
+{
+    uint8_t buffer[50];
+    uint8_t pos = 0;
+
+    /* type */
+    buffer[pos++] = CMD_ACK;
+
+    /* addr */
+    buffer[pos++] = lock.address;
+
+    /* uid */
+    buffer[pos++] = (lock.uid0 >> 24)& 0xff;
+    buffer[pos++] = (lock.uid0 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid0 >> 8) & 0xff;
+    buffer[pos++] = lock.uid0 & 0xff;
+    buffer[pos++] = (lock.uid1 >> 24)& 0xff;
+    buffer[pos++] = (lock.uid1 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid1 >> 8) & 0xff;
+    buffer[pos++] = lock.uid1 & 0xff;
+    buffer[pos++] = (lock.uid2 >> 24)& 0xff;
+    buffer[pos++] = (lock.uid2 >> 16) & 0xff;
+    buffer[pos++] = (lock.uid2 >> 8) & 0xff;
+    buffer[pos++] = lock.uid2 & 0xff;
+
+    user_protocol_send_data(CMD_FACTORY_ACK, OPT_CODE_FACTORY_QUERY, buffer, pos); 
 }
 
 
@@ -1128,92 +962,33 @@ void user_database_save(void)
 
 void user_reply_handle(void)
 {
-    if(lock.cmdControl.singleQueryStatus.sendCmdEnable && !lock.cmdControl.singleQueryStatus.sendCmdDelay){
-        lock.cmdControl.singleQueryStatus.sendCmdEnable = CMD_DISABLE;
-        onReportDeviceStatus();
+    uint16_t funcNum = sizeof(report_cmd) / sizeof(cmd_report_t);
+    for(uint16_t i = 0; i < funcNum; i++){
+        if(*report_cmd[i].cmdEnable && !(*report_cmd[i].cmdDelay)){
+            *report_cmd[i].cmdEnable = CMD_DISABLE;
+            report_cmd[i].func();
+        }
     }
+}
 
-    if(lock.cmdControl.singleSetOnOff.sendCmdEnable && !lock.cmdControl.singleSetOnOff.sendCmdDelay){
-        lock.cmdControl.singleSetOnOff.sendCmdEnable = CMD_DISABLE;
-        onReportSetDevOnOffStatus();
+void user_check_report_delay(void)
+{
+    uint16_t funcNum = sizeof(report_cmd) / sizeof(cmd_report_t);
+    for(uint16_t i = 0; i < funcNum; i++){
+        if(*report_cmd[i].cmdEnable && (*report_cmd[i].cmdDelay > 0)){
+            *report_cmd[i].cmdDelay --;
+        }
     }
-
-    if(lock.cmdControl.singleBasicSetting.sendCmdEnable && !lock.cmdControl.singleBasicSetting.sendCmdDelay){
-        lock.cmdControl.singleBasicSetting.sendCmdEnable = CMD_DISABLE;
-        onReportBasicSetting();
-    }
-
-    if(lock.cmdControl.singleSetLight.sendCmdEnable && !lock.cmdControl.singleSetLight.sendCmdDelay){
-        lock.cmdControl.singleSetLight.sendCmdEnable = CMD_DISABLE;
-        onReportSetLightStatus();
-    }
-
-    if(lock.cmdControl.singleClrAlarm.sendCmdEnable && !lock.cmdControl.singleClrAlarm.sendCmdDelay){
-        lock.cmdControl.singleClrAlarm.sendCmdEnable = CMD_DISABLE;
-        onReportClearDevAlarmSetting();
-    }
-
-    if(lock.cmdControl.singleManualAlarm.sendCmdEnable && !lock.cmdControl.singleManualAlarm.sendCmdDelay){
-        lock.cmdControl.singleManualAlarm.sendCmdEnable = CMD_DISABLE;
-        //onReportManualAlarm(lock.lockState);
-        printf("keyDetectState: %d\r\n", lock.keyDetectState);
-        onReportManualAlarm(lock.keyDetectState);
-    }
-		
-    if(lock.cmdControl.autoLockAlarm.sendCmdEnable && !lock.cmdControl.autoLockAlarm.sendCmdDelay){
-        lock.cmdControl.autoLockAlarm.sendCmdEnable = CMD_DISABLE;
-        onReportAutoLockAlarm();   
-    }
-    
-    if(lock.cmdControl.faultAlarm.sendCmdEnable && !lock.cmdControl.faultAlarm.sendCmdDelay){
-        lock.cmdControl.faultAlarm.sendCmdEnable = CMD_DISABLE;
-        onReportFaultAlarm();  
-    }
-    
-    if(lock.cmdControl.singleQueryGsensor.sendCmdEnable && !lock.cmdControl.singleQueryGsensor.sendCmdDelay){
-        lock.cmdControl.singleQueryGsensor.sendCmdEnable = CMD_DISABLE;
-        onReportGsensorData();
-    }
-
-    if(lock.cmdControl.singleQueryAllStatus.sendCmdEnable && !lock.cmdControl.singleQueryAllStatus.sendCmdDelay){
-        lock.cmdControl.singleQueryAllStatus.sendCmdEnable = CMD_DISABLE;
-        onReportDeviceAllStatus();
-    }
-
-    if(lock.cmdControl.shakeReport.sendCmdEnable && !lock.cmdControl.shakeReport.sendCmdDelay){
-        lock.cmdControl.shakeReport.sendCmdEnable = CMD_DISABLE;
-        onReportShakeAlarm();
-    }
-
-    if(lock.cmdControl.singleModifyBaudRate.sendCmdEnable && !lock.cmdControl.singleModifyBaudRate.sendCmdDelay){
-        lock.cmdControl.singleModifyBaudRate.sendCmdEnable = CMD_DISABLE;
-        onReportSingleModifyBaudRate();
-    }
-
-	if(lock.cmdControl.singleModifyShakeConfig.sendCmdEnable && !lock.cmdControl.singleModifyShakeConfig.sendCmdDelay){
-        lock.cmdControl.singleModifyShakeConfig.sendCmdEnable = CMD_DISABLE;
-        onReportSingleModifyShakeConfig();
-    }
-
-	if(lock.cmdControl.singleReportDoorState.sendCmdEnable && !lock.cmdControl.singleReportDoorState.sendCmdDelay){
-        onReportSingleDoorState();
-		lock.cmdControl.singleReportDoorState.sendCmdEnable = CMD_DISABLE;
-    }
-
-	if(lock.cmdControl.singleRportAutoLockByDoorState.sendCmdEnable && !lock.cmdControl.singleRportAutoLockByDoorState.sendCmdDelay){
-		onReportSingleAutoLockByDoorState();
-		lock.cmdControl.singleRportAutoLockByDoorState.sendCmdEnable = CMD_DISABLE;
-	}
 }
 
 void printSetting(void)
 {
-		printf("Chip uuid: 0x%04x%04x%04x\r\n", lock.uid0, lock.uid1, lock.uid2);
+	printf("Chip uuid: 0x%04x%04x%04x\r\n", lock.uid0, lock.uid1, lock.uid2);
     printf("address: 0x%02X\r\n", lock.address);
     printf("autoReportFlag: 0x%02X\r\n", lock.autoReportFlag);
     printf("lockDelayEnable: 0x%02X\r\n", lock.autoLockFlag);
     printf("lockDelay: 0x%04X\r\n", lock.autoLockTime);
     printf("lockReplyDelay: 0x%02X\r\n", lock.lockReplyDelay);
-		printf("baudRateIndex: 0x%02X\r\n", lock.baudRateIndex);
+	printf("baudRateIndex: 0x%02X\r\n", lock.baudRateIndex);
 }
 

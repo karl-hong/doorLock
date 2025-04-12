@@ -215,31 +215,7 @@ void tim_interrupt_callback(void)
         /* 100ms */
         timeBase = 0;
 
-        if(lock.cmdControl.singleQueryStatus.sendCmdDelay > 0) lock.cmdControl.singleQueryStatus.sendCmdDelay --;
-
-        if(lock.cmdControl.singleSetOnOff.sendCmdDelay > 0) lock.cmdControl.singleSetOnOff.sendCmdDelay --;
-
-        if(lock.cmdControl.singleBasicSetting.sendCmdDelay > 0) lock.cmdControl.singleBasicSetting.sendCmdDelay --;
-
-        if(lock.cmdControl.singleSetLight.sendCmdDelay > 0) lock.cmdControl.singleSetLight.sendCmdDelay --;
-
-        if(lock.cmdControl.singleClrAlarm.sendCmdDelay > 0) lock.cmdControl.singleClrAlarm.sendCmdDelay --;
-
-        if(lock.cmdControl.singleManualAlarm.sendCmdDelay > 0) lock.cmdControl.singleManualAlarm.sendCmdDelay --;
-
-        if(lock.cmdControl.autoLockAlarm.sendCmdDelay > 0) lock.cmdControl.autoLockAlarm.sendCmdDelay --;
-
-        if(lock.cmdControl.faultAlarm.sendCmdDelay > 0) lock.cmdControl.faultAlarm.sendCmdDelay --;
-
-        if(lock.cmdControl.singleQueryGsensor.sendCmdDelay > 0) lock.cmdControl.singleQueryGsensor.sendCmdDelay --;
-
-        if(lock.cmdControl.singleQueryAllStatus.sendCmdDelay > 0) lock.cmdControl.singleQueryAllStatus.sendCmdDelay --;
-
-        if(lock.cmdControl.shakeReport.sendCmdDelay > 0) lock.cmdControl.shakeReport.sendCmdDelay --;
-
-		if(lock.cmdControl.singleModifyShakeConfig.sendCmdDelay > 0) lock.cmdControl.singleModifyShakeConfig.sendCmdDelay --;
-
-		if(lock.cmdControl.singleRportAutoLockByDoorState.sendCmdDelay > 0) lock.cmdControl.singleRportAutoLockByDoorState.sendCmdDelay --;
+        user_check_report_delay();
 
         /* auto lock detect */
         if(lock.HoldOnDetectEnable){

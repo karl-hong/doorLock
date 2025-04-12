@@ -1,6 +1,11 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 #include <stdint.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h> 
+// #include <math.h>
+#include "main.h"
 
 #define DATABASE_START_ADDR         (0x0800F000)
 #define DATABASE_MAGIC              (0xaaaa)
@@ -33,6 +38,11 @@
 
 #define	VERSION						(13)
 
+#define BROADCAST_ADDR              (0xFF)
+#define CHECK_ADDR_INVALID(addr)    (BROADCAST_ADDR != addr && addr != lock.address)
+#define CHECK_ACK(addr)             (addr == lock.address)
+#define IS_ADDR_INVALID(addr)        (addr != lock.address)
+#define IS_UID_INVALID(uid0, uid1, uid2)        (uid0 != lock.uid0 || uid1 != lock.uid1 || uid2 != lock.uid2)
 
 enum {
     CMD_DISABLE = 0,
@@ -66,6 +76,11 @@ typedef struct {
 	cmd_setting_t singleModifyShakeConfig;
 	cmd_setting_t singleReportDoorState;
 	cmd_setting_t singleRportAutoLockByDoorState;
+    cmd_setting_t setAddrByUid;
+    cmd_setting_t getInfoByAddr;
+    cmd_setting_t setAddrByAddr;
+    cmd_setting_t clearUartBuffer;
+    cmd_setting_t factoryCmd;
 }cmd_control_t;
 
 typedef struct {
@@ -101,6 +116,7 @@ typedef struct {
     uint8_t  alarmStatus;
     uint8_t  autoReportFlag;
     uint8_t  address;
+    uint8_t  oldAddr;
     uint8_t autoLockFlag;
     uint8_t autoLockEnable;
     uint8_t HoldOnDetectEnable;

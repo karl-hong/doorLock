@@ -6,6 +6,7 @@
 #include "user_data.h"
 
 static RingBuffer myRingBuffer; 
+static uint8_t gClearBuffer = 0;
 
 extern void user_uart1_send_data(uint8_t *data, uint16_t size);
 
@@ -68,7 +69,7 @@ PTL_STATUS ComUnpack(ComStream_t * inStream,UnPack_t *pResult)
 	//包不完整(包破坏或等待继续接收)
 	if (nTailPos < 1){
 		pResult->indexOfHead = indexOfHead;
-		//printf("[%s]length1 error!\r\n", __FUNCTION__);
+		printf("[%s]length1 error!\r\n", __FUNCTION__);
 		return PTL_LENGTH_ERROR;
 
 	}
@@ -84,7 +85,7 @@ PTL_STATUS ComUnpack(ComStream_t * inStream,UnPack_t *pResult)
 	}
 	
 	//4.验证包长度:2byte
-	nLength = (pTempBuf[2] << 8) + pTempBuf[3];//数据区长度
+	nLength = pTempBuf[2];//(pTempBuf[2] << 8) + pTempBuf[3];//数据区长度
 	pResult->indexOfHead = indexOfHead;
 	if (nLenofActData != nLength + CMD_FIX_LEN){
 		pResult->indexOfHead = nTailPos + 1;
@@ -97,7 +98,7 @@ PTL_STATUS ComUnpack(ComStream_t * inStream,UnPack_t *pResult)
 
 	//6.验证校验码（cmd + length + data）
 	crc = (pTempBuf[nLenofActData - 2] << 8) + pTempBuf[nLenofActData - 1];
-	cal_crc = cal_crc16((char *)pTempBuf, nLength + 4);
+	cal_crc = cal_crc16((char *)pTempBuf, nLength + 3);
 	if (cal_crc != crc){
 		printf("[%s]checksum error: crc->0x%x, cal_crc->0x%x!\r\n", __FUNCTION__, crc, cal_crc);
 		return PTL_CHECKSUM_ERROR;
@@ -113,7 +114,7 @@ PTL_STATUS ComUnpack(ComStream_t * inStream,UnPack_t *pResult)
 	pResult->lenOfData = nLength;
 
 	//9.获取数据域
-	memcpy(pResult->pData, &pTempBuf[4], pResult->lenOfData);
+	memcpy(pResult->pData, &pTempBuf[3], pResult->lenOfData);
 
 	return PTL_NO_ERROR;
 }
@@ -144,15 +145,16 @@ PTL_STATUS ComPack(const Pack_t*  pPack, ComStream_t* outStream)
 	pPackAct[pos++] = pPack->optionID;
 
 	//4. 填充长度(option + cmd + nLenOfData) 
-	pPackAct[pos++] = (pPack->nLenOfData >> 8) & 0xff;
-	pPackAct[pos++] = (pPack->nLenOfData >> 0) & 0xff;
+	pPackAct[pos++] = pPack->nLenOfData & 0xff;
+	// pPackAct[pos++] = (pPack->nLenOfData >> 8) & 0xff;
+	// pPackAct[pos++] = (pPack->nLenOfData >> 0) & 0xff;
 	
 	//5.填充数据域
 	memcpy(&pPackAct[pos], pPack->pData, pPack->nLenOfData);
 	pos += pPack->nLenOfData;
 	
 	//6.填充校验字节(校验  cmd + option + data)
-	crc = cal_crc16((char *)&pPackAct[1], pPack->nLenOfData + 4);
+	crc = cal_crc16((char *)&pPackAct[1], pPack->nLenOfData + 3);
 	pPackAct[pos++] = (crc >> 8) & 0xff;
 	pPackAct[pos++] = (crc >> 0) & 0xff;
 	
@@ -162,7 +164,7 @@ PTL_STATUS ComPack(const Pack_t*  pPack, ComStream_t* outStream)
 	//8.对数据包进行转义（除开包头、包尾）
 	uint16_t nLenOfTransData = 0;
 	outStream->pBuffer[nLenOfTransData++] = pPackAct[0];
-	for (uint16_t i = 1; i < pPack->nLenOfData + 7; i++)
+	for (uint16_t i = 1; i < pPack->nLenOfData + 6; i++)
 	{
 		uint8_t curChar = pPackAct[i];
 		if (curChar == FRAME_HEADER || curChar == FRAME_TAIL || curChar == TRANSLATE_CHAR){
@@ -172,7 +174,7 @@ PTL_STATUS ComPack(const Pack_t*  pPack, ComStream_t* outStream)
 			outStream->pBuffer[nLenOfTransData++] = curChar;
 		}
 	}
-	outStream->pBuffer[nLenOfTransData++] = pPackAct[7 + pPack->nLenOfData];
+	outStream->pBuffer[nLenOfTransData++] = pPackAct[6 + pPack->nLenOfData];
 
 	//8.数据包
 	outStream->nLenOfBuf = nLenOfTransData;
@@ -185,98 +187,24 @@ void user_event_process(uint8_t cmd, uint8_t opt, uint8_t *data, uint16_t lenOfD
 	printf("cmd: 0x%02x, opt code: 0x%02x\r\n", cmd, opt);
 	switch(cmd){
 		case CMD_QUERY:{
-			switch (opt)
-			{
-				case OPT_CODE_SINGLE_DEV_QUERY_STATUS:{
-					onCmdQuerySingleDevStatus(data, lenOfData);
-					break;
+			for(int i=0;query_cmd[i].func != NULL;i++){
+				if(opt == query_cmd[i].opt){
+					query_cmd[i].func(data, lenOfData);
+					return;
 				}
-
-				case OPT_CODE_MULTI_DEV_SET_ONOFF:{
-					onCmdSetDeviceOnOff(data, lenOfData, 0);
-					break;
-				}
-
-				case OPT_CODE_SINGLE_DEV_SET_ONOFF:{
-					onCmdSetDeviceOnOff(data, lenOfData, 1);
-					break;
-				}
-
-				case OPT_CODE_MULTI_DEV_BASE_SETTING:{
-					onCmdModifyDeviceBasicSetting(data, lenOfData, 0);
-					break;
-				}
-
-				case OPT_CODE_SINGLE_DEV_BASE_SETTING:{
-					onCmdModifyDeviceBasicSetting(data, lenOfData, 1);
-					break;
-				}
-
-				case OPT_CODE_MULTI_DEV_SET_LIGHT:{
-					onCmdSetLight(data, lenOfData, 0);
-					break;
-				}
-
-				case OPT_CODE_SINGLE_DEV_SET_LIGHT:{
-					onCmdSetLight(data, lenOfData, 1);
-					break;
-				}
-
-				case OPT_CODE_MULTI_DEV_CLEAR_ALARM:{
-					onCmdClrDevAlarmSetting(data, lenOfData, 0);
-					break;
-				}
-
-				case OPT_CODE_SINGLE_DEV_CLEAR_ALARM:{
-					onCmdClrDevAlarmSetting(data, lenOfData, 1);
-					break;
-				}
-
-				case OPT_CODE_MANUAL_ALARM:{
-					break;
-				}
-
-				case OPT_CODE_AUTO_LOCK:{
-					break;
-				}
-
-				case OPT_CODE_FAULT_ALARM:{
-					break;
-				}
-
-				case OPT_CODE_SINGLE_DEV_QUERY_GSENSOR:{
-					onCmdGetGsensorData(data, lenOfData);
-					break;
-				}
-
-				case OPT_CODE_SINGLE_DEV_QUERY_ALL_STATUS:{
-					onCmdQuerySingleDevAllStatus(data, lenOfData);
-					break;
-				}
-
-				case OPT_CODE_SINGLE_MODIFY_BAUDRATE:{
-					onCmdModifyBaudRate(data, lenOfData, 1);
-					break;
-				}
-
-				case OPT_CODE_MULTI_MODIFY_BAUDRATE:{
-					onCmdModifyBaudRate(data, lenOfData, 0);
-					break;
-				}
-
-				case OPT_CODE_MULTI_SET_SHAKE_CONFIG:{
-					onCmdModifyShakeConfig(data, lenOfData, 0);
-					break;
-				}
-
-				case OPT_CODE_SIGNLE_SET_SHAKE_CONFIG:{
-					onCmdModifyShakeConfig(data, lenOfData, 1);
-					break;
-				}
-				
-				default:
-					break;
 			}
+			printf("[%s][%d]invalid opt: 0x%02x!!!!\r\n", __FUNCTION__, __LINE__, opt);
+			break;
+		}
+
+		case CMD_FACTORY_QUERY:{
+			for(int i=0;factory_query_cmd[i].func != NULL;i++){
+				if(opt == factory_query_cmd[i].opt){
+					factory_query_cmd[i].func(data, lenOfData);
+					return;
+				}
+			}
+			printf("[%s][%d]invalid opt: 0x%02x!!!!\r\n", __FUNCTION__, __LINE__, opt);
 			break;
 		}
 
@@ -289,6 +217,7 @@ void user_event_process(uint8_t cmd, uint8_t opt, uint8_t *data, uint16_t lenOfD
 		}
 	}
 }
+
 void user_protocol_init(void)
 {
 	user_buffer_create(&myRingBuffer, MAX_BUFFER_SIZE, 0, 0);
@@ -298,6 +227,20 @@ void user_protocol_push_data(uint8_t *data, uint16_t size)
 {
 	user_buffer_write_items(&myRingBuffer, data, size);
 }
+
+void user_protocol_reset_buffer(void)
+{
+	if(gClearBuffer){
+		gClearBuffer = 0;
+		user_buffer_clear(&myRingBuffer);
+	}
+}
+
+void user_set_clear_buffer_flag(uint8_t isClear)
+{
+	gClearBuffer = 	isClear;
+}
+
 void user_protocol_handle(void)
 {
 	static uint16_t size;
@@ -331,6 +274,8 @@ void user_protocol_handle(void)
 			user_buffer_release_items(&myRingBuffer, pResultReseave.indexOfTail + 1);
 		}
 	}
+
+	user_protocol_reset_buffer();
 }
 
 void user_protocol_send_data(uint8_t cmd, uint8_t optID, uint8_t *data, uint16_t size)

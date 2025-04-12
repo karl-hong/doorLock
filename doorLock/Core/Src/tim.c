@@ -22,6 +22,7 @@
 
 /* USER CODE BEGIN 0 */
 #include "common.h"
+#include "user_data.h"
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim14;
