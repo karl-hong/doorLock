@@ -88,6 +88,7 @@ enum {
 	OPT_CODE_SET_ADDR_BY_UID = 0x13,//单锁通过UID设置地址
 	OPT_CODE_GET_INFO_BY_ADDR = 0x14,//单锁通过地址获取信息
 	OPT_CODE_SET_ADDR_BY_ADDR = 0x15,//单锁通过地址设置地址
+	OPT_CODE_SET_REQUEST_UPGRADE = 0xe2,//单锁请求升级
 	OPT_CODE_CLEAR_UART_BUFFER = 0xfd,//单锁清除串口缓存
 	OPT_CODE_SINGLE_MODIFY_BAUDRATE = 0xfe,//单个设备修改波特率
 	// OPT_CODE_MULTI_MODIFY_BAUDRATE,//批量修改波特率

@@ -45,6 +45,8 @@ void onCmdClearUartBuffer(uint8_t *data, uint8_t length);
 
 void onCmdFactoryQuery(uint8_t *data, uint8_t length);
 
+void onCmdRequestUpgrade(uint8_t *data, uint8_t length);
+
 void onReportDeviceStatus(void);
 
 void onReportSetDevOnOffStatus(void);
@@ -85,6 +87,8 @@ void onReportClearUartBuffer(void);
 
 void onReportFactoryCmd(void);
 
+void onReportRequestUpgrade(void);
+
 void user_database_init(void);
 
 void user_database_save(void);
@@ -94,5 +98,7 @@ void user_reply_handle(void);
 void user_check_report_delay(void);
 
 void printSetting(void);
+
+int write_upgrade_flag(void);
 
 #endif

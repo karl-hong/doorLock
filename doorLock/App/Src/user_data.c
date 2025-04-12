@@ -27,6 +27,7 @@ cmd_query_t query_cmd[] = {
     {OPT_CODE_SET_ADDR_BY_UID,                onCmdSetAddrByUid},
     {OPT_CODE_GET_INFO_BY_ADDR,               onCmdGetInfoByAddr},
     {OPT_CODE_SET_ADDR_BY_ADDR,               onCmdSetAddrByAddr},
+    {OPT_CODE_SET_REQUEST_UPGRADE,            onCmdRequestUpgrade},
     {OPT_CODE_CLEAR_UART_BUFFER,              onCmdClearUartBuffer},
     {OPT_CODE_SIGNLE_SET_SHAKE_CONFIG,        onCmdModifyBaudRate},
     {0, NULL},//must end with NULL
@@ -66,6 +67,7 @@ cmd_report_t report_cmd[] = {
     {&lock.cmdControl.clearUartBuffer.sendCmdEnable, &lock.cmdControl.clearUartBuffer.sendCmdDelay, onReportClearUartBuffer},
     {&lock.cmdControl.singleModifyBaudRate.sendCmdEnable, &lock.cmdControl.singleModifyBaudRate.sendCmdDelay, onReportSingleModifyBaudRate},
     {&lock.cmdControl.factoryCmd.sendCmdEnable, &lock.cmdControl.factoryCmd.sendCmdDelay, onReportFactoryCmd},
+    {&lock.cmdControl.upgrade.sendCmdEnable, &lock.cmdControl.upgrade.sendCmdDelay, onReportRequestUpgrade},
 };
 
 void onCmdQuerySingleDevStatus(uint8_t *data, uint8_t length)
@@ -423,6 +425,30 @@ void onCmdFactoryQuery(uint8_t *data, uint8_t length)
 {
     lock.cmdControl.factoryCmd.sendCmdEnable = CMD_ENABLE;
     lock.cmdControl.factoryCmd.sendCmdDelay = 0;
+}
+
+void onCmdRequestUpgrade(uint8_t *data, uint8_t length)
+{
+    uint8_t addr = 0;
+    uint8_t pos = 0;
+    uint8_t status = 0;
+
+    addr = data[pos++];
+    status = data[pos++];
+
+    if(IS_ADDR_INVALID(addr)){
+        printf("[%s]address is not matched!\r\n", __FUNCTION__);
+        return;
+    }
+
+    if(status != 0){
+        printf("[%s]request upgrade failed!\r\n", __FUNCTION__);
+        return;
+    }
+
+    /* send ack msg here */
+    lock.cmdControl.upgrade.sendCmdEnable = CMD_ENABLE;
+    lock.cmdControl.upgrade.sendCmdDelay = 0;
 }
 
 void onReportDeviceStatus(void)
@@ -834,6 +860,30 @@ void onReportFactoryCmd(void)
     user_protocol_send_data(CMD_FACTORY_ACK, OPT_CODE_FACTORY_QUERY, buffer, pos); 
 }
 
+void onReportRequestUpgrade(void)
+{
+
+	printf("[%s]\r\n", __FUNCTION__);
+
+	uint8_t res = 0;
+	(void)res;
+
+	if(0 == write_upgrade_flag()){
+		res = 1;
+	}
+
+	// uint8_t buffer[30];
+    // uint8_t pos = 0;
+
+    // buffer[pos++] = res;
+    // buffer[pos++] = lock.address;
+
+	// user_protocol_send_data(CMD_ACK, OPT_CODE_SET_REQUEST_UPGRADE, buffer, pos); 
+
+	// HAL_Delay(100);//等待发送出去
+
+	HAL_NVIC_SystemReset();
+}
 
 uint16_t user_read_flash(uint32_t address)
 {
@@ -991,4 +1041,49 @@ void printSetting(void)
     printf("lockReplyDelay: 0x%02X\r\n", lock.lockReplyDelay);
 	printf("baudRateIndex: 0x%02X\r\n", lock.baudRateIndex);
 }
+
+int write_upgrade_flag(void)
+{
+    int ret =0;
+    HAL_StatusTypeDef status;
+    FLASH_EraseInitTypeDef flashEraseInitType;
+    uint32_t PageError;
+    upgrade_t upgradeData;
+    uint16_t i;
+    uint16_t *pData = NULL;
+    uint16_t lenOfDataBase = sizeof(upgrade_t) / sizeof(uint16_t);
+
+    upgradeData.magic = DATABASE_MAGIC;
+    upgradeData.address = lock.address;
+    upgradeData.deviceCmd = CMD_QUERY;
+    upgradeData.baudIndex = lock.baudRateIndex;
+    upgradeData.upgradeFlag = APP_UPGREQ_IS_VALID;
+
+    pData = (uint16_t *)&upgradeData;
+    
+    HAL_FLASH_Unlock();
+
+    flashEraseInitType.TypeErase = FLASH_TYPEERASE_PAGES;
+    flashEraseInitType.PageAddress = APP_UPGRADE_FLAG_ADDRESS;
+    flashEraseInitType.NbPages = 1;
+    status = HAL_FLASHEx_Erase(&flashEraseInitType, &PageError);
+    
+    if(HAL_OK != status){
+        HAL_FLASH_Lock();
+        printf("[%s]Flash erase error: %d\r\n", __FUNCTION__, status);
+        return -1;
+    }
+
+    for(i=0;i<lenOfDataBase;i++){
+       if(HAL_OK != HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, APP_UPGRADE_FLAG_ADDRESS + 2U*i, pData[i])){
+            printf("[%s]write data[%d] fail!\r\n", __FUNCTION__, i);
+            ret = -1;
+       } 
+    }
+
+    HAL_FLASH_Lock();
+
+    return ret;
+}
+
 

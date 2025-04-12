@@ -6,6 +6,7 @@
 #include <stdlib.h> 
 // #include <math.h>
 #include "main.h"
+#include "flash_if.h"
 
 #define DATABASE_START_ADDR         (0x0800F000)
 #define DATABASE_MAGIC              (0xaaaa)
@@ -81,6 +82,7 @@ typedef struct {
     cmd_setting_t setAddrByAddr;
     cmd_setting_t clearUartBuffer;
     cmd_setting_t factoryCmd;
+    cmd_setting_t upgrade;
 }cmd_control_t;
 
 typedef struct {
@@ -201,6 +203,14 @@ typedef struct {
 	uint16_t autoCloseDoorEnable;
 	uint16_t autoCloseDoorDelay;
 }database_t;
+
+typedef struct {
+    uint16_t magic;
+    uint16_t address;
+    uint16_t deviceCmd;
+    uint16_t baudIndex;
+    uint32_t upgradeFlag;
+}upgrade_t;
 
 
 extern lock_ctrl_t lock;

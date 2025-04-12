@@ -46,7 +46,9 @@ extern "C" {
 
 /* Exported macro ------------------------------------------------------------*/
 /* USER CODE BEGIN EM */
-
+#define FLASH_IS_32K false
+#define FLASH_IS_64K true
+#define FLASH_IS_1024K false
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
