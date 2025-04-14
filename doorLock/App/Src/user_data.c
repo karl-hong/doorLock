@@ -441,7 +441,7 @@ void onCmdRequestUpgrade(uint8_t *data, uint8_t length)
         return;
     }
 
-    if(status != 0){
+    if(status != 1){
         printf("[%s]request upgrade failed!\r\n", __FUNCTION__);
         return;
     }
