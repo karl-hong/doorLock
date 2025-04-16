@@ -23,13 +23,13 @@ cmd_query_t query_cmd[] = {
     {OPT_CODE_SINGLE_DEV_CLEAR_ALARM,         onCmdClrDevAlarmSetting},
     {OPT_CODE_SINGLE_DEV_QUERY_GSENSOR,       onCmdGetGsensorData},
     {OPT_CODE_SINGLE_DEV_QUERY_ALL_STATUS,    onCmdQuerySingleDevAllStatus},
-    {OPT_CODE_SINGLE_MODIFY_BAUDRATE,         onCmdModifyShakeConfig},
+    {OPT_CODE_SIGNLE_SET_SHAKE_CONFIG,        onCmdModifyShakeConfig},
     {OPT_CODE_SET_ADDR_BY_UID,                onCmdSetAddrByUid},
     {OPT_CODE_GET_INFO_BY_ADDR,               onCmdGetInfoByAddr},
     {OPT_CODE_SET_ADDR_BY_ADDR,               onCmdSetAddrByAddr},
     {OPT_CODE_SET_REQUEST_UPGRADE,            onCmdRequestUpgrade},
     {OPT_CODE_CLEAR_UART_BUFFER,              onCmdClearUartBuffer},
-    {OPT_CODE_SIGNLE_SET_SHAKE_CONFIG,        onCmdModifyBaudRate},
+    {OPT_CODE_SINGLE_MODIFY_BAUDRATE,         onCmdModifyBaudRate},
     {0, NULL},//must end with NULL
 };
 
