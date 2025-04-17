@@ -101,4 +101,6 @@ void printSetting(void);
 
 int write_upgrade_flag(void);
 
+void sync_boot_env(void);
+
 #endif

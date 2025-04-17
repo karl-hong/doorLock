@@ -31,13 +31,13 @@
 #define FAULT_DECT                  (2*DELAY_BASE)//(5*DELAY_BASE)
 #define MOTOR_LATENCY               (4)//selinda update //3
 #define MOTOR_TIMEOUT               (2*DELAY_BASE)
-#define MOTOR_DELAY_STOP_BASE				(MOTOR_LATENCY * 4)
-#define MOTOR_DELAY_STOP_LATENCY		(1*MOTOR_DELAY_STOP_BASE)
+#define MOTOR_DELAY_STOP_BASE		(MOTOR_LATENCY * 4)
+#define MOTOR_DELAY_STOP_LATENCY	(1*MOTOR_DELAY_STOP_BASE)
 #define LOCK_STOP_DEFAULT_DELAY     120//ms
 #define UNLOCK_STOP_DEFAULT_DELAY   60//ms
 #define REPORT_DOOR_STATE_DELAY		100//ms
 
-#define	VERSION						(0x1001)//v16.1  -20250416
+#define	VERSION						(0x1002)//v16.1  -20250417
 
 #define BROADCAST_ADDR              (0xFF)
 #define CHECK_ADDR_INVALID(addr)    (BROADCAST_ADDR != addr && addr != lock.address)
@@ -49,6 +49,13 @@ enum {
     CMD_DISABLE = 0,
     CMD_ENABLE,
 };
+
+enum {
+    STATUS_REQUEST_UPGRADE = 1,
+    STATUS_UPGRADE_GOING,
+    STATUS_UPGRADE_SUCCESS,
+};
+#define PACKET_SIZE                 (32)
 
 typedef struct {
 	int16_t x;
@@ -210,6 +217,10 @@ typedef struct {
     uint16_t deviceCmd;
     uint16_t baudIndex;
     uint32_t upgradeFlag;
+    uint32_t packetIndex;
+    uint32_t packetSize;
+    uint8_t packetData[PACKET_SIZE];
+    uint16_t upgradeStatus;
 }upgrade_t;
 
 

@@ -8,6 +8,10 @@
 #include "led.h"
 #include "motor.h"
 
+static uint32_t packetIndex;
+static uint32_t packetSize;
+static uint8_t upgradeStatus;
+static uint8_t packetData[PACKET_SIZE];
 /**
  * @brief 添加监听指令步骤
  * （1）在user_protocol.h中定义opt
@@ -431,17 +435,29 @@ void onCmdRequestUpgrade(uint8_t *data, uint8_t length)
 {
     uint8_t addr = 0;
     uint8_t pos = 0;
-    uint8_t status = 0;
 
     addr = data[pos++];
-    status = data[pos++];
+    upgradeStatus = data[pos++];
+    packetSize = (data[pos++] << 24);
+    packetSize += (data[pos++] << 16);
+    packetSize += (data[pos++] << 8);
+    packetSize += data[pos++];
+
+    packetIndex = (data[pos++] << 24);
+    packetIndex += (data[pos++] << 16);
+    packetIndex += (data[pos++] << 8);
+    packetIndex += data[pos++];
+
+    for(uint8_t i=0;i<PACKET_SIZE;i++){
+        packetData[i] = data[pos++];
+    }
 
     if(IS_ADDR_INVALID(addr)){
         printf("[%s]address is not matched!\r\n", __FUNCTION__);
         return;
     }
 
-    if(status != 1){
+    if(upgradeStatus != STATUS_REQUEST_UPGRADE && upgradeStatus != STATUS_UPGRADE_GOING){
         printf("[%s]request upgrade failed!\r\n", __FUNCTION__);
         return;
     }
@@ -863,26 +879,54 @@ void onReportFactoryCmd(void)
 void onReportRequestUpgrade(void)
 {
 
-	printf("[%s]\r\n", __FUNCTION__);
+	printf("[%s]status: %d, packet index: %d, packet num: %d\r\n", __FUNCTION__, upgradeStatus, packetIndex, packetSize);
+    uint8_t buffer[50];
+    uint8_t pos = 0;
 
-	uint8_t res = 0;
-	(void)res;
+    switch(upgradeStatus){
+        case STATUS_REQUEST_UPGRADE:{
+             if(0 != write_upgrade_flag()){
+                printf("Write upgrade flag fail!");
+                return;
+            }
+            HAL_NVIC_SystemReset();//boot再回复
+            return;
+        }
 
-	if(0 == write_upgrade_flag()){
-		res = 1;
-	}
+        case STATUS_UPGRADE_GOING:{
+            if(packetSize && packetSize == packetIndex){
+                upgradeStatus = STATUS_UPGRADE_SUCCESS;
+            }else{
+                return;
+            }
+            break;
+        }
 
-	// uint8_t buffer[30];
-    // uint8_t pos = 0;
+        case STATUS_UPGRADE_SUCCESS:break;
+        default:return;
+    }
 
-    // buffer[pos++] = res;
-    // buffer[pos++] = lock.address;
+    /* 地址 */
+    buffer[pos++] = lock.address;
+    /* 状态 */
+    buffer[pos++] = upgradeStatus;
+    /* 包总数 */
+    buffer[pos++] = (packetSize >> 24) & 0xFF;
+    buffer[pos++] = (packetSize >> 16) & 0xFF;
+    buffer[pos++] = (packetSize >> 8) & 0xFF;
+    buffer[pos++] = packetSize & 0xFF;
+    /* 包序号 */
+    buffer[pos++] = (packetIndex >> 24) & 0xFF;
+    buffer[pos++] = (packetIndex >> 16) & 0xFF;
+    buffer[pos++] = (packetIndex >> 8) & 0xFF;
+    buffer[pos++] = packetIndex & 0xFF;
+    /* 数据 */
+    for(int i =0; i< PACKET_SIZE;i++){
+        buffer[pos++] = packetData[i];
+    }
 
-	// user_protocol_send_data(CMD_ACK, OPT_CODE_SET_REQUEST_UPGRADE, buffer, pos); 
-
-	// HAL_Delay(100);//等待发送出去
-
-	HAL_NVIC_SystemReset();
+    // printf("[%s]status: %d, packet index: %d, packet num: %d\r\n", __FUNCTION__, upgradeStatus, packetIndex, packetSize);
+	user_protocol_send_data(CMD_ACK, OPT_CODE_SET_REQUEST_UPGRADE, buffer, pos);  
 }
 
 uint16_t user_read_flash(uint32_t address)
@@ -1042,14 +1086,43 @@ void printSetting(void)
 	printf("baudRateIndex: 0x%02X\r\n", lock.baudRateIndex);
 }
 
-int write_upgrade_flag(void)
+int user_write_flash(uint32_t address, uint16_t *data, uint16_t size)
 {
-    int ret =0;
     HAL_StatusTypeDef status;
     FLASH_EraseInitTypeDef flashEraseInitType;
     uint32_t PageError;
+    int ret = 0;
+
+    if(NULL == data)    return -1;
+
+    HAL_FLASH_Unlock();
+
+    flashEraseInitType.TypeErase = FLASH_TYPEERASE_PAGES;
+    flashEraseInitType.PageAddress = address;
+    flashEraseInitType.NbPages = 1;
+    status = HAL_FLASHEx_Erase(&flashEraseInitType, &PageError);
+    
+    if(HAL_OK != status){
+        HAL_FLASH_Lock();
+        printf("Flash erase error: %d\r\n", status);
+        return -1;
+    }
+
+    for(uint16_t i=0;i<size;i++){
+        if(HAL_OK != HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, address + 2U*i, data[i])){
+            printf("Write data[%d] fail!\r\n", i);
+            ret = -1;
+        }
+    }
+
+    HAL_FLASH_Lock();
+
+    return ret;
+}
+
+int write_upgrade_flag(void)
+{
     upgrade_t upgradeData;
-    uint16_t i;
     uint16_t *pData = NULL;
     uint16_t lenOfDataBase = sizeof(upgrade_t) / sizeof(uint16_t);
 
@@ -1060,30 +1133,37 @@ int write_upgrade_flag(void)
     upgradeData.upgradeFlag = APP_UPGREQ_IS_VALID;
 
     pData = (uint16_t *)&upgradeData;
-    
-    HAL_FLASH_Unlock();
 
-    flashEraseInitType.TypeErase = FLASH_TYPEERASE_PAGES;
-    flashEraseInitType.PageAddress = APP_UPGRADE_FLAG_ADDRESS;
-    flashEraseInitType.NbPages = 1;
-    status = HAL_FLASHEx_Erase(&flashEraseInitType, &PageError);
-    
-    if(HAL_OK != status){
-        HAL_FLASH_Lock();
-        printf("[%s]Flash erase error: %d\r\n", __FUNCTION__, status);
-        return -1;
-    }
+    return user_write_flash(APP_UPGRADE_FLAG_ADDRESS, pData, lenOfDataBase);
+}
+
+void sync_boot_env(void)
+{
+    uint16_t i;
+    uint16_t lenOfDataBase = sizeof(upgrade_t) / sizeof(uint16_t);
+    upgrade_t readDataBase;
+    uint16_t *pData = (uint16_t *)&readDataBase;
 
     for(i=0;i<lenOfDataBase;i++){
-       if(HAL_OK != HAL_FLASH_Program(FLASH_TYPEPROGRAM_HALFWORD, APP_UPGRADE_FLAG_ADDRESS + 2U*i, pData[i])){
-            printf("[%s]write data[%d] fail!\r\n", __FUNCTION__, i);
-            ret = -1;
-       } 
+        pData[i] = user_read_flash(APP_UPGRADE_FLAG_ADDRESS + 2U*i);
     }
 
-    HAL_FLASH_Lock();
-
-    return ret;
+    if(DATABASE_MAGIC == readDataBase.magic && readDataBase.upgradeStatus == STATUS_UPGRADE_SUCCESS){
+        /* sync boot env */
+        upgradeStatus = STATUS_UPGRADE_SUCCESS;
+        packetSize = readDataBase.packetSize;
+        packetIndex = readDataBase.packetIndex;
+        for(uint8_t i=0;i<PACKET_SIZE;i++){
+            packetData[i] = readDataBase.packetData[i];
+        }
+        /* send msg */
+        lock.cmdControl.upgrade.sendCmdEnable = CMD_ENABLE;
+        lock.cmdControl.upgrade.sendCmdDelay = 0;
+        /* clear upgrade status */
+        readDataBase.upgradeStatus = 0;
+        user_write_flash(APP_UPGRADE_FLAG_ADDRESS, pData, lenOfDataBase);
+        printf("Upgrade done!!!!!\r\n");
+    }
 }
 
 
