@@ -24,8 +24,7 @@
 #include <stdio.h>
 #include "user_protocol.h"
 #include "common.h"
-#define MAX_RECV_SIZE 128
-static uint8_t recData[MAX_RECV_SIZE] = {0};
+static uint8_t recData;
 const uint32_t baudRate[]={
   4800,
   9600,
@@ -38,7 +37,6 @@ const uint32_t baudRate[]={
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
-DMA_HandleTypeDef hdma_usart1_rx;
 
 /* USART1 init function */
 
@@ -50,7 +48,7 @@ void MX_USART1_UART_Init(void)
   /* USER CODE END USART1_Init 0 */
 
   /* USER CODE BEGIN USART1_Init 1 */
-  // huart1.Init.BaudRate = baudRate[lock.baudRateIndex];
+
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
   huart1.Init.BaudRate = baudRate[lock.baudRateIndex];
@@ -69,7 +67,7 @@ void MX_USART1_UART_Init(void)
   }
   /* USER CODE BEGIN USART1_Init 2 */
 	user_protocol_init();
-	HAL_UARTEx_ReceiveToIdle_DMA(&huart1, recData, MAX_RECV_SIZE);
+	HAL_UART_Receive_IT(&huart1, &recData, 1);
   /* USER CODE END USART1_Init 2 */
 
 }
@@ -94,7 +92,8 @@ void MX_USART2_UART_Init(void)
   huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
   huart2.Init.OverSampling = UART_OVERSAMPLING_16;
   huart2.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
+  huart2.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_DMADISABLEONERROR_INIT;
+  huart2.AdvancedInit.DMADisableonRxError = UART_ADVFEATURE_DMA_DISABLEONRXERROR;
   if (HAL_UART_Init(&huart2) != HAL_OK)
   {
     Error_Handler();
@@ -129,23 +128,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.Alternate = GPIO_AF1_USART1;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-    /* USART1 DMA Init */
-    /* USART1_RX Init */
-    hdma_usart1_rx.Instance = DMA1_Channel3;
-    hdma_usart1_rx.Init.Direction = DMA_PERIPH_TO_MEMORY;
-    hdma_usart1_rx.Init.PeriphInc = DMA_PINC_DISABLE;
-    hdma_usart1_rx.Init.MemInc = DMA_MINC_ENABLE;
-    hdma_usart1_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
-    hdma_usart1_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-    hdma_usart1_rx.Init.Mode = DMA_NORMAL;
-    hdma_usart1_rx.Init.Priority = DMA_PRIORITY_LOW;
-    if (HAL_DMA_Init(&hdma_usart1_rx) != HAL_OK)
-    {
-      Error_Handler();
-    }
-
-    __HAL_LINKDMA(uartHandle,hdmarx,hdma_usart1_rx);
 
     /* USART1 interrupt Init */
     HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
@@ -198,9 +180,6 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
     */
     HAL_GPIO_DeInit(GPIOA, GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_12);
 
-    /* USART1 DMA DeInit */
-    HAL_DMA_DeInit(uartHandle->hdmarx);
-
     /* USART1 interrupt Deinit */
     HAL_NVIC_DisableIRQ(USART1_IRQn);
   /* USER CODE BEGIN USART1_MspDeInit 1 */
@@ -228,21 +207,12 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
-{//空闲中断
-    if(huart->Instance == USART1){
-      user_protocol_push_data(recData, MAX_RECV_SIZE - hdma_usart1_rx.Instance->CNDTR);
-      HAL_UARTEx_ReceiveToIdle_DMA(&huart1, recData, MAX_RECV_SIZE);
-    }
-
-}
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{//接收完成中断
-    if(huart->Instance == USART1){
-      user_protocol_push_data(recData, MAX_RECV_SIZE);
-      HAL_UARTEx_ReceiveToIdle_DMA(&huart1, recData, MAX_RECV_SIZE);
-    }
-
+{
+		if(huart->Instance == USART1){
+				user_protocol_push_data(&recData, 1);
+				HAL_UART_Receive_IT(&huart1, &recData, 1);
+		}
 }
 
 void user_huart_error_check(void)
@@ -258,7 +228,7 @@ void user_huart_error_check(void)
 		errCnt ++;
 	}
 	
-	HAL_UARTEx_ReceiveToIdle_DMA(&huart1, recData, MAX_RECV_SIZE);
+	HAL_UART_Receive_IT(&huart1, &recData, 1);
 }
 
 void user_uart1_send_data(uint8_t *data, uint16_t size)
@@ -278,5 +248,4 @@ int fgetc(FILE *f)
   HAL_UART_Receive(&huart2,&ch,1,0xffff);
   return ch;
 }
-
 /* USER CODE END 1 */

@@ -73,6 +73,7 @@ void InterruptRemap(void)
 	__HAL_RCC_SYSCFG_CLK_ENABLE();
 	memcpy((void*)RAM_ADDRESS_START, (void*)APPLICATION_ADDRESS, VECTOR_SIZE);
 	__HAL_SYSCFG_REMAPMEMORY_SRAM();
+  __enable_irq();//如果bootloader关闭中断，这里必须打开中断，否则会导致中断无法响应
 }
 /* USER CODE END 0 */
 

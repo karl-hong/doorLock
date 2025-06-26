@@ -37,7 +37,7 @@
 #define UNLOCK_STOP_DEFAULT_DELAY   60//ms
 #define REPORT_DOOR_STATE_DELAY		100//ms
 
-#define	VERSION						(0x1002)//v16.1  -20250417
+#define	VERSION						(0x1002)//v16.2  -20250626
 
 #define BROADCAST_ADDR              (0xFF)
 #define CHECK_ADDR_INVALID(addr)    (BROADCAST_ADDR != addr && addr != lock.address)
