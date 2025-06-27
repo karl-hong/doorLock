@@ -68,6 +68,20 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+/**
+ * 
+ * @brief  设置RDP Level 1,禁止通过SWD烧录口读写Flash
+ * 开启后，只能通过cubemxprammer或者其他烧录器来解除保护，解除保护会擦掉flash
+ * 开启RDP Level 1保护，禁止通过SWD烧录口读写Flash。调试时关掉读写保护
+ * 开启后，SWD口硬件线路未与stlink断开，且PC端在操作STlink时，会导致MCU程序卡死
+ */
+
+
+#define OPEN_RDPLEVEL_1   // 打开读保护 Level 1 
+
+FLASH_OBProgramInitTypeDef obInit;
+
 void InterruptRemap(void)
 {
 	__HAL_RCC_SYSCFG_CLK_ENABLE();
@@ -81,7 +95,34 @@ void InterruptRemap(void)
   * @brief  The application entry point.
   * @retval int
   */
-int main(void)
+void Set_RDP_Level1(void)
+{
+    HAL_FLASH_Unlock();         // 解锁主 Flash
+    HAL_FLASH_OB_Unlock();      // 解锁 Option Bytes
+    // 读取当前 Option Bytes 设置
+    HAL_FLASHEx_OBGetConfig(&obInit);
+    // 判断是否已设置为 Level 1，避免重复操作
+    if (obInit.RDPLevel != OB_RDP_LEVEL_1)
+    {
+        obInit.OptionType = OPTIONBYTE_RDP;
+        obInit.RDPLevel = OB_RDP_LEVEL_1;
+
+        // 配置 RDP Level 1
+        if (HAL_FLASHEx_OBProgram(&obInit) != HAL_OK)
+        {
+            printf("set RDP Level 1 fail!\r\n");// 可以继续执行其他初始化
+            return;        
+        }
+
+        // 启动 Option Bytes 加载，MCU 会复位
+        HAL_FLASH_OB_Launch();
+    }
+
+    HAL_FLASH_OB_Lock();   // 锁定 Option Bytes
+    HAL_FLASH_Lock();      // 锁定 Flash
+}
+
+  int main(void)
 {
   /* USER CODE BEGIN 1 */
 	InterruptRemap();
@@ -92,6 +133,9 @@ int main(void)
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
+  #ifdef OPEN_RDPLEVEL_1
+  Set_RDP_Level1();
+  #endif
   /* USER CODE BEGIN Init */
 	user_database_init();
   /* USER CODE END Init */
