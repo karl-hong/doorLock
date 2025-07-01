@@ -1079,15 +1079,26 @@ void user_reply_handle(void)
     }
 }
 
+
 void user_check_report_delay(void)
 {
     uint16_t funcNum = sizeof(report_cmd) / sizeof(cmd_report_t);
     for(uint16_t i = 0; i < funcNum; i++){
-        if(*report_cmd[i].cmdEnable && (*report_cmd[i].cmdDelay > 0)){
-            *report_cmd[i].cmdDelay --;
+        if((*report_cmd[i].cmdEnable) && ((*report_cmd[i].cmdDelay) > 0)){
+            (*report_cmd[i].cmdDelay) --;
         }
     }
 }
+
+// void user_check_report_delay(void)
+// {
+//     uint16_t funcNum = sizeof(report_cmd) / sizeof(cmd_report_t);
+//     for(uint16_t i = 0; i < funcNum; i++){
+//         if(*report_cmd[i].cmdEnable && (*report_cmd[i].cmdDelay > 0)){
+//             *report_cmd[i].cmdDelay --;
+//         }
+//     }
+// }
 
 void printSetting(void)
 {
