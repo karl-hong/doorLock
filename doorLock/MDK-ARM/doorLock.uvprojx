@@ -300,8 +300,13 @@
               </OCR_RVCT8>
               <OCR_RVCT9>
                 <Type>0</Type>
+<<<<<<< HEAD
                 <StartAddress>0x20000000</StartAddress>
                 <Size>0x1f40</Size>
+=======
+                <StartAddress>0x20000800</StartAddress>
+                <Size>0x1800</Size>
+>>>>>>> eabcd00728ee50d796692c56617fd15ffa27cd53
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>

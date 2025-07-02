@@ -78,7 +78,7 @@ void SystemClock_Config(void);
  */
 
 
-#define OPEN_RDPLEVEL_1   // 打开读保护 Level 1 
+// #define OPEN_RDPLEVEL_1   // 打开读保护 Level 1 
 
 FLASH_OBProgramInitTypeDef obInit;
 
@@ -132,16 +132,13 @@ void Set_RDP_Level1(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
+  
+  /* Configure the system clock */
+  SystemClock_Config();
+  user_database_init();
   #ifdef OPEN_RDPLEVEL_1
   Set_RDP_Level1();
   #endif
-  /* USER CODE BEGIN Init */
-	user_database_init();
-  /* USER CODE END Init */
-
-  /* Configure the system clock */
-  SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
 
@@ -149,17 +146,25 @@ void Set_RDP_Level1(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+
   MX_DMA_Init();
   MX_I2C2_Init();
   MX_IWDG_Init();
+
   MX_TIM14_Init();
+
+  /* USER CODE BEGIN 2 */
+  
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
+<<<<<<< HEAD
   
   
 
   /* USER CODE BEGIN 2 */
   user_database_init();
+=======
+>>>>>>> eabcd00728ee50d796692c56617fd15ffa27cd53
   printSetting();
   sync_boot_env();
   lock_state_init();
