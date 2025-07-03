@@ -39,12 +39,14 @@ void lock_stop_detect(void)
 		}
 		lock.autoLockEnable = 0;
 		lock.motorTask.faultDectEnable = 0;
+		lock.cmdControl.singleSetOnOff.sendCmdDelay = 0;//立刻响应
 	}else if(MOTOR_TASK_BACKWARD == lock.motorTask.task && !lock.lockState){
 		/* totally unlock and stop motor */
 		gMotorStopEnable = 1;
 		gMotorStopLatency = lock.unlockStopDelay;
 		lock.autoLockEnable = 0;
 		lock.motorTask.faultDectEnable = 0;
+		lock.cmdControl.singleSetOnOff.sendCmdDelay = 0;//立刻响应
 	}else if(MOTOR_TASK_IDLE == lock.motorTask.task && stateChange){
         /* manual operate alarm */
         // lock.alarmStatus = LOCK_STATE_LOCK;

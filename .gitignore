@@ -17,6 +17,7 @@
 *.lnp*
 *.dep*
 *.iex*
+*.crf
 
 # Precompiled Headers
 *.gch
@@ -52,7 +53,8 @@
 *.mod*
 *.cmd
 *.rar
-/doorLock/MDK-ARM/doorLock/
+doorLock/MDK-ARM/doorLock/
+doorLock/MDK-ARM/RTE/
 .tmp_versions/
 .vscode/
 modules.order

@@ -78,7 +78,7 @@ void SystemClock_Config(void);
  */
 
 
-// #define OPEN_RDPLEVEL_1   // 打开读保护 Level 1 
+#define OPEN_RDPLEVEL_1   // 打开读保护 Level 1 
 
 FLASH_OBProgramInitTypeDef obInit;
 
@@ -157,14 +157,6 @@ void Set_RDP_Level1(void)
   
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
-<<<<<<< HEAD
-  
-  
-
-  /* USER CODE BEGIN 2 */
-  user_database_init();
-=======
->>>>>>> eabcd00728ee50d796692c56617fd15ffa27cd53
   printSetting();
   sync_boot_env();
   lock_state_init();

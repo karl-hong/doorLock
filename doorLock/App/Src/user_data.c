@@ -1085,11 +1085,7 @@ void user_check_report_delay(void)
     uint16_t funcNum = sizeof(report_cmd) / sizeof(cmd_report_t);
     for(uint16_t i = 0; i < funcNum; i++){
         if((*report_cmd[i].cmdEnable) && ((*report_cmd[i].cmdDelay) > 0)){
-<<<<<<< HEAD
-            (*report_cmd[i].cmdDelay)--;
-=======
             (*report_cmd[i].cmdDelay) --;
->>>>>>> eabcd00728ee50d796692c56617fd15ffa27cd53
         }
     }
 }
